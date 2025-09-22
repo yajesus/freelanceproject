@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TonIce Clicker Game - Installation Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .alert {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .step {
+            margin-bottom: 20px;
+        }
+        .step-number {
+            font-weight: bold;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧊 TonIce Clicker Game 🎮</h1>
+    
+    <div class="alert">
+        <strong>Important:</strong> This project was developed by <a href="https://nikandr.com">Nikandr Surkov</a>. 
+        Please respect the usage terms and only use this code if purchased from the official website.
+    </div>
+
+    <h2>📌 Contact Information</h2>
+    <ul>
+        <li><strong>Website:</strong> <a href="https://nikandr.com">https://nikandr.com</a></li>
+        <li><strong>YouTube:</strong> <a href="https://www.youtube.com/@NikandrSurkov">@NikandrSurkov</a></li>
+        <li><strong>Telegram:</strong> <a href="https://t.me/nikandr_s">@nikandr_s</a></li>
+        <li><strong>Updates Channel:</strong> <a href="https://t.me/clicker_game_news">Clicker Game News</a></li>
+        <li><strong>GitHub:</strong> <a href="https://github.com/nikandr-surkov">nikandr-surkov</a></li>
+    </ul>
+
+    <h2>🚀 Getting Started</h2>
+    
+    <div class="step">
+        <p><span class="step-number">1.</span> <strong>Set up environment variables</strong></p>
+        <p>Create a <code>.env</code> file with the following:</p>
+        <pre>
+DATABASE_URL="your MongoDB database URL"
+BOT_TOKEN="your Telegram bot token"  # Optional if BYPASS_TELEGRAM_AUTH is true
+BYPASS_TELEGRAM_AUTH=true  # Set to true during tests
+NODE_ENV=production # Set to "production" when deploying to Vercel, don't use while testing
+        </pre>
+        <p>Create a <code>.env.local</code> file with:</p>
+        <pre>
+NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH=true  # Set to true during tests
+NEXT_PUBLIC_BOT_USERNAME="your Telegram bot username like MyBot_bot" 
+NEXT_PUBLIC_APP_URL_SHORT_NAME="the short name of your app, which you provide to BotFather when creating a Telegram mini app, is given last"
+        </pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">2.</span> <strong>Install dependencies</strong></p>
+        <pre>npm install</pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">3.</span> <strong>Generate Prisma schema</strong></p>
+        <pre>npx prisma generate</pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">4.</span> <strong>Seed the database</strong></p>
+        <pre>npx prisma db seed</pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">5.</span> <strong>Run the app</strong></p>
+        <pre>npm run dev</pre>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">6.</span> <strong>Customize the code</strong></p>
+        <p>Review and modify these files as needed:</p>
+        <ul>
+            <li><code>prisma/seed.ts</code></li>
+            <li><code>utils/tasks-data.ts</code></li>
+            <li><code>utils/game-mechanics.ts</code></li>
+            <li><code>utils/consts.ts</code></li>
+        </ul>
+    </div>
+
+    <h2>🔐 Admin Panel</h2>
+
+	<div class="step">
+		<p><span class="step-number">2.</span> <strong>Accessing the Admin Panel</strong></p>
+		<p>The admin panel is only accessible when running the application locally. To access it:</p>
+		<ol>
+			<li>Ensure your application is running locally (e.g., using <code>npm run dev</code>)</li>
+			<li>Open your browser and navigate to <code>http://localhost:3000/admin</code></li>
+		</ol>
+		<p><strong>Note:</strong> The admin panel is intentionally restricted to localhost for security reasons. It cannot be accessed when the application is deployed to a production environment.</p>
+	</div>
+
+	<div class="step">
+		<p><span class="step-number">3.</span> <strong>Using the Admin Panel</strong></p>
+		<p>The admin panel now offers three main functionalities:</p>
+		<ul>
+			<li>Exporting user data</li>
+			<li>Managing tasks (adding new tasks and modifying existing ones)</li>
+			<li>Viewing existing tasks</li>
+		</ul>
+	</div>
+
+	<div class="step">
+		<p><span class="step-number">4.</span> <strong>Exporting User Data</strong></p>
+		<ol>
+			<li>Navigate to the "Export User Data" section</li>
+			<li>Select the fields you want to export by checking the corresponding checkboxes</li>
+			<li>Click the "Export JSON" button to download the selected user data</li>
+			<li>The data will be downloaded as a JSON file named <code>users_export.json</code></li>
+		</ol>
+		<p><strong>Note:</strong> The export is paginated to handle large datasets efficiently.</p>
+	</div>
+
+	<div class="step">
+		<p><span class="step-number">5.</span> <strong>Managing Tasks</strong></p>
+		<p>To add a new task or modify an existing one:</p>
+		<ol>
+			<li>Navigate to the "Manage Tasks" section</li>
+			<li>Fill out the form with the task details (title, description, points, type, etc.)</li>
+			<li>Select an image for the task from the available options</li>
+			<li>For new tasks, click "Add Task" to create it</li>
+			<li>To edit an existing task, click on the task in the list, modify the details, and click "Update Task"</li>
+			<li>You can toggle a task's active status using the "Is Active" checkbox</li>
+		</ol>
+		<p><strong>Note:</strong> Different task actions (VISIT, TELEGRAM, REFERRAL) have specific fields that need to be filled out.</p>
+	</div>
+
+	<div class="step">
+		<p><span class="step-number">6.</span> <strong>Adding New Images for Tasks</strong></p>
+		<p>To add new images that can be selected for tasks:</p>
+		<ol>
+			<li>Place your new image file in the appropriate directory (e.g., <code>/images</code>)</li>
+			<li>Open the file <code>images/index.ts</code></li>
+			<li>Import your new image at the top of the file:
+				<pre>import newImage from "./new-image.png";</pre>
+			</li>
+			<li>Add the new image to the <code>imageMap</code> object at the bottom of the file:
+				<pre>
+	export const imageMap: Record<string, any> = {
+		youtube,
+		telegram,
+		twitter,
+		friends,
+		newImage // Add your new image here
+	};
+				</pre>
+			</li>
+			<li>Save the file. The new image will now be available for selection when creating or editing tasks.</li>
+		</ol>
+		<p><strong>Note:</strong> Make sure to use appropriate image formats (e.g., PNG) and keep file sizes reasonable to maintain good performance.</p>
+	</div>
+
+	<div class="alert">
+		<strong>Security Notice:</strong> The admin panel is designed for use in a development environment by trusted individuals with full system access. Always ensure that sensitive data is handled securely and in compliance with applicable laws and regulations.
+	</div>
+
+    <h2>🎥 Video Instructions</h2>
+    <p>Watch my detailed video guide on YouTube for instructions on:</p>
+    <ul>
+        <li>Running the code on Vercel</li>
+        <li>Creating a Telegram Mini App</li>
+    </ul>
+    <p><a href="https://youtu.be/OYcqPL1HSTo?si=MjVNFBSAV-W0pz57">👉 Watch the YouTube Instructions Video</a></p>
+
+    <h2>🚀 Vercel Deployment</h2>
+    <p>When deploying to Vercel, provide these environment variables:</p>
+    <pre>
+DATABASE_URL
+BOT_TOKEN
+NEXT_PUBLIC_BOT_USERNAME
+NEXT_PUBLIC_APP_URL_SHORT_NAME
+NODE_ENV
+    </pre>
+
+</body>
+</html>

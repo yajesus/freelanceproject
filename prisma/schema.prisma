@@ -1,0 +1,577 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                          String               @id @default(auto()) @map("_id") @db.ObjectId
+  telegramId                  String               @unique
+  name                        String?
+  isPremium                   Boolean              @default(false)
+  points                      Float                @default(0)
+  pointsBalance               Float                @default(0)
+  tonBalance                  Float                @default(0)
+  multitapLevelIndex          Int                  @default(0)
+  energy                      Int                  @default(100)
+  energyRefillsLeft           Int                  @default(6)
+  energyLimitLevelIndex       Int                  @default(0)
+  mineLevelIndex              Int                  @default(0)
+  lastPointsUpdateTimestamp   DateTime             @default(now())
+  lastEnergyUpdateTimestamp   DateTime             @default(now())
+  lastEnergyRefillsTimestamp  DateTime             @default(now())
+  tonWalletAddress            String?
+  referralPointsEarned        Float                @default(0)
+  offlinePointsEarned         Float                @default(0)
+  // Relation fields
+  referrals                   User[]               @relation("Referrals")
+  referredBy                  User?                @relation("Referrals", fields: [referredById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referredById                String?              @db.ObjectId
+  // Tasks
+  completedTasks              UserTask[]
+  // Upgrades
+  userUpgrades                UserUpgrade[]
+  // Yield per hour
+  yieldPerHour                Float                @default(0)
+  bonusYieldPerHour           Float                @default(0)
+  bonusOfflineYieldDuration   Int                  @default(0)
+  lastUpgradeYieldTimestamp   DateTime             @default(now())
+  // Daily Rewards
+  lastClaimRewardTimestamp    DateTime             @default(now())
+  lastClaimRewardDay          Int                  @default(0)
+  // Profile
+  twitterHandle               String?
+  twitterId                   String?
+  erc20Wallet                 String?
+  // Inventory
+  inventory                   UserInventory?       @relation("User Inventory")
+  // last active timestamp
+  lastActiveTimestamp         DateTime?
+  lastOnlineTimestamp         DateTime?
+  // giveaway submissions
+  giveawaySubmissions         GiveawaySubmission[]
+  UserAirdrop                 UserAirdrop[]
+  // last HolderCheck timestamp
+  lastHolderCheckTimestamp    DateTime?
+  isHolder                    Boolean              @default(false)
+  holderLevel                 Int                  @default(0)
+  // airdrop requirement
+  isAirdropRequirementMet     Boolean?             @default(false)
+  // Fake friends
+  fakeFriends                 Int                  @default(0)
+  // Boost tracking
+  activeOfflineBoostEndTime   DateTime? // When the offline boost expires
+  activeRewardBoostEndTime    DateTime? // When the reward boost expires
+  activeOfflineBoostDuration  Int? // Current active offline boost duration in hours
+  activeRewardBoostMultiplier Float? // Current active reward boost multiplier (e.g., 0.5 for 50%)
+  // Star-related fields
+  totalStars                  Int                  @default(0) // Total stars available to the user
+  earnedStars                 Int                  @default(0) // Stars earned through quests
+  // Transaction history
+  transactions                Transaction[]
+  // reminders
+  reminders                   Json?
+  // raffles
+  raffleEntries               RaffleEntry[]
+  raffleWins                  RaffleWinner[]
+  RaffleClaimedTier           RaffleClaimedTier[]
+  PayoutWinner                PayoutWinner[]
+  dailyQuestStreakCount       Int                  @default(0) // current active streak
+  lastDailyQuestCompletedDate DateTime?
+  lastStreakClaim             DateTime? 
+  isSheildActive              Boolean              @default(false)
+  withdrawalRequests          WithdrawalRequest[]
+}
+
+model ComboOfTheDay {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  comboDate  DateTime @unique
+  upgradeIds String[]
+  createdAt  DateTime @default(now())
+  endsAt     DateTime
+}
+
+model UserComboProgress {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  comboDate     DateTime
+  discoveredIds String[] // Upgrade IDs the user has discovered
+  rewardClaimed Boolean  @default(false)
+  sharedOnX     Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, comboDate])
+}
+
+model DuelGameUser {
+  id                   String    @id @default(uuid()) @map("_id")
+  userId               String    @unique
+  energy               Int       @default(50)
+  lastEnergyUpdateTime DateTime? @default(now())
+  wins                 Int       @default(0)
+  losses               Int       @default(0)
+  draws                Int       @default(0)
+  gamesPlayed          Int       @default(0)
+  lastEnergyRegen      DateTime? @default(now())
+  watchedAds           Int       @default(0)
+  lastAdWatchReset     DateTime? @default(now())
+}
+
+model DuelGame {
+  id        String   @id @default(uuid()) @map("_id")
+  userId    String
+  round1    Json
+  round2    Json
+  round3    Json
+  status    String
+  prizeId   String
+  createdAt DateTime @default(now())
+}
+
+model Prize {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  type   String
+  result Json
+}
+
+model Games {
+  id     String   @id @default(uuid()) @map("_id")
+  userId String   @unique
+  games  String[]
+}
+
+model Transaction {
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime          @default(now())
+  status      TransactionStatus @default(PENDING)
+  userId      String            @db.ObjectId
+  user        User              @relation(fields: [userId], references: [id])
+  amount      Int               @default(0)
+  type        TransactionType
+  invoiceUrl  String?
+  description String?
+  sourceId    String?           @db.ObjectId // ID of the quest or product related to this transaction
+  updatedAt   DateTime          @updatedAt
+}
+
+model UserChestReward {
+  id        String   @id @default(uuid()) @map("_id")
+  userId    String
+  prizeType String
+  prizeData Json
+  claimedAt DateTime @default(now())
+}
+
+model Task {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String
+  points       Int?
+  multiplier   Float?
+  rewardStars  Int?
+  type         TaskType
+  image        String
+  callToAction String
+  taskData     Json?
+  isActive     Boolean    @default(true)
+  deletedAt    DateTime?
+  isDeleted    Boolean    @default(false)
+  taskAction   TaskAction @relation(fields: [taskActionId], references: [id])
+  taskActionId String     @db.ObjectId
+  userTasks    UserTask[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model UserTask {
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  user               User      @relation(fields: [userId], references: [id])
+  userId             String    @db.ObjectId
+  task               Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId             String    @db.ObjectId
+  taskStartTimestamp DateTime  @default(now())
+  isCompleted        Boolean   @default(false)
+  completedAt        DateTime?
+  updatedAt          DateTime  @updatedAt
+  submissionUrl      String? // field to store the social media post url; twitter url
+  metadata           Json? // field to store the metadata of the task; e.g., homescreenToken, etc.
+}
+
+model TaskAction {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique // Will contain: VISIT, TELEGRAM, TWITTER, REFERRAL
+  tasks Task[]
+}
+
+model Upgrade {
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        String
+  baseCost           Int
+  basePoints         Int
+  category           String
+  subcategory        String
+  userUpgrades       UserUpgrade[]
+  image              String?
+  srNo               String?
+  unlockRequirements UnlockRequirement[] @relation("RequiredUpgrade")
+  requiredBy         UnlockRequirement[] // Virtual field for back-reference
+  // Specials upgrade fields
+  isSpecial          Boolean             @default(false)
+  countdownEndsAt    DateTime?
+  imageUrl           String? // For custom image URLs
+}
+
+model UnlockRequirement {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  upgrade           Upgrade @relation(fields: [upgradeId], references: [id], onDelete: Cascade)
+  upgradeId         String  @db.ObjectId // The upgrade that has this requirement
+  requiredUpgrade   Upgrade @relation("RequiredUpgrade", fields: [requiredUpgradeId], references: [id], onDelete: Cascade)
+  requiredUpgradeId String  @db.ObjectId // ID of the required upgrade
+  requiredLevel     Int // Level required to unlock the current upgrade
+}
+
+model UserUpgrade {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String    @db.ObjectId
+  upgrade        Upgrade   @relation(fields: [upgradeId], references: [id], onDelete: Cascade)
+  upgradeId      String    @db.ObjectId
+  level          Int       @default(0)
+  acquiredAt     DateTime  @default(now())
+  cooldownEndsAt DateTime?
+
+  @@unique([userId, upgradeId])
+}
+
+model Partner {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
+  description String
+  image       String
+  link        String
+  isActive    Boolean @default(true)
+}
+
+model ShopItem {
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        String
+  category           ShopCategory
+  price              Int // in stars
+  image              String
+  isBasic            Boolean             @default(false)
+  invoiceUrl         String?
+  level              Int? // Optional: for basic avatar & background
+  // Boost specific fields
+  boostDuration      Float? // in hours
+  boostType          String? // e.g., "offline", "rewards"
+  boostReward        Float? // e.g., 50 for 50% boost
+  // Relation to UserInventoryItem
+  userInventoryItems UserInventoryItem[]
+}
+
+model UserInventory {
+  id                     String              @id @default(auto()) @map("_id") @db.ObjectId
+  user                   User                @relation("User Inventory", fields: [userId], references: [id], onDelete: Cascade)
+  userId                 String              @db.ObjectId
+  equippedAvatar         String?
+  equippedAvatarName     String?
+  equippedBackground     String?
+  equippedBackgroundName String?
+  // Relation to UserInventoryItem
+  items                  UserInventoryItem[]
+
+  @@unique([userId])
+}
+
+model UserInventoryItem {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  userInventory   UserInventory @relation(fields: [userInventoryId], references: [id], onDelete: Cascade)
+  userInventoryId String        @db.ObjectId
+  shopItem        ShopItem      @relation(fields: [shopItemId], references: [id], onDelete: Cascade)
+  shopItemId      String        @db.ObjectId
+  quantity        Int           @default(1) // Optional: to track how many of each item the user has
+  createdAt       DateTime      @default(now())
+  usedAt          DateTime?
+
+  @@unique([userInventoryId, shopItemId])
+}
+
+model AdminUser {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  username     String   @unique
+  passwordHash String
+  firstName    String?
+  lastName     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model GiveawaySubmission {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  link      String
+  createdAt DateTime @default(now())
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model OnchainTask {
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  smartContractAddress String
+  price                String
+  collectionMetadata   Json
+  itemMetadata         Json
+  points               Float
+  isActive             Boolean @default(true)
+
+  completions OnchainTaskCompletion[]
+}
+
+model OnchainTaskCompletion {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  onchainTask       OnchainTask @relation(fields: [onchainTaskId], references: [id])
+  onchainTaskId     String      @db.ObjectId
+  userId            String      @db.ObjectId
+  userWalletAddress String
+  completionTime    DateTime    @default(now())
+}
+
+model UserAirdrop {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  telegramId     String?
+  username       String?
+  equippedAvatar String?
+  price          Float
+  priceInTon     Float
+  createdAt      DateTime @default(now())
+  isFake         Boolean  @default(false)
+  userId         String?  @db.ObjectId
+  user           User?    @relation(fields: [userId], references: [id])
+}
+
+enum TaskType {
+  DAILY
+  OFFICIAL
+  TEMPORARY
+}
+
+enum ShopCategory {
+  AVATAR
+  BACKGROUND
+  BOOST
+  OTHERS
+}
+
+enum TransactionType {
+  DEPOSIT // User deposited Telegram Stars
+  EARNED // User earned stars from quests
+  SHOP // User spent stars on purchases
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+}
+
+enum RewardType {
+  STARS
+  POINTS
+}
+
+model Raffle {
+  id               String              @id @default(auto()) @map("_id") @db.ObjectId
+  startDate        DateTime
+  endDate          DateTime
+  status           String              @default("ACTIVE") // ACTIVE, FINISHED
+  entries          RaffleEntry[]
+  prizes           RafflePrize[]
+  winners          RaffleWinner[]
+  claimedTiers     RaffleClaimedTier[]
+  tonPayouts       TONPayout[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  PendingTONPayout PendingTONPayout[]
+}
+
+model RaffleEntry {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  user        User   @relation(fields: [userId], references: [id])
+  userId      String @db.ObjectId
+  raffle      Raffle @relation(fields: [raffleId], references: [id])
+  raffleId    String @db.ObjectId
+  ticketCount Int
+
+  createdAt DateTime @default(now())
+}
+
+model RafflePrize {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  raffle      Raffle         @relation(fields: [raffleId], references: [id])
+  raffleId    String         @db.ObjectId
+  type        PrizeType
+  amount      Float
+  winnerCount Int            @default(1)
+  tier        PrizeTier      @default(NORMAL)
+  winners     RaffleWinner[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RaffleWinner {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  userId    String      @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  raffleId  String      @db.ObjectId
+  raffle    Raffle      @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  prizeId   String      @db.ObjectId
+  prize     RafflePrize @relation(fields: [prizeId], references: [id], onDelete: Cascade)
+  claimed   Boolean     @default(false)
+  isPaid    Boolean     @default(false) // Track whether TON prize has been paid
+}
+
+model RaffleClaimedTier {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  raffle    Raffle   @relation(fields: [raffleId], references: [id])
+  raffleId  String   @db.ObjectId
+  tier      Int // The tier index that was claimed
+  createdAt DateTime @default(now())
+
+  @@unique([userId, raffleId, tier]) // Ensure a user can't claim the same tier twice
+}
+
+enum RaffleStatus {
+  ACTIVE
+  FINISHED
+  CANCELLED
+}
+
+enum PrizeType {
+  TON
+  YIELD_BOOST
+  TICKET
+}
+
+enum PrizeTier {
+  BIG
+  NORMAL
+}
+
+// For managing TON prize payouts that require admin approval
+model PendingTONPayout {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  raffleId  String         @db.ObjectId
+  raffle    Raffle         @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  status    String         @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  notes     String?
+  winners   PayoutWinner[]
+}
+
+// Individual winners within a payout batch
+model PayoutWinner {
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  userId           String           @db.ObjectId
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pendingPayoutId  String           @db.ObjectId
+  pendingPayout    PendingTONPayout @relation(fields: [pendingPayoutId], references: [id], onDelete: Cascade)
+  telegramId       String
+  amount           Float
+  recipientAddress String?
+  transactionHash  String?
+  status           String           @default("PENDING") // PENDING, SENT, FAILED
+  errorMessage     String?
+}
+
+// Record of TON payouts to raffle winners
+model TONPayout {
+  id              String   @id @default(cuid()) @map("_id") @db.ObjectId
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  raffleId        String   @db.ObjectId
+  raffle          Raffle   @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  transactionHash String?
+  processedBy     String // Admin ID or SYSTEM
+  winnerCount     Int
+  totalAmount     Float
+  status          String // PENDING, COMPLETED, FAILED
+  notes           String?
+}
+
+model Settings {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  key         String   @unique // e.g., "raffleSettings"
+  value       Json // Store settings as a JSON object
+  description String? // Optional description of what these settings are for
+}
+
+model ScheduledMessage {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  message     String
+  imageUrl    String?
+  buttonText  String?
+  buttonUrl   String?
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  status      MessageStatus @default(PENDING)
+  sentCount   Int           @default(0)
+  failedCount Int           @default(0)
+  isScheduled Boolean       @default(false) // true = scheduled, false = immediate
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+model TwitterAuth {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  telegramId   String   @unique
+  userId       String   @unique
+  screenName   String
+  accessToken  String
+  accessSecret String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model WithdrawalRequest {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String            @db.ObjectId
+  amount          Float
+  status          WithdrawalStatus  @default(PENDING)
+  walletAddress   String
+  transactionHash String?           // Filled when processed
+  requestedAt     DateTime          @default(now())
+  processedAt     DateTime?
+  processedBy     String?           // Admin who processed the request
+  notes           String?           // Optional notes from admin
+}
+
+enum WithdrawalStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  REJECTED
+  FAILED
+}
