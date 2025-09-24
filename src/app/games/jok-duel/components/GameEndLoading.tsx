@@ -14,10 +14,8 @@ interface RecoverEnergyProps {
 }
 
 const GameEndLoading: React.FC<RecoverEnergyProps> = ({
-  currentView,
   setCurrentView,
   gameId,
-  updateDuelGame,
   updateDuelGameUser,
   gameUser,
   telegramId,
