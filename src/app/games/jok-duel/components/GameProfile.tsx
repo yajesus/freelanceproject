@@ -1,3 +1,12 @@
+import { cards, character1, shopImageMap } from "@/images";
+import { calculateYieldPerHour } from "@/utils/calculations";
+import { useGameStore } from "@/utils/game-mechanics";
+import {
+  formatNumber,
+  showBackButton,
+  triggerHapticFeedback,
+} from "@/utils/ui";
+import Image from "next/image";
 import { FC, useEffect } from "react";
 import {
   gameProfileBg,
@@ -5,15 +14,6 @@ import {
   jokDuelOnboardingBtnBg,
   RankingBtnBg,
 } from "../images";
-import Image from "next/image";
-import { useGameStore } from "@/utils/game-mechanics";
-import { cards, character1, shopImageMap } from "@/images";
-import { calculateYieldPerHour } from "@/utils/calculations";
-import {
-  formatNumber,
-  showBackButton,
-  triggerHapticFeedback,
-} from "@/utils/ui";
 
 export interface GameProfileProps {
   currentView: string;

@@ -1,15 +1,15 @@
 "use client";
 
-import { shopImageMap, character1 } from "@/images";
+import { character1, shopImageMap } from "@/images";
+import { useGameStore } from "@/utils/game-mechanics";
+import Image from "next/image";
+import { useState } from "react";
 import {
   closeButtonBg,
   continueButtonBg,
   gameClosePopupBg,
   gameHeader,
 } from "../images";
-import { useGameStore } from "@/utils/game-mechanics";
-import Image from "next/image";
-import { useState } from "react";
 
 export const GameHeader = ({
   setCurrentView,

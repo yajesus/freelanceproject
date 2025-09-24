@@ -1,25 +1,22 @@
+import { cards } from '@/images';
+import { showBackButton, triggerHapticFeedback } from '@/utils/ui';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import {
   defeatBg,
   defeatDiamond,
   defeatTextBg,
-  jokDuelOnboardingBtnBg,
-  winDiamond,
-  winningBg,
-  winningCountBg,
   drawBg1,
   drawBg2,
   drawBg3,
   drawBg4,
+  jokDuelOnboardingBtnBg,
+  winDiamond,
+  winningBg,
+  winningCountBg,
 } from '../images';
-import Image from 'next/image';
-import { OpponentComment } from './OpponentComment';
 import { GameHeader } from './GameHeader';
-import { AnimatedGif } from './AnimatedGif';
-import winGif from '../animations/joker/victory.json';
-import loseGif from '../animations/joker/die.json';
-import { showBackButton, triggerHapticFeedback } from '@/utils/ui';
-import { cards } from '@/images';
+import { OpponentComment } from './OpponentComment';
 interface FinishProps {
   setCurrentView: (view: string) => void;
   gameUser: any;

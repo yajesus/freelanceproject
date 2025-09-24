@@ -1,7 +1,7 @@
+import { calculateYieldPerHour } from "@/utils/calculations";
+import { useGameStore } from "@/utils/game-mechanics";
 import { useEffect, useRef, useState } from "react";
 import { gameBgBlur1, gameBgBlur2, gameBgBlur3, gameBgBlur4, gameBgBlur5, gameBgBlur6, gameBgBlur7 } from "../images";
-import { useGameStore } from "@/utils/game-mechanics";
-import { calculateYieldPerHour } from "@/utils/calculations";
 
 interface RecoverEnergyProps {
   currentView: string;

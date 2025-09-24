@@ -18,15 +18,15 @@ import {
   openedOrange,
   openedRed,
 } from "@/src/app/games/jok-duel/images";
-import Image from "next/image";
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import { FlippingCard } from "./FlippingCard";
-import { OpponentCard } from "./OpponentCard";
-import { GameHeader } from "./GameHeader";
-import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
 import { useGameStore } from "@/utils/game-mechanics";
+import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
-import { loadAnimation } from "../animations/index"
+import Image from "next/image";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { loadAnimation } from "../animations/index";
+import { FlippingCard } from "./FlippingCard";
+import { GameHeader } from "./GameHeader";
+import { OpponentCard } from "./OpponentCard";
 
 interface GameProps {
   setCurrentView: (view: string) => void;

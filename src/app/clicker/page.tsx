@@ -2,27 +2,27 @@
 
 'use client';
 
+import { CheckTokenHoldings } from '@/components/CheckTokenHoldings';
+import ComebackReward from '@/components/ComebackReward';
+import LoadingScreen from '@/components/Loading';
+import Navigation from '@/components/Navigation';
+import AutoIncrementYieldPerHour from '@/components/UpgradeYieldPerHour';
+import { useGameStore } from '@/utils/game-mechanics';
+import dynamic from 'next/dynamic';
+import { Luckiest_Guy } from 'next/font/google';
 import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
-  useMemo,
 } from 'react';
-import dynamic from 'next/dynamic';
-import LoadingScreen from '@/components/Loading';
-import Navigation from '@/components/Navigation';
-import AutoIncrementYieldPerHour from '@/components/UpgradeYieldPerHour';
-import { CheckTokenHoldings } from '@/components/CheckTokenHoldings';
-import ComebackReward from '@/components/ComebackReward';
-import { Luckiest_Guy } from 'next/font/google';
-import { useGameStore } from '@/utils/game-mechanics';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import WithdrawalPopup from '@/components/popups/WithdrawalPopup';
-import StarSelectionPopup from '@/components/popups/StarSelectionPopup';
 import AppLeaderboard from '@/components/AppLeaderboard';
+import StarSelectionPopup from '@/components/popups/StarSelectionPopup';
+import WithdrawalPopup from '@/components/popups/WithdrawalPopup';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Mine = dynamic(() => import('@/components/Mine'), { ssr: true });
 const Friends = dynamic(() => import('@/components/Friends'), { ssr: true });

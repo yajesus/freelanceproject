@@ -2,8 +2,8 @@
 
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
+import { useCallback, useEffect, useRef } from 'react';
 
 export function AutoIncrement() {
   const { lastClickTimestamp, profitPerHour, pointsPerClick, incrementPoints } = useGameStore();

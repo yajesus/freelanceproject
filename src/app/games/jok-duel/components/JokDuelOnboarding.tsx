@@ -5,11 +5,10 @@ import {
   jokDuelOnboardingText,
   jokTrophy,
 } from '@/src/app/games/jok-duel/images';
-import { FC, useEffect } from 'react';
+import { showBackButton } from '@/utils/ui';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { showBackButton } from '@/utils/ui';
-import { useGameStore } from '@/utils/game-mechanics';
+import { FC, useEffect } from 'react';
 
 export interface JokDuelOnboardingProps {
   currentView: string;
