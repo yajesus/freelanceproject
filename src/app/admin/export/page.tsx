@@ -20,13 +20,8 @@ const userFields: FieldName[] = [
     'points',
     'pointsBalance',
     'multitapLevelIndex',
-    'energy',
-    'energyRefillsLeft',
-    'energyLimitLevelIndex',
     'mineLevelIndex',
     'lastPointsUpdateTimestamp',
-    'lastEnergyUpdateTimestamp',
-    'lastEnergyRefillsTimestamp',
     'tonWalletAddress',
     'referralPointsEarned',
     'offlinePointsEarned'

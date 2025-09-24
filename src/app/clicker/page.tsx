@@ -76,7 +76,6 @@ const GameComponents = {
     () => import('../games/jok-duel/components/GameProfile'),
     { ssr: true }
   ),
-  // RecoverEnergy: dynamic(() => import('../games/jok-duel/components/RecoverEnergy'), { ssr: true }),
   GameEndLoading: dynamic(
     () => import('../games/jok-duel/components/GameEndLoading'),
     { ssr: true }
@@ -150,7 +149,6 @@ function ClickerPage() {
   const [gameState, setGameState] = useState({
     gameUser: {
       id: null,
-      // energy: 50,
       gamesPlayed: 0,
       watchedAds: 0,
     },
@@ -172,7 +170,6 @@ function ClickerPage() {
   const gameId = useRef<string>('');
   const timeoutRefs = useRef<NodeJS.Timeout[]>([]);
   const userPollingInterval = useRef<NodeJS.Timeout | null>(null);
-  // const energyRefreshInterval = useRef<NodeJS.Timeout | null>(null);
 
   const telegramId = useMemo(() => {
     return extractTelegramId(userInfo.userTelegramInitData) || 'undefined';
@@ -181,7 +178,6 @@ function ClickerPage() {
   // Polling interval constants
   const WITHDRAWAL_POLLING_INTERVAL = 15 * 60 * 1000; // 15 minutes
   const USER_POLLING_INTERVAL = 5000; // 5 seconds for user data
-  // const ENERGY_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes for energy refresh
   const CACHE_KEY = useMemo(() => 'withdrawal_data_cache', []);
 
   const shouldShowLoading = useMemo(() => {
@@ -313,38 +309,6 @@ function ClickerPage() {
     };
   }, [userInfo, telegramId, appState.updated, fetchOrCreateUser]);
 
-  // Energy auto-refresh polling
-  // useEffect(() => {
-  //   if (!telegramId || telegramId === 'undefined') return;
-
-  //   const autoRefreshEnergy = async () => {
-  //     try {
-  //       const res = await fetch(`/api/duelGameUser?telegramId=${telegramId}`);
-  //       const data = await res.json();
-  //       if (res.ok && data?.data) {
-  //         setGameState((prev) => ({
-  //           ...prev,
-  //           gameUser: data.data,
-  //         }));
-  //       }
-  //     } catch (err) {
-  //       console.error('⛔ Error in auto energy refresh:', err);
-  //     }
-  //   };
-
-  //   energyRefreshInterval.current = setInterval(
-  //     autoRefreshEnergy,
-  //     ENERGY_REFRESH_INTERVAL
-  //   );
-
-  //   return () => {
-  //     if (energyRefreshInterval.current) {
-  //       clearInterval(energyRefreshInterval.current);
-  //       energyRefreshInterval.current = null;
-  //     }
-  //   };
-  // }, [telegramId]);
-
   // Leaderboard fetching
   useEffect(() => {
     if (!gameState.gameUser?.id) return;
@@ -405,44 +369,6 @@ function ClickerPage() {
     [gameState.gameUser?.id, telegramId]
   );
 
-  // Energy functions
-  // const increaseEnergy = useCallback(
-  //   async (amount: number = 10) => {
-  //     if (!gameState.gameUser) return;
-
-  //     const newEnergy = Math.min(50, gameState.gameUser.energy + amount);
-  //     const updates: Record<string, any> = { energy: newEnergy };
-
-  //     if (amount === 10) {
-  //       updates.watchedAds = gameState.gameUser.watchedAds + 1;
-  //     }
-
-  //     setGameState((prev) => ({
-  //       ...prev,
-  //       gameUser: { ...prev.gameUser, ...updates },
-  //     }));
-
-  //     await updateDuelGameUser(updates);
-  //   },
-  //   [gameState.gameUser, updateDuelGameUser]
-  // );
-
-  // const decreaseEnergy = useCallback(
-  //   async (amount: number = 10) => {
-  //     const currentEnergy = gameState.gameUser.energy;
-  //     const newEnergy =
-  //       currentEnergy === 50 ? 40 : Math.max(0, currentEnergy - amount);
-
-  //     setGameState((prev) => ({
-  //       ...prev,
-  //       gameUser: { ...prev.gameUser, energy: newEnergy },
-  //     }));
-
-  //     await updateDuelGameUser({ energy: newEnergy });
-  //   },
-  //   [gameState.gameUser.energy, updateDuelGameUser]
-  // );
-
   // Game start function
   const startGame = useCallback(async () => {
     setGameState((prev) => ({
@@ -475,7 +401,7 @@ function ClickerPage() {
         console.error('❌ Failed to create duel game', gameData);
         return;
       }
-
+      
       gameId.current = gameData.data.id;
       await updateDuelGameUser({
         gamesPlayed: gameState.gameUser.gamesPlayed + 1,
@@ -490,7 +416,7 @@ function ClickerPage() {
     if (
       gameState.gameUser.id &&
       appState.isInitialized &&
-      appState.currentView === 'opponent-selection'
+      appState.currentView === 'game'
     ) {
       startGame();
     }
@@ -810,9 +736,6 @@ function ClickerPage() {
       if (userPollingInterval.current) {
         clearInterval(userPollingInterval.current);
       }
-      // if (energyRefreshInterval.current) {
-      //   clearInterval(energyRefreshInterval.current);
-      // }
     };
   }, [clearAllTimeouts]);
 
@@ -828,8 +751,6 @@ function ClickerPage() {
       opponentUsername: gameState.opponentUsername,
       leaderBoardInfo: gameState.leaderBoardInfo,
       telegramId,
-      // decreaseEnergy,
-      // increaseEnergy,
       updateDuelGame,
       updateDuelGameUser,
       gameId,
@@ -884,7 +805,6 @@ function ClickerPage() {
       case 'game-profile':
         return <GameComponents.GameProfile {...viewProps} />;
       // case 'recover':
-      //   return <GameComponents.RecoverEnergy {...viewProps} />;
       case 'gameEndLoading':
         return <GameComponents.GameEndLoading {...viewProps} />;
       case 'onboardingLoading':
@@ -916,8 +836,6 @@ function ClickerPage() {
     handleOpenWithdrawalPopup,
     handleTopUpBalance,
     telegramId,
-    // decreaseEnergy,
-    // increaseEnergy,
     updateDuelGame,
     updateDuelGameUser,
     rematchGame,

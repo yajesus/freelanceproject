@@ -56,8 +56,6 @@ export default React.memo(function Game({
     points,
     pointsBalance,
     pointsPerClick,
-    energy,
-    maxEnergy,
     gameLevelIndex,
     clickTriggered,
     updateLastClickTimestamp
@@ -86,7 +84,7 @@ export default React.memo(function Game({
     e.preventDefault(); // Prevent default behavior
 
     const processInteraction = (clientX: number, clientY: number, pageX: number, pageY: number) => {
-      if (energy - pointsPerClick < 0) return;
+      if (pointsPerClick < 0) return;
 
       const card = e.currentTarget;
       const rect = card.getBoundingClientRect();
@@ -194,10 +192,6 @@ export default React.memo(function Game({
               <div className='flex justify-between px-4 mt-4'>
                 <p className='flex justify-center items-center gap-1'>
                   <Image priority={false} src={lightning} alt='Exchange' width={40} height={40} />
-                  <span className='flex flex-col'>
-                    <span className='text-xl font-bold'>{energy}</span>
-                    <span className='text-base font-medium'>/ {maxEnergy}</span>
-                  </span>
                 </p>
                 <button onClick={() => handleViewChange('boost')} className='flex justify-center items-center gap-1'>
                   <Rocket size={40} />

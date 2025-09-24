@@ -176,10 +176,6 @@ export const SHARE_AFFILIATE_LINK_TASK_NAME = 'Share your affiliate link with a 
 
 export const MAXIMUM_INACTIVE_TIME_FOR_MINE = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
 
-export const MAX_ENERGY_REFILLS_PER_DAY = 6;
-export const MAX_REWARD_CLAIM = 1;
-export const ENERGY_REFILL_COOLDOWN = 60 * 60 * 1000; // 1 hour in milliseconds
-
 export const REFERRAL_BONUS_BASE = 5000;
 export const REFERRAL_BONUS_PREMIUM = 25000;
 
@@ -189,13 +185,6 @@ export const multitapUpgradeCostCoefficient = 2;
 
 export const multitapUpgradeBaseBenefit = 1;
 export const multitapUpgradeBenefitCoefficient = 1;
-
-// Energy
-export const energyUpgradeBasePrice = 1000;
-export const energyUpgradeCostCoefficient = 2;
-
-export const energyUpgradeBaseBenefit = 500;
-export const energyUpgradeBenefitCoefficient = 1;
 
 // Mine (profit per hour)
 export const mineUpgradeBasePrice = 1000;

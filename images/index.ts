@@ -16,7 +16,6 @@ import homeHeader from './home-header.webp';
 import JokHeadOnly from './jok_head_only.webp';
 import JokLogo from './jok_logo.webp';
 import dailyRewards from './daily-rewards.webp';
-// import energyBg from './energyBg.webp';
 import raffleBgGradient from './bg-gradient-raffle.webp';
 import dailyChestPrizeBg from './daily-chest-prize-bg.png';
 import bitget from './bitget.webp';
@@ -580,7 +579,6 @@ export {
   paris_Thumb,
   royalHouse_Thumb,
   space_Thumb,
-  // energyBg,
   raffleBgGradient,
   character1,
   character1_harley,

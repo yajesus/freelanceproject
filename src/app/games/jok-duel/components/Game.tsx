@@ -23,7 +23,6 @@ import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { FlippingCard } from "./FlippingCard";
 import { OpponentCard } from "./OpponentCard";
 import { GameHeader } from "./GameHeader";
-import { EverySecondEnergy } from "./EverySecondEnergy";
 import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
 import { useGameStore } from "@/utils/game-mechanics";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
@@ -126,23 +125,9 @@ const Game: React.FC<GameProps> = ({
     }
   }, [count, stopCount]);
 
-  const [energyEffects, setEnergyEffects] = useState<
-    { id: number; left: number }[]
-  >([]);
-  const energyCounter = useRef(0);
   useEffect(() => {
     const interval = setInterval(() => {
       const randomLeft = 40 + Math.random() * 20;
-
-      setEnergyEffects((prev) => [
-        ...prev,
-        { id: energyCounter.current++, left: randomLeft },
-      ]);
-      setTimeout(() => {
-        setEnergyEffects((prev) =>
-          prev.filter((effect) => effect.id !== energyCounter.current - 1)
-        );
-      }, 2000);
     }, 60000);
 
     return () => clearInterval(interval);
@@ -569,9 +554,6 @@ const Game: React.FC<GameProps> = ({
                   </p>
                 </div>
               </>
-            ))}
-            {energyEffects.map((effect) => (
-              <EverySecondEnergy key={effect.id} leftPosition={effect.left} />
             ))}
             {result !== "" && (
               <div className="absolute left-1/2 transform -translate-x-1/2 top-[200px]">

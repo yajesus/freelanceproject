@@ -601,20 +601,14 @@
     "failedToAddTicket": "Failed to add ticket"
   },
   "Boost": {
-    "refillFailed": "Failed to refill energy",
-    "refillSuccessful": "Energy Refill Successful!",
     "multitapFailed": "Failed to upgrade multitap",
     "multitapSuccessful": "Multitap Upgrade Successful!",
-    "energyLimitFailed": "Failed to upgrade energy limit",
-    "energyLimitSuccessful": "Energy Limit Upgrade Successful!",
     "freeDailyBoosters": "Free daily boosters",
-    "fullEnergy": "Full energy",
     "available": "available",
     "refill": "Refill",
     "boosters": "Boosters",
     "multitap": "Multitap",
     "upgrade": "Upgrade",
-    "energyLimit": "Energy limit",
     "backToGame": "Back to Game",
     "loading": "Loading..."
   },

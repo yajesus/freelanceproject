@@ -16,13 +16,8 @@ model User {
   pointsBalance               Float                @default(0)
   tonBalance                  Float                @default(0)
   multitapLevelIndex          Int                  @default(0)
-  energy                      Int                  @default(100)
-  energyRefillsLeft           Int                  @default(6)
-  energyLimitLevelIndex       Int                  @default(0)
   mineLevelIndex              Int                  @default(0)
   lastPointsUpdateTimestamp   DateTime             @default(now())
-  lastEnergyUpdateTimestamp   DateTime             @default(now())
-  lastEnergyRefillsTimestamp  DateTime             @default(now())
   tonWalletAddress            String?
   referralPointsEarned        Float                @default(0)
   offlinePointsEarned         Float                @default(0)
@@ -110,13 +105,10 @@ model UserComboProgress {
 model DuelGameUser {
   id                   String    @id @default(uuid()) @map("_id")
   userId               String    @unique
-  energy               Int       @default(50)
-  lastEnergyUpdateTime DateTime? @default(now())
   wins                 Int       @default(0)
   losses               Int       @default(0)
   draws                Int       @default(0)
   gamesPlayed          Int       @default(0)
-  lastEnergyRegen      DateTime? @default(now())
   watchedAds           Int       @default(0)
   lastAdWatchReset     DateTime? @default(now())
 }

@@ -9,7 +9,6 @@ import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import {
-  calculateEnergyLimit,
   calculateLevelIndex,
   calculatePointsPerClick,
   calculateProfitPerHour,
@@ -102,11 +101,6 @@ const JokDuelLoading: FC<JokDuelLoadingProps> = ({ setIsLoading, setCurrentView 
         unsynchronizedPoints: 0,
         multitapLevelIndex: userData.multitapLevelIndex,
         pointsPerClick: calculatePointsPerClick(userData.multitapLevelIndex),
-        energy: userData.energy,
-        maxEnergy: calculateEnergyLimit(userData.energyLimitLevelIndex),
-        energyRefillsLeft: userData.energyRefillsLeft,
-        energyLimitLevelIndex: userData.energyLimitLevelIndex,
-        lastEnergyRefillTimestamp: userData.lastEnergyRefillsTimestamp,
         mineLevelIndex: userData.mineLevelIndex,
         profitPerHour: calculateProfitPerHour(userData.mineLevelIndex),
         tonWalletAddress: userData?.tonWalletAddress,

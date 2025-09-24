@@ -293,7 +293,7 @@ export default function ShopViewWithTabs({
   const basicItems = useMemo(
     () =>
       items
-        .filter((item) => item.isBasic && item.name != 'Game Energy')
+        .filter((item) => item.isBasic)
         .sort((a, b) => (a.level || 0) - (b.level || 0)),
     [items]
   );

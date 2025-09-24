@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { botUrlQr, JokHeadOnly, pageBackground } from '@/images';
 import {
-  calculateEnergyLimit,
   calculateLevelIndex,
   calculatePointsPerClick,
   calculateProfitPerHour,
@@ -101,11 +100,6 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         unsynchronizedPoints: 0,
         multitapLevelIndex: userData.multitapLevelIndex,
         pointsPerClick: calculatePointsPerClick(userData.multitapLevelIndex),
-        energy: userData.energy,
-        maxEnergy: calculateEnergyLimit(userData.energyLimitLevelIndex),
-        energyRefillsLeft: userData.energyRefillsLeft,
-        energyLimitLevelIndex: userData.energyLimitLevelIndex,
-        lastEnergyRefillTimestamp: userData.lastEnergyRefillsTimestamp,
         mineLevelIndex: userData.mineLevelIndex,
         profitPerHour: calculateProfitPerHour(userData.mineLevelIndex),
         tonWalletAddress: userData?.tonWalletAddress,

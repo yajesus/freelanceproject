@@ -12,7 +12,6 @@ export function PointSynchronizer() {
     const showToast = useToast();
     const {
         userTelegramInitData,
-        energy,
         unsynchronizedPoints,
         lastClickTimestamp,
         resetUnsynchronizedPoints
@@ -32,7 +31,6 @@ export function PointSynchronizer() {
             console.log("Sending data to server:", {
                 initData: userTelegramInitData,
                 unsynchronizedPoints: pointsToSync,
-                currentEnergy: energy,
                 syncTimestamp,
             });
 
@@ -44,7 +42,6 @@ export function PointSynchronizer() {
                 body: JSON.stringify({
                     initData: userTelegramInitData,
                     unsynchronizedPoints: pointsToSync,
-                    currentEnergy: energy,
                     syncTimestamp,
                 }),
             });
@@ -65,7 +62,7 @@ export function PointSynchronizer() {
         } finally {
             setIsSyncing(false);
         }
-    }, [userTelegramInitData, unsynchronizedPoints, energy, resetUnsynchronizedPoints]);
+    }, [userTelegramInitData, unsynchronizedPoints, resetUnsynchronizedPoints]);
 
     useEffect(() => {
         if (syncTimeoutRef.current) {

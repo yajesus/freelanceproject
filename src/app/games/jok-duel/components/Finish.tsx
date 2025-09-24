@@ -27,8 +27,6 @@ interface FinishProps {
   updateDuelGame: any;
   startGame: () => void;
   updateDuelGameUser: any;
-  // decreaseEnergy: (amount: number) => void;
-  setChestOpeningView: (view: string) => void;
 }
 
 const Finish = ({
@@ -37,8 +35,6 @@ const Finish = ({
   gameId,
   startGame,
   updateDuelGameUser,
-  // decreaseEnergy,
-  setChestOpeningView,
 }: FinishProps) => {
   const [gameResult, setGameResult] = useState<any>(
     JSON.parse(localStorage.getItem('gameResult') || '{}')
@@ -82,14 +78,8 @@ const Finish = ({
       startGame();
       setCurrentView('game');
     } else {
-      // if (gameUser.energy < 10) setCurrentView("recover");
-      // else {
-      //   decreaseEnergy(10);
-      //   startGame();
-      //   setCurrentView("opponent-selection");
-      // }
       startGame();
-      setCurrentView('opponent-selection');
+      setCurrentView('game');
     }
   };
 
@@ -118,10 +108,10 @@ const Finish = ({
     }
   };
 
-  const handleChestOpening = () => {
-    setChestOpeningView('win');
-    setCurrentView('chest-opening');
-  };
+  // const handleChestOpening = () => {
+  //   setChestOpeningView('win');
+  //   setCurrentView('chest-opening');
+  // };
   return (
     <div className='bg-black flex justify-center min-h-screen'>
       <div className='w-full bg-black text-white font-bold flex flex-col max-w-xl'>
@@ -178,7 +168,7 @@ const Finish = ({
                         : gameResult.me + '-' + gameResult.pc}
                     </h1>
                   </div>
-                  {
+                  {/* {
                     // @ts-ignore
                     win === 'win' && popup == false && (
                       <AnimatedGif
@@ -214,7 +204,7 @@ const Finish = ({
                       load={false}
                       containerClassname='absolute right-1 -translate-x-1/2 top-[60%] transform text-center'
                     />
-                  )}
+                  )} */}
 
                   <div
                     className='absolute bottom-[20%] transform left-1/2 -translate-x-1/2'
@@ -277,7 +267,7 @@ const Finish = ({
                       : gameResult.pc + '-' + gameResult.pc}
                   </h1>
                 </div>
-                {
+                {/* {
                   // @ts-ignore
                   win === 'win' && popup == false && (
                     <AnimatedGif
@@ -305,7 +295,7 @@ const Finish = ({
                       className='absolute bottom-[15%] left-1/2 -translate-x-1/2'
                     />
                   )
-                }
+                } */}
 
                 {win === 'draw' && (
                   <OpponentComment
@@ -368,9 +358,9 @@ const Finish = ({
                       : 'Claim your victory!'}
                   </h2>
                   <h2 className='text-[16px] text-center mt-2 whitespace-nowrap'>
-                    {win === 'lose'
-                      ? `🎁 You have earned ${formatNumber(earned)}!`
-                      : '🎁 Your mystery reward is ready!'}
+                    {/* {win === 'lose' */}
+                      🎁 You have earned ${formatNumber(earned)}!
+                      {/* : '🎁 Your mystery reward is ready!'} */}
                   </h2>
                   {win === 'lose' && (
                     <Image
@@ -381,7 +371,7 @@ const Finish = ({
                       width={63}
                     />
                   )}
-                  {win === 'win' ? (
+                  {/* {win === 'win' ? (
                     <button
                       className='w-[100%] h-[20%] mt-[45%]'
                       onClick={handleChestOpening}
@@ -394,10 +384,10 @@ const Finish = ({
                     >
                       Open Chest
                     </button>
-                  ) : (
+                  ) : ( */}
                     <>
                       <button
-                        className='w-[100%] h-[20%]'
+                        className='w-[100%] h-[20%] mt-[3%]'
                         onClick={() => handlePlayAgain()}
                         style={{
                           backgroundImage: `url(${jokDuelOnboardingBtnBg.src})`,
@@ -421,7 +411,7 @@ const Finish = ({
                         Claim & Quit
                       </button>
                     </>
-                  )}
+                  {/* )} */}
                 </div>
               </div>
             )}

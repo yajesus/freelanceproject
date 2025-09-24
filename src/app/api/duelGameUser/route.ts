@@ -20,7 +20,6 @@ export async function POST(req: Request) {
       const created = await prisma.duelGameUser.create({
         data: {
           userId: telegramId,
-          energy: 50,
           wins: 0,
           losses: 0,
           draws: 0,
@@ -120,34 +119,6 @@ export async function GET(req: Request) {
         });
       }
     }
-
-    // ✅ Energy regen fallback
-    if (!user.lastEnergyRegen || user.energy === 50) {
-      user = await prisma.duelGameUser.update({
-        where: { userId: telegramId },
-        data: { lastEnergyRegen: now },
-      });
-
-      return NextResponse.json({ success: true, data: user });
-    }
-
-    const minutesPassed = Math.floor(
-      (now.getTime() - new Date(user.lastEnergyRegen).getTime()) / (1000 * 60)
-    );
-
-    const energyToAdd = Math.floor(minutesPassed / 5);
-    const updatedEnergy = Math.min(user.energy + energyToAdd, 50);
-
-    if (energyToAdd > 0 && updatedEnergy > user.energy) {
-      user = await prisma.duelGameUser.update({
-        where: { userId: telegramId },
-        data: {
-          energy: updatedEnergy,
-          lastEnergyRegen: now,
-        },
-      });
-    }
-
     return NextResponse.json({ success: true, data: user });
   } catch (error) {
     console.error("❌ GET /api/duelGameUser error:", error);

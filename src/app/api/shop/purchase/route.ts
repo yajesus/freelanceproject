@@ -127,26 +127,6 @@ export async function POST(req: NextRequest) {
           });
           if (!dbUser) throw new Error('User not found');
 
-          // Special purchase for item "Game Energy"
-          if (shopItem.name === 'Game Energy') {
-            if (dbUser.totalStars < 100) {
-              throw new Error('Insufficient stars balance');
-            }
-
-            await tx.user.update({
-              where: { id: dbUser.id },
-              data: { totalStars: { decrement: 100 } }
-            });
-
-            return {
-              success: true,
-              message: 'Special item purchased with 100 stars',
-              starsUsed: 100,
-              remainingStars: dbUser.totalStars - 100,
-              remainingEarnedStars: dbUser.earnedStars
-            };
-          }
-
           if (starsToUse > 0) {
             const tenMinutesAgo = new Date(Date.now() - TRANSACTION_EXPIRY_MINS * 60 * 1000);
 

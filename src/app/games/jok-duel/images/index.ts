@@ -45,7 +45,6 @@ import gameBgBlur5 from './gameBackgrounds/4-blur.png';
 import gameBgBlur6 from './gameBackgrounds/5-blur.png';
 import gameBgBlur7 from './gameBackgrounds/6-blur.png';
 import goldenCup from './golden-cup.png';
-import energyIcon from './energyIcon.png';
 import heartBg from './heart-bg.png';
 import heart from './heart.png';
 import gameTimer from './game-timer.png';
@@ -69,7 +68,6 @@ import countdown1 from './countdown1.png';
 import countdown2 from './countdown2.png';
 import countdown3 from './countdown3.png';
 import go from './Go.png';
-// import energyBgBordered from "./energyBgBordered.png";
 
 //intro
 import introBarBg from './introBarBg.png';
@@ -119,7 +117,6 @@ export {
   jokDuelLoadingText,
   jokDuelLoadingCards,
   jokDuelLoadingBg,
-  // energyBgBordered,
   // Onboarding
   jokDuelOnboardingBg,
   jokDuelOnboardingText,
@@ -150,7 +147,6 @@ export {
   gameBg6,
   gameBg7,
   goldenCup,
-  energyIcon,
   heartBg,
   heart,
   gameTimer,

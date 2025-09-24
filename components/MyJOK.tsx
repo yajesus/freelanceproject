@@ -17,7 +17,6 @@ import {
   tonAirdrop,
   tonAirdropStar,
   wallpaper1,
-  // energyBg,
   leaderboard,
 } from '@/images';
 import { useGameStore } from '@/utils/game-mechanics';
@@ -43,7 +42,6 @@ import { formatTime } from '@/lib/utils';
 import { useQuests } from '@/hooks/useQuests';
 import { TASK_DAILY_RESET_TIME } from '@/utils/consts';
 import { calculateYieldPerHour } from '@/utils/calculations';
-// import { energyBgBordered } from '@/src/app/games/jok-duel/images';
 
 interface MyJOKProps {
   currentView: string;
@@ -74,7 +72,6 @@ const AvatarButton = memo(
           {/* <p
           className='absolute -top-1/2 left-1/2 -translate-x-1/2 text-[12px] flex w-[80px] h-[32px] gap-1 z-1 justify-center items-start pt-[2%]'
           style={{
-            backgroundImage: `url(${gameUser.energy == 50 ? energyBgBordered.src : energyBg.src})`,
             backgroundPosition: 'center',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat'
@@ -90,7 +87,6 @@ const AvatarButton = memo(
               fill='#4F9CE8'
             />
           </svg>
-          <span>{gameUser.energy} / 50</span>
         </p> */}
           <p className='font-base uppercase text-nowrap'>{t('battle-jok')}</p>
           <p className='text-xs'>{t('battle-jok-desc')}</p>

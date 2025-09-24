@@ -8,10 +8,6 @@ import {
   calculateYieldPerHour
 } from './calculations';
 import {
-  energyUpgradeBaseBenefit,
-  energyUpgradeBasePrice,
-  energyUpgradeBenefitCoefficient,
-  energyUpgradeCostCoefficient,
   LEVELS,
   MAX_COOLDOWN_TIME,
   MAXIMUM_INACTIVE_TIME_FOR_MINE,
@@ -43,11 +39,6 @@ export interface InitialGameState {
   unsynchronizedPoints: number;
   multitapLevelIndex: number;
   pointsPerClick: number;
-  energy: number;
-  maxEnergy: number;
-  energyRefillsLeft: number;
-  energyLimitLevelIndex: number;
-  lastEnergyRefillTimestamp: number;
   mineLevelIndex: number;
   profitPerHour: number;
   tonWalletAddress: string | null;
@@ -111,11 +102,6 @@ export interface GameState extends InitialGameState {
   resetUnsynchronizedPoints: (syncedPoints: number) => void;
   setPointsPerClick: (pointsPerClick: number) => void;
   upgradeMultitap: () => void;
-  setEnergy: (energy: number) => void;
-  incrementEnergy: (amount: number) => void;
-  refillEnergy: () => void;
-  upgradeEnergyLimit: () => void;
-  resetDailyRefills: () => void;
   setMineLevelIndex: (mineLevelIndex: number) => void;
   upgradeMineLevelIndex: () => void;
   setTonWalletAddress: (address: string | null) => void;
@@ -177,14 +163,6 @@ export const calculatePointsPerClick = (levelIndex: number) => {
   return calculateUpgradeBenefit(levelIndex, multitapUpgradeBaseBenefit, multitapUpgradeBenefitCoefficient);
 };
 
-export const calculateEnergyLimitUpgradeCost = (levelIndex: number) => {
-  return calculateUpgradeCost(levelIndex, energyUpgradeBasePrice, energyUpgradeCostCoefficient);
-};
-
-export const calculateEnergyLimit = (levelIndex: number) => {
-  return calculateUpgradeBenefit(levelIndex, energyUpgradeBaseBenefit, energyUpgradeBenefitCoefficient);
-};
-
 export const calculateMineUpgradeCost = (levelIndex: number) => {
   return calculateUpgradeCost(levelIndex, mineUpgradeBasePrice, mineUpgradeCostCoefficient);
 };
@@ -204,16 +182,6 @@ export const calculateMinedPoints = (levelIndex: number, previousTimestamp: numb
   const profitPerHour = calculateProfitPerHour(levelIndex);
   const minedPoints = (profitPerHour / 3600000) * timePeriod;
   return Math.max(0, minedPoints);
-};
-
-export const calculateRestoredEnergy = (
-  multitapLevelIndex: number,
-  previousTimestamp: number,
-  newTimestamp: number
-): number => {
-  const pointsPerClick = calculatePointsPerClick(multitapLevelIndex);
-  const restoredEnergy = pointsPerClick * Math.floor((newTimestamp - previousTimestamp) / 1000);
-  return Math.max(0, restoredEnergy);
 };
 
 export const calculateSkillUpgradeCost = (levelIndex: number, basePrice: number) => {
@@ -244,16 +212,14 @@ export const createGameStore = (initialState: InitialGameState) =>
       }),
     clickTriggered: () =>
       set((state) => {
-        if (state.energy - state.pointsPerClick < 0) return {};
+        if (state.pointsPerClick < 0) return {};
         const newPoints = state.points + state.pointsPerClick;
         const newPointsBalance = state.pointsBalance + state.pointsPerClick;
         const newUnsynchronizedPoints = state.unsynchronizedPoints + state.pointsPerClick;
-        const newEnergy = state.energy - state.pointsPerClick;
         return {
           points: newPoints,
           pointsBalance: newPointsBalance,
           unsynchronizedPoints: newUnsynchronizedPoints,
-          energy: newEnergy,
           lastClickTimestamp: Date.now()
         };
       }),
@@ -293,39 +259,8 @@ export const createGameStore = (initialState: InitialGameState) =>
         }
         return state;
       }),
-    setEnergy: (energy) => set({ energy }),
     setlastClaimRewardTimestamp: (lastClaimRewardTimestamp) => set({ lastClaimRewardTimestamp }),
     setLastClaimRewardDay: (lastClaimRewardDay) => set({ lastClaimRewardDay }),
-
-    incrementEnergy: (amount) =>
-      set((state) => ({
-        energy: Math.min(state.energy + amount, state.maxEnergy)
-      })),
-    refillEnergy: () =>
-      set((state) => {
-        if (state.energyRefillsLeft > 0) {
-          return {
-            energy: state.maxEnergy,
-            energyRefillsLeft: state.energyRefillsLeft - 1,
-            lastEnergyRefillTimestamp: Date.now()
-          };
-        }
-        return state;
-      }),
-
-    upgradeEnergyLimit: () =>
-      set((state) => {
-        const upgradeCost = calculateEnergyLimitUpgradeCost(state.energyLimitLevelIndex);
-        if (state.pointsBalance >= upgradeCost) {
-          return {
-            pointsBalance: state.pointsBalance - upgradeCost,
-            maxEnergy: calculateEnergyLimit(state.energyLimitLevelIndex + 1),
-            energyLimitLevelIndex: state.energyLimitLevelIndex + 1
-          };
-        }
-        return state;
-      }),
-    resetDailyRefills: () => set({ energyRefillsLeft: 6 }),
     setMineLevelIndex: (mineLevelIndex) => set({ mineLevelIndex }),
     upgradeMineLevelIndex: () =>
       set((state) => {
@@ -493,11 +428,6 @@ export const useGameStore = () => {
       unsynchronizedPoints: 0,
       multitapLevelIndex: 0,
       pointsPerClick: 1,
-      energy: energyUpgradeBaseBenefit,
-      maxEnergy: energyUpgradeBaseBenefit,
-      energyRefillsLeft: 6,
-      energyLimitLevelIndex: 0,
-      lastEnergyRefillTimestamp: Date.now(),
       mineLevelIndex: 0,
       profitPerHour: 0,
       tonWalletAddress: null,

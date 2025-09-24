@@ -5,13 +5,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
-import { calculateRestoredEnergy, calculatePointsPerClick, calculateEnergyLimit, calculateMinedPoints } from '@/utils/game-mechanics';
+import { calculatePointsPerClick, calculateMinedPoints } from '@/utils/game-mechanics';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 interface SyncRequestBody {
   initData: string;
   unsynchronizedPoints: number;
-  currentEnergy: number;
   syncTimestamp: number;
 }
 
@@ -28,9 +27,9 @@ const RETRY_DELAY = 100; // milliseconds
 export async function POST(req: Request) {
   try {
     const requestBody: SyncRequestBody = await req.json();
-    const { initData: telegramInitData, unsynchronizedPoints, currentEnergy, syncTimestamp } = requestBody;
+    const { initData: telegramInitData, unsynchronizedPoints, syncTimestamp } = requestBody;
 
-    console.log("Received data:", { telegramInitData, unsynchronizedPoints, currentEnergy, syncTimestamp });
+    console.log("Received data:", { telegramInitData, unsynchronizedPoints, syncTimestamp });
 
     if (!telegramInitData) {
       return NextResponse.json({ error: 'Invalid request: missing telegramInitData' }, { status: 400 });
@@ -48,10 +47,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid user data: missing telegramId' }, { status: 400 });
     }
 
-    if (typeof unsynchronizedPoints !== 'number' || typeof currentEnergy !== 'number' ||
-      unsynchronizedPoints < 0 || currentEnergy < 0) {
-      console.error('Invalid input data:', { unsynchronizedPoints, currentEnergy });
-      throw new ValidationError(`Invalid input data: unsynchronizedPoints=${unsynchronizedPoints}, currentEnergy=${currentEnergy}`);
+    if (typeof unsynchronizedPoints !== 'number' ||
+      unsynchronizedPoints < 0) {
+      console.error('Invalid input data:', { unsynchronizedPoints });
+      throw new ValidationError(`Invalid input data: unsynchronizedPoints=${unsynchronizedPoints}`);
     }
 
     const MAX_TIME_DEVIATION = 60 * 1000; // 1 minute
@@ -78,29 +77,15 @@ export async function POST(req: Request) {
               message: 'Sync successful',
               updatedPoints: dbUser.points,
               updatedPointsBalance: dbUser.pointsBalance,
-              updatedEnergy: dbUser.energy,
             };
           }
-
-          const maxEnergy = calculateEnergyLimit(dbUser.energyLimitLevelIndex);
-
-          // Calculate restored energy
-          console.log("Last energy timestamp: ", dbUser.lastEnergyUpdateTimestamp.getTime());
-          console.log("Current timestamp: ", syncTimestamp);
-
-          const restoredEnergy = calculateRestoredEnergy(dbUser.multitapLevelIndex, dbUser.lastEnergyUpdateTimestamp.getTime(), syncTimestamp);
-          console.log("Restored energy: ", restoredEnergy);
-          const expectedEnergy = dbUser.energy + restoredEnergy;
-          console.log("DB energy: ", dbUser.energy);
-          console.log("Expected energy: ", expectedEnergy);
 
           const pointsPerClick = calculatePointsPerClick(dbUser.multitapLevelIndex);
 
           // Calculate maximum possible points gained
-          if (currentEnergy > expectedEnergy) {
-            throw new ValidationError(`Invalid energy: ${currentEnergy}`);
-          }
-          const maxPossibleClicks = Math.floor((expectedEnergy - currentEnergy) / pointsPerClick);
+          
+          // random number 1 - 10
+          const maxPossibleClicks = Math.floor(Math.random() * 10) + 1;
           const maxPossiblePoints = (maxPossibleClicks * pointsPerClick) * 1.2; // 20% buffer for network latency
 
           // Validate the unsynchronized points
@@ -123,9 +108,7 @@ export async function POST(req: Request) {
             data: {
               points: { increment: (unsynchronizedPoints + minedPoints) },
               pointsBalance: { increment: (unsynchronizedPoints + minedPoints) },
-              energy: currentEnergy,
               lastPointsUpdateTimestamp: new Date(syncTimestamp),
-              lastEnergyUpdateTimestamp: new Date(syncTimestamp),
             },
           });
 
@@ -134,7 +117,6 @@ export async function POST(req: Request) {
             message: 'Sync successful',
             updatedPoints: updatedUser.points,
             updatedPointsBalance: updatedUser.pointsBalance,
-            updatedEnergy: updatedUser.energy,
           };
         });
 

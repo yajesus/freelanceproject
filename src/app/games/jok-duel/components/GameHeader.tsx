@@ -90,7 +90,7 @@ export const GameHeader = ({
               Are You sure you want to leave a game?
             </h1>
             <h2 className="text-[12px] text-center mt-2">
-              If you leave now, you'll forfeit the match and lose 10 Energy!
+              If you leave now, you'll forfeit the match! 
             </h2>
             <div className="flex justify-center gap-3 items-center mt-5">
               <button
@@ -121,44 +121,6 @@ export const GameHeader = ({
           </div>
         </div>
       )}
-      <div className="absolute right-1/2 transform translate-x-[100%] flex top-[2%] z-[5000]">
-        <div className="flex mt-[25%]">
-          <svg
-            width="21"
-            height="25"
-            viewBox="0 0 21 25"
-            fill="none"
-            className="absolute right-[83%] top-[40%]"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20.5989 10.7568C18.4071 13.885 13.8476 20.4769 11.6867 23.5672C11.0698 24.4541 9.67782 23.9464 9.77807 22.8706L10.4593 15.5226C10.5171 14.907 10.0313 14.3749 9.41301 14.3749C-2.91306 14.3657 0.806273 16.1476 3.93609 1.1541C4.05588 0.690301 4.47492 0.365086 4.95435 0.365086H14.7276C15.4165 0.365086 15.9192 1.01804 15.743 1.68511L14.1287 7.7851C13.9526 8.45217 14.4551 9.10512 15.144 9.10512H19.7364C20.5848 9.10524 21.0835 10.0602 20.5989 10.7568Z"
-              fill="#4ECDEA"
-            />
-            <path
-              d="M15.4936 18.0987L11.6917 23.5637C11.0748 24.4506 9.68279 23.9429 9.78304 22.8672L10.4642 15.5192C10.5221 14.9035 10.0363 14.3714 9.41798 14.3714H1.90037C1.21401 14.3714 0.711497 13.7236 0.882364 13.0591L3.94131 1.15087C4.16426 -0.135731 6.74591 0.506248 7.5812 0.361737L5.83711 9.01047C5.62627 10.0541 6.42448 11.0297 7.49003 11.0297H12.3985C13.5334 11.0297 14.3445 12.1287 14.0089 13.2134L13.1735 15.9151C12.755 17.4257 14.1156 18.3092 15.4936 18.0987Z"
-              fill="#4F9CE8"
-            />
-          </svg>
-          <div
-            style={{
-              background: "linear-gradient(to right, #004989, #001323)",
-              width: "68px",
-              height: "20px",
-            }}
-            className="rounded-full flex items-center justify-center"
-          >
-            <div
-              style={{ backgroundColor: "rgba(255,255,255,0.21)" }}
-              className="w-[66px] h-[18px] absolute top-1/2 transform  rounded-full flex justify-end pr-1"
-            >
-              <p className="text-[14px] absolute top-1/2 transform -translate-y-2">
-                {gameUser.energy}/{50}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="absolute right-1/2 transform translate-x-[220%] flex top-[2%] z-[5000]">
         <div className="flex mt-[25%]">
           <svg

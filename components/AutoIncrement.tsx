@@ -6,7 +6,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 
 export function AutoIncrement() {
-  const { lastClickTimestamp, profitPerHour, pointsPerClick, incrementPoints, incrementEnergy } = useGameStore();
+  const { lastClickTimestamp, profitPerHour, pointsPerClick, incrementPoints } = useGameStore();
 
   // Use a ref to store the latest values without causing re-renders
   const stateRef = useRef({ profitPerHour, pointsPerClick, lastClickTimestamp });
@@ -22,11 +22,7 @@ export function AutoIncrement() {
     const currentTime = Date.now();
 
     incrementPoints(pointsPerSecond);
-
-    if (!(lastClickTimestamp && currentTime - lastClickTimestamp < 2000)) {
-      incrementEnergy(pointsPerClick);
-    }
-  }, [incrementPoints, incrementEnergy]);
+  }, [incrementPoints]);
 
   useEffect(() => {
     const interval = setInterval(autoIncrement, 1000);

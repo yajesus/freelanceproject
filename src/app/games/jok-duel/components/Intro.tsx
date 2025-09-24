@@ -391,10 +391,6 @@ const Intro = ({ currentView, setCurrentView }: IntroProps) => {
           <div className="flex items-center justify-center gap-2 mt-2">
             <p className="text-[14px]">💡 Lost? Get a small prize!</p>
           </div>
-          <h3 className="text-[20px] mt-5 text-white text-center">⚡ Energy</h3>
-          <div className="flex items-center justify-center gap-2 mt-2">
-            <p className="text-[14px]">🕒 +1 Energy every 5 min.</p>
-          </div>
           <div className="flex items-center justify-center gap-2 mt-2">
             <p className="text-[14px] w-[80%]">
               {" "}
