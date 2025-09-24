@@ -2,17 +2,16 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
-import { battery, lightning, multiclick } from '@/images';
-import IceCubes from '@/icons/IceCubes';
-import { calculateMultitapUpgradeCost, useGameStore } from '@/utils/game-mechanics';
-import IceCube from '@/icons/IceCube';
-import { formatNumber, showBackButton, triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
+import IceCube from '@/icons/IceCube';
+import IceCubes from '@/icons/IceCubes';
+import { multiclick } from '@/images';
+import { calculateMultitapUpgradeCost, useGameStore } from '@/utils/game-mechanics';
+import { formatNumber, showBackButton, triggerHapticFeedback } from '@/utils/ui';
 import { useHydration } from '@/utils/useHydration';
-import Time from '@/icons/Time';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface BoostProps {
   currentView: string;

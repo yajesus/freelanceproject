@@ -17,9 +17,8 @@ export function AutoIncrement() {
   }, [profitPerHour, pointsPerClick, lastClickTimestamp]);
 
   const autoIncrement = useCallback(() => {
-    const { profitPerHour, pointsPerClick, lastClickTimestamp } = stateRef.current;
+    const { profitPerHour } = stateRef.current;
     const pointsPerSecond = profitPerHour / 3600;
-    const currentTime = Date.now();
 
     incrementPoints(pointsPerSecond);
   }, [incrementPoints]);
