@@ -111,7 +111,10 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
                 className="z-0 opacity-20 absolute -bottom-[300px] -left-[50px] rotate-[-166deg] bg-[linear-gradient(to_top_right,#4FF852,#CDFF0B,#DE82F8,#AE9FD6)] w-[232px] h-[400px] rounded-full blur-3xl"
               />
               {/* Header */}
-              <MatchHeader />
+              <MatchHeader
+                currentView={currentView}
+                setCurrentView={setCurrentView}
+              />
 
               {/* Games */}
               <div className="flex flex-col gap-6 z-10">

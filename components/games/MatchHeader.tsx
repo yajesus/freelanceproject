@@ -4,10 +4,12 @@ import { useMemo, useState } from "react";
 import { character1, shopImageMap } from "@/images";
 import { useGameStore } from "@/utils/game-mechanics";
 
-interface MatchHeaderProps {}
+interface MatchHeaderProps {
+    currentView: string;
+    setCurrentView: (view: string) => void;
+}
 
-const MatchHeader: React.FC<MatchHeaderProps> = () => {
-  const [tabs, setTabs] = useState("open");
+const MatchHeader: React.FC<MatchHeaderProps> = ({currentView, setCurrentView}) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
 
   const avatar = useMemo(
@@ -55,9 +57,9 @@ const MatchHeader: React.FC<MatchHeaderProps> = () => {
       <div className="flex items-center gap-2.5 z-10">
         <div className="flex-1 flex justify-between items-center">
           <div
-            onClick={() => setTabs("open")}
+            onClick={() => setCurrentView("opponent-selection")}
             className={`w-full ${
-              tabs == "open"
+              currentView == "opponent-selection"
                 ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
                 : "bg-neutral-900 rounded-l-[10px]"
             }`}
@@ -67,9 +69,9 @@ const MatchHeader: React.FC<MatchHeaderProps> = () => {
             </div>
           </div>
           <div
-            onClick={() => setTabs("launch")}
+            onClick={() => setCurrentView("launch-bet")}
             className={`w-full  ${
-              tabs == "launch"
+              currentView == "launch-bet"
                 ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
                 : "bg-neutral-900 rounded-r-[10px]"
             }`}
