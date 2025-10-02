@@ -36,14 +36,16 @@ const GameProfile: FC<GameProfileProps> = ({
   } = useGameStore();
   localStorage.removeItem("prizeTaken");
   const handlePlay = () => {
-    if (totalStars < 0) {
+    if (totalStars < 6) {
       setCurrentView("recover");
-    }
-    if (intro) {
-      setCurrentView("opponent-selection");
     } else {
-      setCurrentView("gameIntro");
+      setCurrentView("game");
     }
+    // if (intro) {
+    //   setCurrentView("opponent-selection");
+    // } else {
+    //   setCurrentView("gameIntro");
+    // }
     // }
   };
 

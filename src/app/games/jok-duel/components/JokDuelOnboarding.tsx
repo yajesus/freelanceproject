@@ -44,7 +44,7 @@ const JokDuelOnboarding: FC<JokDuelOnboardingProps> = ({
     if (totalStars < 6) {
       setCurrentView("recover");
     } else {
-      setCurrentView("game");
+      setCurrentView("opponent-selection");
     }
     // opponent-selection
     // setCurrentView("game");
