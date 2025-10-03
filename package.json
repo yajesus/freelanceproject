@@ -14,8 +14,11 @@
 		"postinstall": "prisma generate"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.1",
 		"@gsap/react": "^2.1.2",
 		"@hookform/resolvers": "^3.9.0",
+		"@mui/material": "^7.3.4",
 		"@orbs-network/ton-access": "github:orbs-network/ton-access",
 		"@prisma/client": "^6.6.0",
 		"@radix-ui/react-accordion": "^1.2.1",

@@ -103,8 +103,10 @@ import timerIcon from "./timer.png";
 import textShape from "./your-luck-shape.png";
 import naruto from "./Naruto.png";
 import sword from "./sword.png";
-import diamond from "./diamond.png"
-import ellipse from "./ellipse.png"
+import diamond from "./diamond.png";
+import ellipse from "./ellipse.png";
+import cardBg from "./defeat-text-bg.png";
+import cardsIcon from "./CardsIcon.png"
 
 //recovery
 import adPlayIcon from "./ad-play-icon.png";
@@ -238,6 +240,8 @@ export {
   sword,
   diamond,
   ellipse,
+  cardBg,
+  cardsIcon,
 
   //Versus
   vsNames,
