@@ -13,7 +13,7 @@ import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { borderTopLeftRadius } from "html2canvas/dist/types/css/property-descriptors/border-radius";
 
-export interface LaunchBetProps {
+export interface ConfirmBetProps {
   currentView: string;
   setCurrentView: (view: string) => void;
 }
@@ -47,7 +47,7 @@ const CustomSlider = styled(Slider)({
   },
 });
 
-const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
+const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
   const [value, setValue] = useState(30);
   const handleViewChange = (view: string) => {
     if (typeof setCurrentView === "function") {
@@ -141,9 +141,9 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                   <div className="absolute top-[165px] left-1/2 -translate-x-1/2 w-full px-3.5">
                     <CustomSlider
                       min={1}
-                      max={1000}
+                      max={10000}
                       defaultValue={30}
-                      step={1}
+                      step={10}
                       value={value}
                       onChange={(e: Event, newValue: number | number[]) =>
                         setValue(newValue as number)
@@ -213,4 +213,4 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
     </div>
   );
 };
-export default LaunchBet;
+export default ConfirmBet;
