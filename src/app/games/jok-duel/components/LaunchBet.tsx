@@ -4,6 +4,7 @@ import {
   cardsIcon,
   ellipse,
   star2,
+  jokDuelOnboardingBtnBg,
 } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
 import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
@@ -119,12 +120,21 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                       <p className="text-white font-normal text-base">
                         Enter amount
                       </p>
-                      <div className="bg-gradient-to-b from-white to-neutral-400  rounded-[10px]">
+                      <div className="relative bg-stone-900  rounded-[10px]">
                         <input
-                          className="font-normal bg-transparent rounded-[10px] border border-white/0 text-white/10 text-base py-3 px-2 w-[88px]"
-                          type="text"
+                          className="no-arrows font-normal bg-transparent rounded-[10px] border border-white/0 placeholder-neutral-700 text-center text-base py-3 px-2 w-[88px] focus:outline-none focus:ring-0"
+                          type="number"
                           placeholder="Your bet"
                         />
+                        <div
+                          className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
+                          style={{
+                            WebkitMaskImage:
+                              "linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
+                            WebkitMaskRepeat: "no-repeat",
+                            WebkitMaskSize: "100% 100%",
+                          }}
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -143,7 +153,10 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                   </div>
                   <div className="absolute top-[240px] left-1/2 -translate-x-1/2 w-full px-3.5 flex justify-between">
                     {addAmounts.map((amount) => (
-                      <div className="relative inline-block" onClick={() => setValue(amount)}>
+                      <div
+                        className="relative inline-block"
+                        onClick={() => setValue(amount)}
+                      >
                         <div className="w-[55px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
                           +{amount}
                         </div>
@@ -173,6 +186,23 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                         }}
                       ></div>
                     </div>
+                  </div>
+
+                  <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2">
+                    <button
+                      onClick={() => {}}
+                      className="block mx-auto w-fit relative"
+                    >
+                      <Image
+                        priority={false}
+                        src={jokDuelOnboardingBtnBg}
+                        alt={""}
+                        className="mt-[-5px] h-[20%] mx-auto object-contain"
+                      />
+                      <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[80%]">
+                        🔥 it's hot
+                      </p>
+                    </button>
                   </div>
                 </div>
               </div>
