@@ -48,7 +48,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
         </p>
 
         <div
-          className={`z-10 absolute left-1/2 -translate-x-1/2 top-1 flex-wrap h-[32px] flex gap-1 py-2 px-4 outline outline-1 outline-offset-[-1px] rounded-[20px] ${
+          className={`z-10 absolute left-1/2 -translate-x-1/2 top-1 flex-wrap h-[32px] flex gap-1 py-2 px-3 outline outline-1 outline-offset-[-1px] rounded-[20px] ${
             isPremium ? "outline-fuchsia-500" : "outline-green-400"
           } `}
         >
@@ -86,7 +86,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
           {amount}
         </p>
 
-        <p className="absolute top-2 right-[11px] flex gap-1 items-center font-normal">
+        <p className="absolute top-2 right-[5px] flex gap-1 items-center font-normal text-[16px]">
           <Image
             priority={false}
             src={timerIcon}
