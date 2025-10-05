@@ -59,6 +59,15 @@ const GameComponents = {
   LaunchBet: dynamic(() => import("../games/jok-duel/components/LaunchBet"), {
     ssr: true,
   }),
+  HistoryAllMatches: dynamic(() => import("../games/jok-duel/components/HistoryAllMatches"), {
+    ssr: true,
+  }),
+  HistoryMyMatches: dynamic(() => import("../games/jok-duel/components/HistoryMyMatches"), {
+    ssr: true,
+  }),
+  HistoryOngoing: dynamic(() => import("../games/jok-duel/components/HistoryOngoing"), {
+    ssr: true,
+  }),
   SelectedOpponent: dynamic(
     () => import("../games/jok-duel/components/SelectedOpponent"),
     { ssr: true }
@@ -797,6 +806,12 @@ function ClickerPage() {
         return <GameComponents.OpponentSelection {...viewProps} />;
       case "launch-bet":
         return <GameComponents.LaunchBet {...viewProps} />;
+      case "history-ongoing":
+        return <GameComponents.HistoryOngoing {...viewProps} />;
+      case "history-all-matches":
+        return <GameComponents.HistoryAllMatches {...viewProps} />;
+      case "history-my-matches":
+        return <GameComponents.HistoryMyMatches {...viewProps} />;
       case "selectedOpponent":
         return <GameComponents.SelectedOpponent {...viewProps} />;
       case "game":
@@ -853,6 +868,9 @@ function ClickerPage() {
       "onboardingLoading",
       "opponent-selection",
       "launch-bet",
+      "history-ongoing",
+      "history-all-matches",
+      "history-my-matches",
       "onboarding",
       "selectedOpponent",
       "finish",

@@ -1,24 +1,8 @@
 import { FC, useMemo, useEffect, useRef, useState } from "react";
 import {
-  jokDuelOpponentSelectionBg,
-  jokDuelOpponentBg,
   jokDuelOpponentSelectionCard1,
   jokDuelOpponentSelectionCard2,
   jokDuelOpponentSelectionCard3,
-  jokDuelOpponentSelectionCardBg,
-  stars,
-  starIcon,
-  starIcon2,
-  historyIcon,
-  greenCard,
-  clashIcon,
-  star3,
-  glowingSparkle,
-  starGlow,
-  timerIcon,
-  textShape,
-  naruto,
-  sword,
   ellipse,
 } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
@@ -123,65 +107,6 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
                 <MatchCard isPremium={true} amount={500} minLeft={3} />
               </div>
             </div>
-
-            {/* <div className="h-full mt-[-43px] flex justify-center items-center">
-              <div className="relative w-fit flex justify-center">
-                <Image
-                  priority={false}
-                  src={jokDuelOpponentSelectionCardBg}
-                  alt={""}
-                />
-
-                <div
-                  className={`absolute top-[24px] left-1/2 -translate-x-1/2`}
-                  style={{
-                    width: jokDuelOpponentSelectionCardBg.width - 12,
-                  }}
-                >
-                  <div className="w-full text-2xl text-center flex justify-center items-center">
-                    <p>Hi {userTelegramName}</p>
-                    <p className="translate-y-[-7px]">🔥</p>
-                  </div>
-                  <div className="mt-[10px] flex justify-center items-center">
-                    <Image
-                      priority={false}
-                      src={avatar}
-                      alt={""}
-                      className="w-1/2 aspect-square"
-                    />
-                  </div>
-                  <p className="text-center mt-[32px] font-extralight">
-                    Searching for available players
-                  </p>
-
-                  <div className="mt-[18px] flex justify-center items-center">
-                    <div className="spinner">
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                      <div className="spinner-blade"></div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-center items-center">
-                    <Image
-                      priority={false}
-                      src={randomCard}
-                      alt={""}
-                      className="ml-[16px] w-[55%] h-[20%] object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

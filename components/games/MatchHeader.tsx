@@ -92,7 +92,8 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }
             </div>
           </div>
         </div>
-        <div onClick={() => setOpen(!open)} className="bg-neutral-900 outline outline-1 outline-offset-[-1px] outline-neutral-600 rounded-[10px]">
+        <div onClick={() => setOpen(!open)}
+          className={`bg-neutral-900 outline outline-1 outline-offset-[-1px] outline-neutral-600 rounded-[10px]`}>
           <Image
             priority={false}
             src={historyIcon}
@@ -100,15 +101,13 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }
             className="p-2.5 size-10"
           />
         </div>
-
-
       </div>
       {open && (
-        <div style={{zIndex: "999"}} className="absolute top-[132px] right-0 mt-2 w-[119px] bg-gradient-to-b from-[#060303] to-[#252525] rounded-xl shadow-lg overflow-hidden">
+        <div style={{ zIndex: "999" }} className="absolute top-[132px] right-0 mt-2 w-[119px] bg-gradient-to-b from-[#060303] to-[#252525] rounded-xl shadow-lg overflow-hidden">
           <ul className="flex flex-col text-white">
-            <li className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">onGoing</li>
-            <li className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">All Matches</li>
-            <li className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">My Matches</li>
+            <li onClick={() => setCurrentView("history-ongoing")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">onGoing</li>
+            <li onClick={() => setCurrentView("history-all-matches")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">All Matches</li>
+            <li onClick={() => setCurrentView("history-my-matches")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">My Matches</li>
           </ul>
         </div>
       )}

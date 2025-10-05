@@ -107,6 +107,8 @@ import diamond from "./diamond.png";
 import ellipse from "./ellipse.png";
 import cardBg from "./defeat-text-bg.png";
 import cardsIcon from "./CardsIcon.png"
+import Trophy from "./trophy.png";
+import Live from "./live.png"
 
 //recovery
 import adPlayIcon from "./ad-play-icon.png";
@@ -242,6 +244,8 @@ export {
   ellipse,
   cardBg,
   cardsIcon,
+  Trophy,
+  Live,
 
   //Versus
   vsNames,
