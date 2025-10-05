@@ -12,6 +12,7 @@ import MatchHeader from "@/components/games/MatchHeader";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { borderTopLeftRadius } from "html2canvas/dist/types/css/property-descriptors/border-radius";
+import GradientSlider from "@/components/games/GradientSlider";
 
 export interface LaunchBetProps {
   currentView: string;
@@ -98,7 +99,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                 setCurrentView={setCurrentView}
               />
 
-              <div className="relative w-full flex flex-col justify-center items-center gap-9">
+              <div className="relative w-full flex flex-col justify-center items-center gap-9 z-10">
                 <p className="text-white/50 font-normal text-[38px]">
                   JOK<span className="text-[28px]">er</span> DUeL
                 </p>
@@ -139,6 +140,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                     </div>
                   </div>
                   <div className="absolute top-[165px] left-1/2 -translate-x-1/2 w-full px-3.5">
+                    {/* <GradientSlider /> */}
                     <CustomSlider
                       min={1}
                       max={1000}

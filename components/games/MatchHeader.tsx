@@ -1,16 +1,29 @@
 import { historyIcon, star2 } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { character1, shopImageMap } from "@/images";
 import { useGameStore } from "@/utils/game-mechanics";
 
 interface MatchHeaderProps {
-    currentView: string;
-    setCurrentView: (view: string) => void;
+  currentView: string;
+  setCurrentView: (view: string) => void;
 }
 
-const MatchHeader: React.FC<MatchHeaderProps> = ({currentView, setCurrentView}) => {
+const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
+  const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   const avatar = useMemo(
     () => shopImageMap[equippedAvatar] || character1,
@@ -18,7 +31,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({currentView, setCurrentView}) 
   );
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 z-999 relative" ref={menuRef}>
       <div className="flex justify-between w-full">
         <div className="flex justify-center items-center gap-9">
           <div
@@ -54,15 +67,14 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({currentView, setCurrentView}) 
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2.5 z-10">
+      <div className="flex items-center gap-2.5 z-999">
         <div className="flex-1 flex justify-between items-center">
           <div
             onClick={() => setCurrentView("opponent-selection")}
-            className={`w-full ${
-              currentView == "opponent-selection"
-                ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
-                : "bg-neutral-900 rounded-l-[10px]"
-            }`}
+            className={`w-full ${currentView == "opponent-selection"
+              ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
+              : "bg-neutral-900 rounded-l-[10px]"
+              }`}
           >
             <div className="bg-neutral-900 w-full rounded-[10px]">
               <p className="text-center w-full py-2.5">Open Duel</p>
@@ -70,26 +82,36 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({currentView, setCurrentView}) 
           </div>
           <div
             onClick={() => setCurrentView("launch-bet")}
-            className={`w-full  ${
-              currentView == "launch-bet"
-                ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
-                : "bg-neutral-900 rounded-r-[10px]"
-            }`}
+            className={`w-full  ${currentView == "launch-bet"
+              ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
+              : "bg-neutral-900 rounded-r-[10px]"
+              }`}
           >
             <div className="bg-neutral-900 w-full rounded-[10px]">
               <p className="text-center w-full py-2.5">+ Launch a Duel</p>
             </div>
           </div>
         </div>
-        <div className="bg-neutral-900 outline outline-1 outline-offset-[-1px] outline-neutral-600 rounded-[10px]">
+        <div onClick={() => setOpen(!open)} className="bg-neutral-900 outline outline-1 outline-offset-[-1px] outline-neutral-600 rounded-[10px]">
           <Image
             priority={false}
             src={historyIcon}
-            alt={""}
+            alt={"History Icon"}
             className="p-2.5 size-10"
           />
         </div>
+
+
       </div>
+      {open && (
+        <div style={{zIndex: "999"}} className="absolute top-[132px] right-0 mt-2 w-[119px] bg-gradient-to-b from-[#060303] to-[#252525] rounded-xl shadow-lg overflow-hidden">
+          <ul className="flex flex-col text-white">
+            <li className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">onGoing</li>
+            <li className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">All Matches</li>
+            <li className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">My Matches</li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

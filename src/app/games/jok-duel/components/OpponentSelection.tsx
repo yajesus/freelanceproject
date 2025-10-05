@@ -117,7 +117,7 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
               />
 
               {/* Games */}
-              <div className="flex flex-col gap-6 z-10">
+              <div className="flex flex-col gap-6 z-0">
                 <MatchCard isPremium={false} amount={30} minLeft={2} />
                 <MatchCard isPremium={true} amount={500} minLeft={2} />
                 <MatchCard isPremium={true} amount={500} minLeft={3} />
