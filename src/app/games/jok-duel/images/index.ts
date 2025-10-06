@@ -64,6 +64,7 @@ import round1 from "./round1.png";
 import round2 from "./round2.png";
 import round3 from "./round3.png";
 import winDiamond from "./winDiamond.png";
+import VersusBg from "./versus-background.png";
 
 import countdown1 from "./countdown1.png";
 import countdown2 from "./countdown2.png";
@@ -248,6 +249,7 @@ export {
   Trophy,
   Live,
   RectangleBg,
+  VersusBg,
 
   //Versus
   vsNames,

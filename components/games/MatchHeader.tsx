@@ -108,6 +108,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }
             <li onClick={() => setCurrentView("history-ongoing")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">onGoing</li>
             <li onClick={() => setCurrentView("history-all-matches")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">All Matches</li>
             <li onClick={() => setCurrentView("history-my-matches")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">My Matches</li>
+            <li onClick={() => setCurrentView("match-versus")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">Match versus (test)</li>
           </ul>
         </div>
       )}
