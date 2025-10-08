@@ -7,9 +7,10 @@ import { useGameStore } from "@/utils/game-mechanics";
 interface MatchHeaderProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  showTabs?: boolean;
 }
 
-const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }) => {
+const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, showTabs = true }) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -67,7 +68,8 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2.5 z-999">
+
+      {showTabs && <div className="flex items-center gap-2.5 z-999">
         <div className="flex-1 flex justify-between items-center">
           <div
             onClick={() => setCurrentView("opponent-selection")}
@@ -101,7 +103,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }
             className="p-2.5 size-10"
           />
         </div>
-      </div>
+      </div>}
       {open && (
         <div style={{ zIndex: "999" }} className="absolute top-[132px] right-0 mt-2 w-[119px] bg-gradient-to-b from-[#060303] to-[#252525] rounded-xl shadow-lg overflow-hidden">
           <ul className="flex flex-col text-white">
@@ -109,6 +111,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView }
             <li onClick={() => setCurrentView("history-all-matches")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">All Matches</li>
             <li onClick={() => setCurrentView("history-my-matches")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">My Matches</li>
             <li onClick={() => setCurrentView("match-versus")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">Match versus (test)</li>
+            <li onClick={() => setCurrentView("confirm-bet")} className="px-4 py-2 uppercase cursor-pointer text-[12px] font-normal text-center border-b border-[#565656]">Confirm Bet (test)</li>
           </ul>
         </div>
       )}

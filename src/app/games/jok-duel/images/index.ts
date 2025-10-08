@@ -111,6 +111,7 @@ import cardsIcon from "./CardsIcon.png"
 import Trophy from "./trophy.png";
 import Live from "./live.png"
 import RectangleBg from "./Rectangle.png"
+import AmountBg from "./amount-bg.png"
 
 //recovery
 import adPlayIcon from "./ad-play-icon.png";
@@ -250,6 +251,7 @@ export {
   Live,
   RectangleBg,
   VersusBg,
+  AmountBg,
 
   //Versus
   vsNames,

@@ -59,6 +59,9 @@ const GameComponents = {
   LaunchBet: dynamic(() => import("../games/jok-duel/components/LaunchBet"), {
     ssr: true,
   }),
+  ConfirmBet: dynamic(() => import("../games/jok-duel/components/ConfirmBet"), {
+    ssr: true,
+  }),
   MatchVersus: dynamic(() => import("../games/jok-duel/components/MatchVersus"), {
     ssr: true,
   }),
@@ -809,6 +812,8 @@ function ClickerPage() {
         return <GameComponents.OpponentSelection {...viewProps} />;
       case "launch-bet":
         return <GameComponents.LaunchBet {...viewProps} />;
+      case "confirm-bet":
+        return <GameComponents.ConfirmBet {...viewProps} />;
       case "match-versus":
         return <GameComponents.MatchVersus {...viewProps} />;
       case "history-ongoing":
@@ -873,6 +878,7 @@ function ClickerPage() {
       "onboardingLoading",
       "opponent-selection",
       "launch-bet",
+      "confirm-bet",
       "match-versus",
       "history-ongoing",
       "history-all-matches",

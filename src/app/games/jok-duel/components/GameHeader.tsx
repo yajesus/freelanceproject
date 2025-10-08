@@ -41,9 +41,8 @@ export const GameHeader = ({
       <div
         className="w-full h-[55px] absolute top-[2%] left-1/2 transform -translate-x-1/2 z-[1000]"
         style={{
-          backgroundImage: `url(${
-            bgShow == false ? "transparent" : gameHeader.src
-          })`,
+          backgroundImage: `url(${bgShow == false ? "transparent" : gameHeader.src
+            })`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "contain",
@@ -90,7 +89,7 @@ export const GameHeader = ({
               Are You sure you want to leave a game?
             </h1>
             <h2 className="text-[12px] text-center mt-2">
-              If you leave now, you'll forfeit the match! 
+              If you leave now, you'll forfeit the match!
             </h2>
             <div className="flex justify-center gap-3 items-center mt-5">
               <button
@@ -179,9 +178,9 @@ export const GameHeader = ({
           >
             <div
               style={{ backgroundColor: "rgba(255,255,255,0.21)" }}
-              className="w-[66px] h-[18px] absolute top-1/2 transform  rounded-full flex justify-end pr-1"
+              className="w-[56px] h-[18px] absolute top-1/2 transform rounded-full flex justify-center items-center pr-1"
             >
-              <p className="text-[14px] absolute top-1/2 transform -translate-y-2">
+              <p className="text-[14px] text-center">
                 {totalStars}
               </p>
             </div>

@@ -15,6 +15,10 @@ const MatchVersus: React.FC<MatchVersusProps> = ({ currentView, setCurrentView }
     const { equippedAvatar, userTelegramName } = useGameStore();
     const [countDown, setCountDown] = useState(3)
 
+    setTimeout(() => {
+        setCurrentView("game");
+    }, 3000);
+
     useEffect(() => {
         if (countDown <= 0) return;
 

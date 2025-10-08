@@ -145,9 +145,8 @@ const Finish = ({
                       priority={false}
                       src={win === "win" ? winDiamond : defeatDiamond}
                       alt="not found"
-                      className={`absolute transform -translate-x-1/2 left-1/2 translate-y-[120%] z-0 ${
-                        win == "win" ? "" : "opacity-[0.5]"
-                      }`}
+                      className={`absolute transform -translate-x-1/2 left-1/2 translate-y-[120%] z-0 ${win == "win" ? "" : "opacity-[0.5]"
+                        }`}
                     />
                   )}
 
@@ -156,8 +155,8 @@ const Finish = ({
                     {win == "win"
                       ? "You Win"
                       : win === "draw"
-                      ? "Draw! Play again!"
-                      : "Defeat"}
+                        ? "Draw! Play again!"
+                        : "Defeat"}
                   </h1>
 
                   <div
@@ -172,43 +171,6 @@ const Finish = ({
                         : gameResult.me + "-" + gameResult.pc}
                     </h1>
                   </div>
-                  {/* {
-                    // @ts-ignore
-                    win === 'win' && popup == false && (
-                      <AnimatedGif
-                        // @ts-ignore
-                        src={winGif}
-                        isPlaying={true}
-                        repeat='once'
-                        width={500}
-                        height={500}
-                        className='absolute bottom-[15%] left-1/2 -translate-x-1/2'
-                      />
-                    )
-                  }
-
-                  {
-                    // @ts-ignore
-                    win === 'lose' && popup == false && (
-                      <AnimatedGif
-                        // @ts-ignore
-                        src={loseGif}
-                        isPlaying={true}
-                        repeat='once'
-                        width={500}
-                        height={500}
-                        className='absolute bottom-[15%] left-1/2 -translate-x-1/2'
-                      />
-                    )
-                  }
-
-                  {win === 'draw' && (
-                    <OpponentComment
-                      comment='Ooooh, a close one! Let’s try again!'
-                      load={false}
-                      containerClassname='absolute right-1 -translate-x-1/2 top-[60%] transform text-center'
-                    />
-                  )} */}
 
                   <div
                     className="absolute bottom-[20%] transform left-1/2 -translate-x-1/2"
@@ -224,8 +186,8 @@ const Finish = ({
                       {prizeTaken && win == "win"
                         ? "Claim Prize"
                         : win == "draw"
-                        ? "Rematch"
-                        : "Play Again"}
+                          ? "Rematch"
+                          : "Play Again"}
                     </h1>
                   </div>
                 </div>
@@ -247,16 +209,15 @@ const Finish = ({
                   priority={false}
                   src={win === "win" ? winDiamond : defeatDiamond}
                   alt="not found"
-                  className={`absolute transform -translate-x-1/2 left-1/2 translate-y-[120%] z-0 ${
-                    win === "win" ? "" : "opacity-[0.5]"
-                  }`}
+                  className={`absolute transform -translate-x-1/2 left-1/2 translate-y-[120%] z-0 ${win === "win" ? "" : "opacity-[0.5]"
+                    }`}
                 />
                 <h1 className="absolute transform -translate-x-1/2 left-1/2 translate-y-[270%] text-[35px] font-extralight whitespace-nowrap">
                   {win === "win"
                     ? "You Win"
                     : win === "draw"
-                    ? "Draw! Play again!"
-                    : "Defeat"}
+                      ? "Draw! Play again!"
+                      : "Defeat"}
                 </h1>
 
                 <div
@@ -271,35 +232,6 @@ const Finish = ({
                       : gameResult.pc + "-" + gameResult.pc}
                   </h1>
                 </div>
-                {/* {
-                  // @ts-ignore
-                  win === 'win' && popup == false && (
-                    <AnimatedGif
-                      // @ts-ignore
-                      src={winGif}
-                      isPlaying={true}
-                      repeat='once'
-                      width={500}
-                      height={500}
-                      className='absolute bottom-[15%] left-1/2 -translate-x-1/2'
-                    />
-                  )
-                }
-
-                {
-                  // @ts-ignore
-                  win === 'lose' && popup == false && (
-                    <AnimatedGif
-                      // @ts-ignore
-                      src={loseGif}
-                      isPlaying={true}
-                      repeat='once'
-                      width={500}
-                      height={500}
-                      className='absolute bottom-[15%] left-1/2 -translate-x-1/2'
-                    />
-                  )
-                } */}
 
                 {win === "draw" && (
                   <OpponentComment

@@ -1,10 +1,13 @@
 import { FC, useMemo, useEffect, useRef, useState } from "react";
 import {
   cardBg,
-  cardsIcon,
+  sword,
   ellipse,
   star2,
   jokDuelOnboardingBtnBg,
+  defeatTextBg,
+  starGlow,
+  AmountBg
 } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
 import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
@@ -18,62 +21,8 @@ export interface ConfirmBetProps {
   setCurrentView: (view: string) => void;
 }
 
-const CustomSlider = styled(Slider)({
-  height: 31,
-  "& .MuiSlider-thumb": {
-    background: `url(${star2.src}) center center no-repeat`,
-    backgroundSize: "24px 24px",
-    width: 40,
-    height: 40,
-    border: "2px solid #3f3c40",
-    backgroundColor: "#262426",
-    marginLeft: -20,
-  },
-  "& .MuiSlider-track": {
-    borderRadius: 80,
-    background: "linear-gradient(to right, #C27CBC, #D3FF00, #3BE32D)",
-  },
-  "& .MuiSlider-rail": {
-    borderRadius: 80,
-    border: "2px solid #3f3c40",
-    backgroundColor: "#262426", // inactive part
-  },
-  "& .MuiSlider-valueLabel": {
-    background: "#262426",
-    color: "#fff",
-    fontSize: "16px",
-    fontFamily: "Poppins, sans-serif",
-    padding: "4px 8px",
-  },
-});
-
 const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
-  const [value, setValue] = useState(30);
-  const handleViewChange = (view: string) => {
-    if (typeof setCurrentView === "function") {
-      try {
-        triggerHapticFeedback(window);
-        setCurrentView(view);
-      } catch (error) {
-        console.error("Error occurred while changing view:", error);
-      }
-    } else {
-      console.error("setCurrentView is not a function:", setCurrentView);
-    }
-  };
-
-  useEffect(() => {
-    const setupBackButton = async () => {
-      await showBackButton(() => {
-        handleViewChange("onboarding");
-      });
-    };
-
-    setupBackButton();
-  }, []);
-
-  const addAmounts = [10, 100, 500, 1000];
-
+  const amount = 500
   return (
     <div className="bg-black flex justify-center min-h-screen">
       <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
@@ -96,113 +45,98 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
               <MatchHeader
                 currentView={currentView}
                 setCurrentView={setCurrentView}
+                showTabs={false}
               />
 
-              <div className="relative w-full flex flex-col justify-center items-center gap-9">
+              <div className="relative w-full flex flex-col justify-center items-center gap-3.5">
                 <p className="text-white/50 font-normal text-[38px]">
                   JOK<span className="text-[28px]">er</span> DUeL
                 </p>
-                <div className="relative">
-                  <Image
-                    priority={false}
-                    src={cardsIcon}
-                    alt="Card Icon"
-                    className="absolute -top-10 left-1/2 -translate-x-1/2 z-10"
-                  />
-                  <Image
-                    priority={false}
-                    src={cardBg}
-                    alt="Card Bg"
-                    className=""
-                  />
-                  <div className="absolute top-[55px] left-1/2 -translate-x-1/2">
-                    <div className="flex flex-col gap-1.5 justify-center items-center">
-                      <p className="text-white font-normal text-base">
-                        Enter amount
-                      </p>
-                      <div className="relative bg-stone-900  rounded-[10px]">
-                        <input
-                          className="no-arrows font-normal bg-transparent rounded-[10px] border border-white/0 placeholder-neutral-700 text-center text-base py-3 px-2 w-[88px] focus:outline-none focus:ring-0"
-                          type="number"
-                          placeholder="Your bet"
-                        />
-                        <div
-                          className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
-                          style={{
-                            WebkitMaskImage:
-                              "linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
-                            WebkitMaskRepeat: "no-repeat",
-                            WebkitMaskSize: "100% 100%",
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute top-[165px] left-1/2 -translate-x-1/2 w-full px-3.5">
-                    <CustomSlider
-                      min={1}
-                      max={10000}
-                      defaultValue={30}
-                      step={10}
-                      value={value}
-                      onChange={(e: Event, newValue: number | number[]) =>
-                        setValue(newValue as number)
-                      }
-                      valueLabelDisplay="on"
-                    />
-                  </div>
-                  <div className="absolute top-[240px] left-1/2 -translate-x-1/2 w-full px-3.5 flex justify-between">
-                    {addAmounts.map((amount) => (
-                      <div
-                        className="relative inline-block"
-                        onClick={() => setValue(amount)}
-                      >
-                        <div className="w-[55px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
-                          +{amount}
-                        </div>
-                        <div
-                          className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
-                          style={{
-                            WebkitMaskImage:
-                              "linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
-                            WebkitMaskRepeat: "no-repeat",
-                            WebkitMaskSize: "100% 100%",
-                          }}
-                        ></div>
-                      </div>
-                    ))}
-                    <div className="relative inline-block">
-                      <div className="w-12 text-center h-[5px] left-[3px] top-[35px] absolute bg-gradient-to-r from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] blur-[10px] z-10" />
-                      <div className=" w-[55px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
-                        All in
-                      </div>
-                      <div
-                        className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
-                        style={{
-                          WebkitMaskImage:
-                            "linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
-                          WebkitMaskRepeat: "no-repeat",
-                          WebkitMaskSize: "100% 100%",
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2">
-                    <button
-                      onClick={() => {}}
-                      className="block mx-auto w-fit relative"
-                    >
+                <div
+                  className="w-[322px] h-[405px] rounded-lg px-5 py-2 flex flex-col items-center text-white relative z-[10000]"
+                  style={{
+                    backgroundImage: `url(${defeatTextBg.src})`,
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex flex-col justify-center items-center py-4">
+                    <p className="text-white font-normal text-[18px]">
+                      You are about to place a bet of
+                    </p>
+                    <p className="flex gap-1 items-center ">
+                      <span>+{amount}</span>
                       <Image
                         priority={false}
-                        src={jokDuelOnboardingBtnBg}
-                        alt={""}
-                        className="mt-[-5px] h-[20%] mx-auto object-contain"
+                        src={star2}
+                        alt="Star Icon"
+                        className="h-[20px] w-[21px]"
                       />
-                      <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[80%]">
-                        🔥 it's hot
-                      </p>
-                    </button>
+                    </p>
+
+                    <div className="py-4 text-center">
+                      <p className="text-[14px] font-normal">🎭 "Your bet is ready! Will an opponent dare to take up the challenge?</p>
+                    </div>
+
+                    <div className="bg-[#1D1D1D] max-h-[172px] flex flex-col justify-center items-center rounded-xl w-full pb-1">
+                      <p className="text-[16px] font-normal mt-[15px]">Potential Winnings</p>
+                      <Image
+                        priority={false}
+                        src={starGlow}
+                        alt="Star Glow Icon"
+                        className="-mt-[30px] h-[143px]"
+                      />
+
+                      <div className="relative -mt-[35px]">
+                        <Image
+                          priority={false}
+                          src={AmountBg}
+                          alt="Amount bg"
+                          className=""
+                        />
+                        <p className="text-[20px] font-normal absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">+{amount * 2}</p>
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-[25px] flex gap-2 items-center justify-between px-5">
+                      <button
+                        onClick={() => { }}
+                        className="block mx-auto relative"
+                      >
+                        <Image
+                          priority={false}
+                          src={jokDuelOnboardingBtnBg}
+                          alt={""}
+                          className="mt-[-5px] h-[20%] mx-auto object-contain opacity-0"
+                        />
+                        <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[80%]">
+                          Cancel
+                        </p>
+                      </button>
+                      <button
+                        onClick={() => { }}
+                        className="block mx-auto relative"
+                      >
+                        <Image
+                          priority={false}
+                          src={jokDuelOnboardingBtnBg}
+                          alt={""}
+                          className="mt-[-5px] h-[20%] mx-auto object-contain"
+                        />
+                        <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[80%] w-full flex gap-1 justify-center items-center">
+                          <Image
+                            priority={false}
+                            src={sword}
+                            alt={"sward icon"}
+                            className="h-[21px] w-[21px]"
+                          />
+                          Place bet
+                        </p>
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -210,7 +144,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 export default ConfirmBet;
