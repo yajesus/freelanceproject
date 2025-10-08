@@ -192,7 +192,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
 
                   <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2">
                     <button
-                      onClick={() => {}}
+                      onClick={() => setCurrentView('confirm-bet')}
                       className="block mx-auto w-fit relative"
                     >
                       <Image

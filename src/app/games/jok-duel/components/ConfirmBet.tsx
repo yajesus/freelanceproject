@@ -102,7 +102,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
 
                     <div className="absolute bottom-[25px] flex gap-2 items-center justify-between px-5">
                       <button
-                        onClick={() => { }}
+                        onClick={() => setCurrentView('launch-bet')}
                         className="block mx-auto relative"
                       >
                         <Image
@@ -116,7 +116,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
                         </p>
                       </button>
                       <button
-                        onClick={() => { }}
+                        onClick={() => setCurrentView('game')}
                         className="block mx-auto relative"
                       >
                         <Image
