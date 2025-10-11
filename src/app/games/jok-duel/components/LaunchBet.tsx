@@ -13,6 +13,7 @@ import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { borderTopLeftRadius } from "html2canvas/dist/types/css/property-descriptors/border-radius";
 import GradientSlider from "@/components/games/GradientSlider";
+import { useGameStore } from "@/utils/game-mechanics";
 
 export interface LaunchBetProps {
   currentView: string;
@@ -50,6 +51,8 @@ const CustomSlider = styled(Slider)({
 
 const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
   const [value, setValue] = useState(30);
+  const { totalStars } = useGameStore()
+
   const handleViewChange = (view: string) => {
     if (typeof setCurrentView === "function") {
       try {
@@ -72,6 +75,15 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
 
     setupBackButton();
   }, []);
+
+
+  const handleBet = () => {
+    if (!value || value <= 0) return
+    if (value > totalStars) return // try to bet over balance
+
+    localStorage.setItem("amount", value.toString())
+    setCurrentView("confirm-bet")
+  }
 
   const addAmounts = [10, 100, 500, 1000];
 
@@ -143,7 +155,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
                     {/* <GradientSlider /> */}
                     <CustomSlider
                       min={1}
-                      max={1000}
+                      max={100}
                       defaultValue={30}
                       step={1}
                       value={value}
@@ -192,7 +204,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
 
                   <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2">
                     <button
-                      onClick={() => setCurrentView('confirm-bet')}
+                      onClick={() => handleBet()}
                       className="block mx-auto w-fit relative"
                     >
                       <Image

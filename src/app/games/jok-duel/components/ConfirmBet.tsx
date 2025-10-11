@@ -19,10 +19,38 @@ import { borderTopLeftRadius } from "html2canvas/dist/types/css/property-descrip
 export interface ConfirmBetProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  telegramId: string
 }
 
-const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
-  const amount = 500
+const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegramId }) => {
+  const [amount, setAmount] = useState<number>(0)
+
+  useEffect(() => {
+    const getAmount = localStorage.getItem("amount")
+    if (!getAmount || parseInt(getAmount) <= 0) {
+      setCurrentView('launch-bet')
+      return
+    }
+    setAmount(parseInt(getAmount))
+  })
+
+  const placeBet = async () => {
+    const res = await fetch("/api/lobby", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: telegramId.toString(),
+        amount: amount.toString()
+      }),
+    })
+
+    const data = await res.json()
+
+    if (data.success) {
+      setCurrentView('opponent-selection')
+    }
+  }
+
   return (
     <div className="bg-black flex justify-center min-h-screen">
       <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
@@ -116,7 +144,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView }) => {
                         </p>
                       </button>
                       <button
-                        onClick={() => setCurrentView('game')}
+                        onClick={() => placeBet()}
                         className="block mx-auto relative"
                       >
                         <Image

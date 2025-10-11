@@ -124,6 +124,16 @@ model DuelGame {
   createdAt DateTime @default(now())
 }
 
+model CreateLobby {
+  id        String   @id @default(uuid()) @map("_id")
+  userId1   String
+  userId2   String?
+  amount    Int       
+  status    String
+  gameId    String?
+  createdAt DateTime @default(now())
+}
+
 model Prize {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   type   String

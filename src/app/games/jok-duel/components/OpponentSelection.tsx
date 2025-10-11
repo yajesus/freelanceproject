@@ -12,10 +12,18 @@ import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
 import { star2 } from "../images";
 import MatchCard from "@/components/games/MatchCard";
 import MatchHeader from "@/components/games/MatchHeader";
+import { timeAgo } from "@/utils/timeAgo";
 
 export interface OpponentSelectionProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+}
+
+interface lobbyProps {
+  id: string,
+  userId1: string,
+  amount: string,
+  createdAt: string
 }
 
 const OpponentSelection: FC<OpponentSelectionProps> = ({
@@ -23,35 +31,19 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
   setCurrentView,
 }) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
-
-  const randomNum = 1.5;
-  const [randomCard, setRandomCard] = useState(jokDuelOpponentSelectionCard1);
-  useEffect(() => {
-    const randomCard = [
-      jokDuelOpponentSelectionCard1,
-      jokDuelOpponentSelectionCard2,
-      jokDuelOpponentSelectionCard3,
-    ][Math.floor(Math.random() * 3)];
-    setRandomCard(randomCard);
-  }, []);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const avatar = useMemo(
-    () => shopImageMap[equippedAvatar] || character1,
-    [equippedAvatar]
-  );
+  const [lobbies, setLobbies] = useState<lobbyProps[]>()
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      // setCurrentView("selectedOpponent");
-    }, randomNum * 1000);
+    const fetchLobbies = async () => {
+      const res = await fetch('/api/lobby');
+      const data = await res.json()
 
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (data.success) {
+        setLobbies(data.data)
       }
-    };
-  }, [randomNum, setCurrentView]);
+    }
+    fetchLobbies()
+  }, []);
 
   const handleViewChange = (view: string) => {
     if (typeof setCurrentView === "function") {
@@ -102,9 +94,9 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
 
               {/* Games */}
               <div className="flex flex-col gap-6 z-0">
-                <MatchCard isPremium={false} amount={30} minLeft={2} />
-                <MatchCard isPremium={true} amount={500} minLeft={2} />
-                <MatchCard isPremium={true} amount={500} minLeft={3} />
+                {lobbies && lobbies.map((lobby) => (
+                  <MatchCard user={lobby.userId1} isPremium={false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} />
+                ))}
               </div>
             </div>
           </div>
