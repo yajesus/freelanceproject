@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
 
 export async function GET(req: Request) {
-  const lobbies = await prisma.createLobby.findMany();
+  const lobbies = await prisma.lobby.findMany();
 
   return NextResponse.json({ success: true, data: lobbies });
 }
@@ -17,11 +17,9 @@ export async function POST(req: Request) {
     );
   }
 
-  const created = await prisma.createLobby.create({
+  const created = await prisma.lobby.create({
     data: {
       userId1: userId,
-      gameId: "",
-      userId2: "",
       amount,
       status: "pending",
     },
@@ -40,7 +38,7 @@ export async function PATCH(req: Request) {
     );
   }
 
-  const lobby = await prisma.createLobby.findUnique({ where: { id: lobbyId } });
+  const lobby = await prisma.lobby.findUnique({ where: { id: lobbyId } });
   const userId1 = lobby?.userId1;
   const status = lobby?.status;
 
@@ -51,21 +49,29 @@ export async function PATCH(req: Request) {
     );
   }
 
-  if (status != "pending") {
+  if (status == "pending") {
+    await prisma.lobby.update({
+      where: { id: lobbyId },
+      data: {
+        userId2: userId,
+        gameId,
+        status: "playing",
+      },
+    });
+  } else if (status == "pending") {
+    await prisma.lobby.update({
+      where: { id: lobbyId },
+      data: {
+        winner: userId,
+        status: "finished",
+      },
+    });
+  } else {
     return NextResponse.json(
-      { error: "Can't play with the same id" },
+      { error: "Something goes wrong" },
       { status: 400 }
     );
   }
 
-  const lobbies = await prisma.createLobby.update({
-    where: { id: lobbyId },
-    data: {
-      userId2: userId,
-      gameId,
-      status: "playing",
-    },
-  });
-
-  return NextResponse.json({ success: true, data: lobbies });
+  return NextResponse.json({ success: true });
 }
