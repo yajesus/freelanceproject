@@ -109,6 +109,7 @@ const GameEndLoading: React.FC<RecoverEnergyProps> = ({
           draws: gameUser.draws + (userWin == "draw" ? 1 : 0),
           losses: gameUser.losses + (userWin == "lose" ? 1 : 0),
         });
+
         if (userWin === "draw") {
           localStorage.setItem("gameResult", JSON.stringify(gameResult));
           localStorage.setItem("userWin", "draw");

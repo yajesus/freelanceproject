@@ -40,7 +40,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegram
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: telegramId.toString(),
-        amount: amount.toString()
+        amount: amount
       }),
     })
 

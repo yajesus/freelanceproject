@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
 
 export async function GET(req: Request) {
-  const lobbies = await prisma.lobby.findMany();
+  const lobbies = await prisma.lobby.findMany({ where: { status: "pending" } });
 
   return NextResponse.json({ success: true, data: lobbies });
 }
@@ -58,7 +58,7 @@ export async function PATCH(req: Request) {
         status: "playing",
       },
     });
-  } else if (status == "pending") {
+  } else if (status == "playing") {
     await prisma.lobby.update({
       where: { id: lobbyId },
       data: {
