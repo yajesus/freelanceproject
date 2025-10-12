@@ -14,6 +14,7 @@ interface MatchCardProps {
   user: string;
   amount: number;
   minLeft: string;
+  startGame: () => void
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({
@@ -21,6 +22,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
   user,
   amount,
   minLeft,
+  startGame,
 }) => {
   return (
     <div
@@ -96,7 +98,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
           {minLeft} left
         </p>
 
-        <div className="absolute bottom-2 right-[11px]">
+        <div className="absolute bottom-2 right-[11px]" onClick={() => startGame()}>
           <div className="relative">
             <Image
               priority={false}

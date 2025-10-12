@@ -17,6 +17,7 @@ import { timeAgo } from "@/utils/timeAgo";
 export interface OpponentSelectionProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  startMatch: (lobbyId: string) => void
 }
 
 interface lobbyProps {
@@ -29,6 +30,7 @@ interface lobbyProps {
 const OpponentSelection: FC<OpponentSelectionProps> = ({
   currentView,
   setCurrentView,
+  startMatch
 }) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
   const [lobbies, setLobbies] = useState<lobbyProps[]>()
@@ -57,6 +59,11 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
       console.error("setCurrentView is not a function:", setCurrentView);
     }
   };
+
+  const startGame = (id: string) => {
+    startMatch(id);
+    setCurrentView('game')
+  }
 
   useEffect(() => {
     const setupBackButton = async () => {
@@ -95,7 +102,7 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
               {/* Games */}
               <div className="flex flex-col gap-6 z-0">
                 {lobbies && lobbies.map((lobby) => (
-                  <MatchCard user={lobby.userId1} isPremium={false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} />
+                  <MatchCard user={lobby.userId1} isPremium={false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} startGame={() => startGame(lobby.id)} />
                 ))}
               </div>
             </div>

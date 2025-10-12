@@ -387,6 +387,65 @@ function ClickerPage() {
     [gameState.gameUser?.id, telegramId]
   );
 
+  // start match
+  const startMatch = useCallback(async (lobbyId: string) => {
+    setGameState((prev) => ({
+      ...prev,
+      opponentUsername: generateRandomUsername(),
+    }));
+
+    try {
+      const prizeRes = await fetch("/api/prize", { method: "POST" });
+      const prizeData = await prizeRes.json();
+      if (!prizeRes.ok || !prizeData?.data?.id) {
+        console.error("❌ Failed to create prize", prizeData);
+        return;
+      }
+      const gameRes = await fetch("/api/duelGame", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: telegramId.toString(),
+          round1: { me: 0, pc: 0 },
+          round2: { me: 0, pc: 0 },
+          round3: { me: 0, pc: 0 },
+          status: "pending",
+          prizeId: prizeData.data.id,
+        }),
+      });
+
+
+      const gameData = await gameRes.json();
+      if (!gameRes.ok || !gameData?.data?.id) {
+        console.error("❌ Failed to create duel game", gameData);
+        return;
+      }
+
+      const lobbyRes = await fetch("/api/lobby", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lobbyId: lobbyId,
+          userId: telegramId.toString(),
+          gameId: gameData?.data?.id
+        }),
+      });
+      const lobbyData = await lobbyRes.json();
+
+      if (!lobbyRes.ok) {
+        console.error("❌ Failed to create lobby", lobbyData);
+        return;
+      }
+
+      gameId.current = gameData.data.id;
+      await updateDuelGameUser({
+        gamesPlayed: gameState.gameUser.gamesPlayed + 1,
+      });
+    } catch (error) {
+      console.error("⚠️ Error in startMatch:", error);
+    }
+  }, [telegramId, gameState.gameUser.gamesPlayed, updateDuelGameUser]);
+
   // Game start function
   const startGame = useCallback(async () => {
     setGameState((prev) => ({
@@ -773,6 +832,7 @@ function ClickerPage() {
       updateDuelGameUser,
       gameId,
       startGame: rematchGame,
+      startMatch: startMatch
     };
 
     switch (appState.currentView) {
