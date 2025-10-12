@@ -174,6 +174,8 @@ function ClickerPage() {
     leaderBoardInfo: [],
   });
 
+  const [onlinePlayers, setOnlinePlayers] = useState(0)
+
   // Popup state
   const [popupState, setPopupState] = useState({
     showWithdrawalPopup: false,
@@ -268,6 +270,11 @@ function ClickerPage() {
     handleAuthData();
   }, []);
 
+  // lastSeenAt
+  useEffect(() => {
+
+  }, [])
+
   const fetchOrCreateUser = useCallback(async () => {
     try {
       if (!gameState.gameUser.id) {
@@ -302,10 +309,37 @@ function ClickerPage() {
           console.error("Failed to create duelGameUser", createdUser);
         }
       }
+
+      // count online players
+      const result = await fetch("/api/online");
+      const countData = await result.json()
+      if (countData.success) {
+        setOnlinePlayers(countData.data);
+      }
     } catch (err) {
       console.error("Error loading duelGameUser", err);
     }
   }, [gameState.gameUser.id, telegramId]);
+
+  // update lastSeenAt
+  useEffect(() => {
+    const saveSignTime = async () => {
+      const res = await fetch("/api/online", {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: telegramId
+        })
+      })
+
+      const data = await res.json()
+      if (!data.success) {
+        console.error("Have issue of save last seen datetime")
+      }
+    }
+
+    saveSignTime()
+  }, [])
 
   // User polling
   useEffect(() => {
@@ -832,7 +866,8 @@ function ClickerPage() {
       updateDuelGameUser,
       gameId,
       startGame: rematchGame,
-      startMatch: startMatch
+      startMatch: startMatch,
+      onlinePlayers,
     };
 
     switch (appState.currentView) {

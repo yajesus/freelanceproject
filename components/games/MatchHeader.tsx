@@ -8,9 +8,10 @@ interface MatchHeaderProps {
   currentView: string;
   setCurrentView: (view: string) => void;
   showTabs?: boolean;
+  onlinePlayers: number;
 }
 
-const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, showTabs = true }) => {
+const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, showTabs = true, onlinePlayers }) => {
   const { equippedAvatar, userTelegramName, totalStars } = useGameStore();
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -64,7 +65,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, 
         <div className="inline-flex justify-center items-center gap-2">
           <div className="w-3 h-3 bg-gradient-to-l from-lime-700 via-lime-600 to-green-100 rounded-full" />
           <div className="justify-start text-white text-base font-normal lowercase leading-snug">
-            20 online
+            {onlinePlayers} online
           </div>
         </div>
       </div>

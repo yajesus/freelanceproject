@@ -19,10 +19,11 @@ import { borderTopLeftRadius } from "html2canvas/dist/types/css/property-descrip
 export interface ConfirmBetProps {
   currentView: string;
   setCurrentView: (view: string) => void;
-  telegramId: string
+  telegramId: string,
+  onlinePlayers: number;
 }
 
-const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegramId }) => {
+const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegramId, onlinePlayers }) => {
   const [amount, setAmount] = useState<number>(0)
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegram
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 showTabs={false}
+                onlinePlayers={onlinePlayers}
               />
 
               <div className="relative w-full flex flex-col justify-center items-center gap-3.5">

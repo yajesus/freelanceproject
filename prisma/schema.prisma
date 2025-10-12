@@ -79,6 +79,7 @@ model User {
   lastStreakClaim             DateTime? 
   isSheildActive              Boolean              @default(false)
   withdrawalRequests          WithdrawalRequest[]
+  lastSeenAt                  DateTime?
 }
 
 model ComboOfTheDay {

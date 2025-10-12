@@ -17,7 +17,8 @@ import { timeAgo } from "@/utils/timeAgo";
 export interface OpponentSelectionProps {
   currentView: string;
   setCurrentView: (view: string) => void;
-  startMatch: (lobbyId: string) => void
+  startMatch: (lobbyId: string) => void;
+  onlinePlayers: number;
 }
 
 interface lobbyProps {
@@ -30,7 +31,8 @@ interface lobbyProps {
 const OpponentSelection: FC<OpponentSelectionProps> = ({
   currentView,
   setCurrentView,
-  startMatch
+  startMatch,
+  onlinePlayers
 }) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
   const [lobbies, setLobbies] = useState<lobbyProps[]>()
@@ -97,6 +99,7 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
               <MatchHeader
                 currentView={currentView}
                 setCurrentView={setCurrentView}
+                onlinePlayers={onlinePlayers}
               />
 
               {/* Games */}
