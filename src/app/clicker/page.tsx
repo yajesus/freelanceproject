@@ -469,7 +469,7 @@ function ClickerPage() {
       });
       const lobbyData = await lobbyRes.json();
 
-      if (!lobbyRes.ok) {
+      if (!lobbyData.success) {
         console.error("❌ Failed to create lobby", lobbyData);
         return;
       }
@@ -478,6 +478,8 @@ function ClickerPage() {
       await updateDuelGameUser({
         gamesPlayed: gameState.gameUser.gamesPlayed + 1,
       });
+
+      setCurrentView("game")
     } catch (error) {
       console.error("⚠️ Error in startMatch:", error);
     }

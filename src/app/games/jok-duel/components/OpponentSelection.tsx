@@ -64,7 +64,6 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
 
   const startGame = (id: string) => {
     startMatch(id);
-    setCurrentView('game')
   }
 
   useEffect(() => {
