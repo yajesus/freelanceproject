@@ -23,6 +23,7 @@ import AppLeaderboard from "@/components/AppLeaderboard";
 import StarSelectionPopup from "@/components/popups/StarSelectionPopup";
 import WithdrawalPopup from "@/components/popups/WithdrawalPopup";
 import { AnimatePresence, motion } from "framer-motion";
+import { GameHistoryProps } from "../games/jok-duel/components/HistoryOngoing";
 
 const Mine = dynamic(() => import("@/components/Mine"), { ssr: true });
 const Friends = dynamic(() => import("@/components/Friends"), { ssr: true });
@@ -175,6 +176,8 @@ function ClickerPage() {
   });
 
   const [onlinePlayers, setOnlinePlayers] = useState(0)
+  const [gameHistory, setGameHIstory] = useState<GameHistoryProps[]>([])
+  const [allGameHistory, setAllGameHIstory] = useState<GameHistoryProps[]>([])
 
   // Popup state
   const [popupState, setPopupState] = useState({
@@ -479,6 +482,50 @@ function ClickerPage() {
       console.error("⚠️ Error in startMatch:", error);
     }
   }, [telegramId, gameState.gameUser.gamesPlayed, updateDuelGameUser]);
+
+  // game history
+  useEffect(() => {
+    const fetchGameHistory = async (telegramId: string) => {
+      try {
+        const res = await fetch('/api/history', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: telegramId
+          }),
+        })
+        const data = await res.json();
+
+        if (data.success) {
+          setGameHIstory(data.data)
+        } else {
+          throw Error(data.data)
+        }
+
+      } catch (error) {
+        console.error("⚠️ Error in startMatch:", error);
+      }
+    }
+
+    const fetchAllGameHistory = async () => {
+      try {
+        const res = await fetch('/api/history')
+        const data = await res.json();
+
+        if (data.success) {
+          setAllGameHIstory(data.data)
+        } else {
+          throw Error(data.data)
+        }
+
+      } catch (error) {
+        console.error("⚠️ Error in startMatch:", error);
+      }
+    }
+
+    fetchGameHistory(telegramId.toString())
+    fetchAllGameHistory()
+  }, [gameHistory])
 
   // Game start function
   const startGame = useCallback(async () => {
@@ -868,6 +915,8 @@ function ClickerPage() {
       startGame: rematchGame,
       startMatch: startMatch,
       onlinePlayers,
+      gameHistory,
+      allGameHistory
     };
 
     switch (appState.currentView) {

@@ -18,6 +18,7 @@ import { useGameStore } from "@/utils/game-mechanics";
 export interface LaunchBetProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  onlinePlayers: number
 }
 
 const CustomSlider = styled(Slider)({
@@ -49,7 +50,7 @@ const CustomSlider = styled(Slider)({
   },
 });
 
-const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
+const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlayers }) => {
   const [value, setValue] = useState(30);
   const { totalStars } = useGameStore()
 
@@ -109,6 +110,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView }) => {
               <MatchHeader
                 currentView={currentView}
                 setCurrentView={setCurrentView}
+                onlinePlayers={onlinePlayers}
               />
 
               <div className="relative w-full flex flex-col justify-center items-center gap-9 z-10">

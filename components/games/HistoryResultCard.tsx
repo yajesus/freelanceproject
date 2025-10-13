@@ -5,11 +5,13 @@ interface HistoryResultCardProps {
     isPremium: boolean;
     amount: number;
     player1: string;
+    score1: number;
     player2: string;
+    score2: number;
     winner: string;
 }
 
-const HistoryResultCard: React.FC<HistoryResultCardProps> = ({ isPremium, amount, player1, player2, winner }) => {
+const HistoryResultCard: React.FC<HistoryResultCardProps> = ({ isPremium, amount, player1, player2, winner, score1, score2 }) => {
     return <div className={`relative flex justify-between items-center w-full rounded-2xl px-3 py-6 ${isPremium ? 'bg-gradient-to-b from-fuchsia-500/25 to-fuchsia-800/25 border border-fuchsia-500' : 'bg-gradient-to-b from-green-950/60 to-green-600/60 border border-green-400'}`}>
         <div className="absolute left-1/2 -translate-x-1/2 top-0">
             <Image
@@ -37,7 +39,7 @@ const HistoryResultCard: React.FC<HistoryResultCardProps> = ({ isPremium, amount
             </div>
         </div>
         <div className="relative w-full flex flex-col items-center gap-3">
-            {winner == 'player1' && <div className="-z-9 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+            {winner == player1 && <div className="-z-9 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
                 <Image
                     priority={false}
                     src={glowingSparkle}
@@ -52,7 +54,7 @@ const HistoryResultCard: React.FC<HistoryResultCardProps> = ({ isPremium, amount
                 className="z-10"
             />
             <p className="text-[16px] font-normal uppercase flex items-center gap-1">
-                {winner == 'player1' && <Image
+                {winner == player1 && <Image
                     priority={false}
                     src={Trophy}
                     alt="Trophy Icon"
@@ -61,10 +63,10 @@ const HistoryResultCard: React.FC<HistoryResultCardProps> = ({ isPremium, amount
                 {player1}</p>
         </div>
         <div className="w-full flex justify-center items-center">
-            <p className="flex items-center justify-center text-center font-normal text-[22px] text-white bg-[#1D1D1D] rounded-full h-[56px] w-[56px]">2-1</p>
+            <p className="flex items-center justify-center text-center font-normal text-[22px] text-white bg-[#1D1D1D] rounded-full h-[56px] w-[56px]">{score1} - {score2}</p>
         </div>
         <div className="relative w-full flex flex-col justify-center items-center gap-3">
-            {winner == 'player2' && <div className="-z-9 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+            {winner == player2 && <div className="-z-9 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
                 <Image
                     priority={false}
                     src={glowingSparkle}
@@ -79,7 +81,7 @@ const HistoryResultCard: React.FC<HistoryResultCardProps> = ({ isPremium, amount
                 className="z-10"
             />
             <p className="text-[16px] font-normal uppercase flex items-center gap-1">
-                {winner == 'player2' && <Image
+                {winner == player2 && <Image
                     priority={false}
                     src={Trophy}
                     alt="Trophy Icon"

@@ -4,9 +4,12 @@ import Image from "next/image";
 interface HistoryMatchCardProps {
     isPremium: boolean;
     amount: number;
+    player1: string;
+    player2: string;
+    round: number;
 }
 
-const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount }) => {
+const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount, player1, player2, round }) => {
     return <div className={`flex justify-between items-start w-full rounded-2xl px-3 py-1.5 ${isPremium ? 'bg-gradient-to-b from-fuchsia-500/25 to-fuchsia-800/25 border border-fuchsia-500' : 'bg-gradient-to-b from-green-950/60 to-green-600/60 border border-green-400'}`}>
         <div className="w-full flex flex-col gap-8 items-start justify-start">
             <div className="flex gap-2 items-center mt-2">
@@ -26,7 +29,7 @@ const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount }
                     className=""
                 />
                 <p className="uppercase font-normal text-[16px]">
-                    Maskmyth
+                    {player1}
                 </p>
             </div>
         </div>
@@ -68,7 +71,7 @@ const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount }
             </div>
         </div>
         <div className="w-full flex flex-col gap-8 items-end justify-end mt-2">
-            <p className="uppercase font-normal text-[16px]">ROund 1 🔥</p>
+            <p className="uppercase font-normal text-[16px]">ROund {round} 🔥</p>
             <div className="flex flex-col gap-[10px] justify-center items-center">
                 <Image
                     priority={false}
@@ -77,7 +80,7 @@ const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount }
                     className=""
                 />
                 <p className="uppercase font-normal text-[16px]">
-                    Maskmyth
+                    {player2}
                 </p>
             </div>
         </div>

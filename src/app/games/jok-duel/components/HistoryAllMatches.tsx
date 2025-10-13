@@ -5,13 +5,29 @@ import {
 } from "@/src/app/games/jok-duel/images";
 import MatchHeader from "@/components/games/MatchHeader";
 import HistoryResultCard from "@/components/games/HistoryResultCard";
+import { GameHistoryProps } from "./HistoryOngoing";
 
 interface HistoryAllMatchesProps {
     currentView: string;
     setCurrentView: (view: string) => void;
+    onlinePlayers: number;
+    allGameHistory: GameHistoryProps[]
 }
 
-const HistoryAllMatches: React.FC<HistoryAllMatchesProps> = ({ currentView, setCurrentView }) => {
+const HistoryAllMatches: React.FC<HistoryAllMatchesProps> = ({ currentView, setCurrentView, onlinePlayers, allGameHistory }) => {
+    function winner(score1: number, score2: number, player1: string, player2: string) {
+        let winner;
+        if (score1 > score2) {
+            winner = player1
+        } else if (score1 < score2) {
+            winner = player2
+        } else {
+            winner = "Draw"
+        }
+
+        return winner;
+    }
+
     return <div className="bg-black flex justify-center min-h-screen">
         <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
             <div className="flex-grow mt-4 pt-[3px] h-screen bg-gradient-to-r from-[#44F756] via-[#D3EB2F] to-[#D684F5] rounded-t-[48px] relative top-glow z-0">
@@ -33,6 +49,7 @@ const HistoryAllMatches: React.FC<HistoryAllMatchesProps> = ({ currentView, setC
                         <MatchHeader
                             currentView={currentView}
                             setCurrentView={setCurrentView}
+                            onlinePlayers={onlinePlayers}
                         />
 
                         <div className="flex gap-1">
@@ -47,8 +64,11 @@ const HistoryAllMatches: React.FC<HistoryAllMatchesProps> = ({ currentView, setC
 
                         {/* Games */}
                         <div className="flex flex-col gap-6 z-0">
-                            <HistoryResultCard isPremium={false} amount={30} player1="User 1" player2="MaskMyth" winner="player1" />
-                            <HistoryResultCard isPremium={true} amount={500} player1="User 1" player2="MaskMyth" winner="player2" />
+                            {allGameHistory && allGameHistory.map((game) => (
+                                <HistoryResultCard
+                                    isPremium={game.amount > 500} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} score1={game.score1} score2={game.score2} winner={winner(game.score1, game.score2, game.player1, game.player2 || 'Unknown')} />
+                            ))
+                            }
                         </div>
                     </div>
                 </div>
