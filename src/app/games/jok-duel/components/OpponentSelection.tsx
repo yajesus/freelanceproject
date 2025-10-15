@@ -14,40 +14,29 @@ import MatchCard from "@/components/games/MatchCard";
 import MatchHeader from "@/components/games/MatchHeader";
 import { timeAgo } from "@/utils/timeAgo";
 
+export interface lobbyProps {
+  id: string,
+  userId1: string,
+  amount: string,
+  createdAt: string,
+}
+
 export interface OpponentSelectionProps {
   currentView: string;
   setCurrentView: (view: string) => void;
   startMatch: (lobbyId: string) => void;
   onlinePlayers: number;
-}
-
-interface lobbyProps {
-  id: string,
-  userId1: string,
-  amount: string,
-  createdAt: string
+  lobbies: lobbyProps[];
 }
 
 const OpponentSelection: FC<OpponentSelectionProps> = ({
   currentView,
   setCurrentView,
   startMatch,
-  onlinePlayers
+  onlinePlayers,
+  lobbies
 }) => {
   const { equippedAvatar, userTelegramName } = useGameStore();
-  const [lobbies, setLobbies] = useState<lobbyProps[]>()
-
-  useEffect(() => {
-    const fetchLobbies = async () => {
-      const res = await fetch('/api/lobby');
-      const data = await res.json()
-
-      if (data.success) {
-        setLobbies(data.data)
-      }
-    }
-    fetchLobbies()
-  }, []);
 
   const handleViewChange = (view: string) => {
     if (typeof setCurrentView === "function") {
@@ -103,9 +92,9 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
 
               {/* Games */}
               <div className="flex flex-col gap-6 z-0">
-                {lobbies && lobbies.map((lobby) => (
+                {lobbies ? lobbies.map((lobby) => (
                   <MatchCard user={lobby.userId1} isPremium={false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} startGame={() => startGame(lobby.id)} />
-                ))}
+                )) : <p className="text-center">No active user</p>}
               </div>
             </div>
           </div>

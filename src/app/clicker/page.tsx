@@ -24,6 +24,7 @@ import StarSelectionPopup from "@/components/popups/StarSelectionPopup";
 import WithdrawalPopup from "@/components/popups/WithdrawalPopup";
 import { AnimatePresence, motion } from "framer-motion";
 import { GameHistoryProps } from "../games/jok-duel/components/HistoryOngoing";
+import { lobbyProps } from "../games/jok-duel/components/OpponentSelection";
 
 const Mine = dynamic(() => import("@/components/Mine"), { ssr: true });
 const Friends = dynamic(() => import("@/components/Friends"), { ssr: true });
@@ -178,6 +179,7 @@ function ClickerPage() {
   const [onlinePlayers, setOnlinePlayers] = useState(0)
   const [gameHistory, setGameHIstory] = useState<GameHistoryProps[]>([])
   const [allGameHistory, setAllGameHIstory] = useState<GameHistoryProps[]>([])
+  const [lobbies, setLobbies] = useState<lobbyProps[]>([])
 
   // Popup state
   const [popupState, setPopupState] = useState({
@@ -275,8 +277,16 @@ function ClickerPage() {
 
   // lastSeenAt
   useEffect(() => {
+    const fetchLobbies = async () => {
+      const res = await fetch('/api/lobby');
+      const data = await res.json()
 
-  }, [])
+      if (data.success) {
+        setLobbies(data.data)
+      }
+    }
+    fetchLobbies()
+  }, []);
 
   const fetchOrCreateUser = useCallback(async () => {
     try {
@@ -918,7 +928,8 @@ function ClickerPage() {
       startMatch: startMatch,
       onlinePlayers,
       gameHistory,
-      allGameHistory
+      allGameHistory,
+      lobbies
     };
 
     switch (appState.currentView) {
