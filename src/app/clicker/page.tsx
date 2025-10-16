@@ -351,7 +351,11 @@ function ClickerPage() {
       }
     }
 
-    saveSignTime()
+    const interval = setInterval(() => {
+      saveSignTime()
+    }, 30 * 1000);
+
+    return () => clearInterval(interval)
   }, [])
 
   // User polling

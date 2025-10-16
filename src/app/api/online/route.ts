@@ -32,8 +32,4 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json({ success: true });
-  //   const res = await fetch("/online");
-  //   const data = await res.json();
-
-  //   return NextResponse.json({ success: true, data: data });
 }
