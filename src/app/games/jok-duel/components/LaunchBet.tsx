@@ -216,7 +216,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                         alt={""}
                         className="mt-[-5px] h-[20%] mx-auto object-contain"
                       />
-                      <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[80%]">
+                      <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[18px]">
                         🔥 it's hot
                       </p>
                     </button>
