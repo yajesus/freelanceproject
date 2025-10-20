@@ -1,0 +1,81 @@
+.progress-container {
+  width: 600px;
+  height: var(--bar-height);
+  background-color: #333333;
+  border-radius: calc(var(--bar-height) / 2);
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+/* --- Progress Fill (The Gradient Part) --- */
+.progress-fill {
+  height: 100%;
+  width: var(--initial-progress);
+  border-radius: calc(var(--bar-height) / 2);
+  background: linear-gradient(
+    to right,
+    var(--gradient-start),
+    var(--gradient-mid),
+    var(--gradient-end)
+  );
+  transition: width 0.1s ease-out;
+}
+
+/* --- Star Thumb Container (The Draggable Handle) --- */
+.star-thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--initial-progress);
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: grab;
+  padding: 5px;
+  border-radius: 50%;
+  /* UPDATED BACKGROUND COLOR */
+  border: 3px solid #555852;
+  background-color: #555852;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Added subtle shadow for depth */
+}
+
+.star-thumb.dragging {
+  cursor: grabbing;
+}
+
+/* --- Star Icon (Image) --- */
+.star-icon {
+  width: var(--star-size);
+  height: var(--star-size);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+}
+
+/* --- Value Bubble (Dynamic Value) --- */
+.value-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.value-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background-color: black;
+}

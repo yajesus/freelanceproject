@@ -95,14 +95,22 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, 
             </div>
           </div>
         </div>
-        <div onClick={() => setOpen(!open)}
-          className={`bg-neutral-900 outline outline-1 outline-offset-[-1px] outline-neutral-600 rounded-[10px]`}>
-          <Image
-            priority={false}
-            src={historyIcon}
-            alt={"History Icon"}
-            className="p-2.5 size-10"
-          />
+        <div
+          onClick={() => setOpen(!open)}
+          className={` ${currentView == "history-ongoing" || currentView == "history-all-matches" || currentView == "history-my-matches"
+            ? "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"
+            : "bg-neutral-900 rounded-l-[10px]"
+            }`}
+        >
+          <div
+            className={`bg-neutral-900 outline outline-1 outline-offset-[-1px] outline-neutral-600 rounded-[10px]`}>
+            <Image
+              priority={false}
+              src={historyIcon}
+              alt={"History Icon"}
+              className="p-2.5 size-10"
+            />
+          </div>
         </div>
       </div>}
       {open && (
