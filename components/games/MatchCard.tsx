@@ -117,7 +117,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
           {minLeft} left
         </p>
 
-        <div className="absolute bottom-2 right-[11px]" onClick={() => startGame()}>
+        <div className="absolute bottom-2 right-[11px] animate-horizontal-shake" onClick={() => startGame()}>
           <div className="relative">
             <Image
               priority={false}
