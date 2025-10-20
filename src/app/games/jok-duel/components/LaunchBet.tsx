@@ -128,14 +128,37 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                   <div className="absolute top-[165px] left-1/2 -translate-x-1/2 w-full px-3.5">
                     <GradientSlider value={value} onchange={(val: any) => setValue(val[0])} />
                   </div>
-                  <div className="absolute top-[240px] left-1/2 -translate-x-1/2 w-full px-3.5 flex justify-between">
+                  <div className="absolute top-[240px] left-1/2 -translate-x-1/2 w-full px-[14px] flex justify-between gap-1">
                     {addAmounts.map((amount) => (
                       <div
-                        className="relative inline-block"
+                        className="relative inline-block w-[55px]"
                         onClick={() => setValue(amount)}
                       >
-                        <div className="w-[55px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
-                          +{amount}
+                        <div
+                          className={`${amount == value && "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"}`}
+                        >
+                          <div className="w-[53px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
+                            +{amount}
+                          </div>
+                          {amount != value && <div
+                            className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
+                            style={{
+                              WebkitMaskImage:
+                                "linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
+                              WebkitMaskRepeat: "no-repeat",
+                              WebkitMaskSize: "100% 100%",
+                            }}
+                          ></div>}
+                        </div>
+                      </div>
+                    ))}
+                    <div
+                      className={`${totalStars == value && "bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-[10px]"}`}
+                    >
+                      <div className="relative inline-block" onClick={() => setValue(totalStars)}>
+                        <div className="w-12 text-center h-[5px] left-[3px] top-[35px] absolute bg-gradient-to-r from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] blur-[10px] z-10" />
+                        <div className=" w-[55px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
+                          All in
                         </div>
                         <div
                           className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
@@ -147,21 +170,6 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                           }}
                         ></div>
                       </div>
-                    ))}
-                    <div className="relative inline-block">
-                      <div className="w-12 text-center h-[5px] left-[3px] top-[35px] absolute bg-gradient-to-r from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] blur-[10px] z-10" />
-                      <div className=" w-[55px] text-center py-2.5 uppercase text-[16px] font-normal bg-stone-900 rounded-[10px]">
-                        All in
-                      </div>
-                      <div
-                        className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"
-                        style={{
-                          WebkitMaskImage:
-                            "linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
-                          WebkitMaskRepeat: "no-repeat",
-                          WebkitMaskSize: "100% 100%",
-                        }}
-                      ></div>
                     </div>
                   </div>
 
