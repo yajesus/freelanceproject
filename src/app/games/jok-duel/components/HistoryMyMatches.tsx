@@ -15,6 +15,7 @@ interface HistoryMyMatchesProps {
 }
 
 const HistoryMyMatches: React.FC<HistoryMyMatchesProps> = ({ currentView, setCurrentView, onlinePlayers, gameHistory }) => {
+    const myGames = gameHistory?.filter(game => game.status != "pending")
     function winner(score1: number, score2: number, player1: string, player2: string) {
         let winner;
         if (score1 > score2) {
@@ -64,12 +65,9 @@ const HistoryMyMatches: React.FC<HistoryMyMatchesProps> = ({ currentView, setCur
 
                         {/* Games */}
                         <div className="flex flex-col gap-6 z-0">
-                            {gameHistory && gameHistory.map((game) => (
-                                game.status != "pending" ?
-                                    <HistoryResultCard isPremium={game.amount >= 500} amount={game.amount} player1={game.player1} player2={game.player2 || 'Unknown'} score1={game.score1} score2={game.score2} winner={winner(game.score1, game.score2, game.player1, game.player2 || 'Unknown')} />
-                                    : <></>
-                            ))}
-                            {/* <HistoryResultCard isPremium={true} amount={500} player1="User 1" player2="MaskMyth" winner="player2" /> */}
+                            {myGames && myGames.length > 0 ? myGames.map((game) => (
+                                <HistoryResultCard isPremium={game.amount >= 500} amount={game.amount} player1={game.player1} player2={game.player2 || 'Unknown'} score1={game.score1} score2={game.score2} winner={winner(game.score1, game.score2, game.player1, game.player2 || 'Unknown')} />
+                            )) : <p className="text-center">No game</p>}
                         </div>
                     </div>
                 </div>

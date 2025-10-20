@@ -64,10 +64,10 @@ const HistoryAllMatches: React.FC<HistoryAllMatchesProps> = ({ currentView, setC
 
                         {/* Games */}
                         <div className="flex flex-col gap-6 z-0">
-                            {allGameHistory && allGameHistory.map((game) => (
+                            {allGameHistory ? allGameHistory.map((game) => (
                                 <HistoryResultCard
                                     isPremium={game.amount > 500} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} score1={game.score1} score2={game.score2} winner={winner(game.score1, game.score2, game.player1, game.player2 || 'Unknown')} />
-                            ))
+                            )) : <p className="text-center">No game</p>
                             }
                         </div>
                     </div>

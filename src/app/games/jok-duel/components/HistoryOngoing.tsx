@@ -25,6 +25,8 @@ interface HistoryOngoingProps {
 }
 
 const HistoryOngoing: React.FC<HistoryOngoingProps> = ({ currentView, setCurrentView, onlinePlayers, gameHistory }) => {
+    const playingGames = gameHistory?.filter(game => game.status === "playing")
+
     return <div className="bg-black flex justify-center min-h-screen">
         <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
             <div className="flex-grow mt-4 pt-[3px] h-screen bg-gradient-to-r from-[#44F756] via-[#D3EB2F] to-[#D684F5] rounded-t-[48px] relative top-glow z-0">
@@ -61,11 +63,9 @@ const HistoryOngoing: React.FC<HistoryOngoingProps> = ({ currentView, setCurrent
 
                         {/* Games */}
                         <div className="flex flex-col gap-6 z-0">
-                            {gameHistory && gameHistory.map((game) => (
-                                game.status == "playing" ?
-                                    <HistoryMatchCard isPremium={false} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} round={game.round} /> :
-                                    <></>
-                            ))}
+                            {playingGames && playingGames.length > 0 ? playingGames.map((game) => (
+                                <HistoryMatchCard isPremium={false} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} round={game.round} />
+                            )) : <p className="text-center">No game ongoing</p>}
                         </div>
                     </div>
                 </div>
