@@ -48,11 +48,11 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, 
           </div>
           <div className="relative">
             <div className="bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] p-[1px] rounded-r-xl">
-              <div className="bg-black rounded-r-xl ml-1 px-5 py-2 justify-start text-white text-base font-normal lowercase leading-3">
+              <div className="bg-black rounded-r-xl ml-1 px-5 py-2 justify-start text-white text-base text-[16px] font-normal lowercase leading-3">
                 {totalStars}
               </div>
             </div>
-            <div className="absolute -top-1 -left-4">
+            <div className="absolute -top-[2px] -left-4">
               <Image
                 priority={true}
                 src={star2}
@@ -71,7 +71,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, 
       </div>
 
       {showTabs && <div className="flex items-center gap-2.5 z-999">
-        <div className="flex-1 flex justify-between items-center">
+        <div className="flex-1 flex justify-between items-center bg-neutral-900 rounded-[10px]">
           <div
             onClick={() => setCurrentView("opponent-selection")}
             className={`w-full ${currentView == "opponent-selection"
