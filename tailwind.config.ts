@@ -73,6 +73,10 @@ const config: Config = {
         blink: {
           "50%": { opacity: "0" },
         },
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
         fadeToSmoke: {
           "0%": { filter: "grayscale(0%) blur(0px)", opacity: "1" },
           "100%": { filter: "grayscale(100%) blur(10px)", opacity: "0" },
@@ -133,6 +137,14 @@ const config: Config = {
             boxShadow: "0 5px 20px rgba(62, 238, 0, 0.1)",
           },
         },
+        "gradient-glow-blink": {
+          "0%, 100%": {
+            boxShadow: "3px 3px 8px rgba(62, 238, 0, 0.8)",
+          },
+          "50%": {
+            boxShadow: "3px 3px 8px rgba(62, 238, 0, 0.1)",
+          },
+        },
       },
       animation: {
         "slide-up": "slide-up 0.3s ease-out",
@@ -140,6 +152,7 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         blink: "blink 1s step-end infinite",
+        fadeOut: "fadeOut 1s infinite",
         fadeToSmoke: "fadeToSmoke 3s forwards",
         riseSmokeTopRight: "riseSmokeTopRight 3s ease-in-out 1",
         riseSmokeTopLeft: "riseSmokeTopLeft 3s ease-in-out 1",
@@ -147,6 +160,7 @@ const config: Config = {
         riseSmokeBottomRight: "riseSmokeBottomRight 3s ease-in-out 1",
         "blink-shadow-green": "blink-shadow-green 1s infinite",
         "blink-shadow-purple": "blink-shadow-purple 1s infinite",
+        "gradient-glow-blink": "gradient-glow-blink 1s infinite",
       },
       borderRadius: {
         lg: "var(--radius)",

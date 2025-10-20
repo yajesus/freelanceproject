@@ -93,7 +93,7 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
               {/* Games */}
               <div className="flex flex-col gap-6 z-0">
                 {lobbies ? lobbies.map((lobby) => (
-                  <MatchCard user={lobby.userId1} isPremium={false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} startGame={() => startGame(lobby.id)} />
+                  <MatchCard user={lobby.userId1} isPremium={parseInt(lobby.amount) >= 500 ? true : false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} startGame={() => startGame(lobby.id)} />
                 )) : <p className="text-center">No active user</p>}
               </div>
             </div>

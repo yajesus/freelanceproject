@@ -3,9 +3,11 @@ import {
   naruto,
   clashIcon,
   starGlow,
+  starIcon2,
   timerIcon,
   sword,
   diamond,
+  glowingSparkle
 } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
 
@@ -70,9 +72,26 @@ const MatchCard: React.FC<MatchCardProps> = ({
             priority={false}
             src={starGlow}
             alt="star"
+            className="h-[109px] w-[109px] animate-fadeOut"
+          />
+        </div>
+        <div className={`absolute  left-1/2 -translate-x-1/2  ${isPremium ? 'top-[100px] -translate-y-1/2' : 'top-1/2 -translate-y-1/2'}`}>
+          <Image
+            priority={false}
+            src={glowingSparkle}
+            alt="glowingSparkle"
+            className="h-[149px] w-[136px]"
+          />
+        </div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Image
+            priority={false}
+            src={starIcon2}
+            alt="star"
             className="h-[109px] w-[109px]"
           />
         </div>
+
 
         <p
           className="absolute top-[95px] left-1/2 -translate-x-1/2 text-[32px] z-10 font-normal"

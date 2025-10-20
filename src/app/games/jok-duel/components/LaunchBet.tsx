@@ -205,7 +205,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                     </div>
                   </div>
 
-                  <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2">
+                  <div className="absolute bottom-[25px] left-1/2 -translate-x-1/2 rounded-full animate-gradient-glow-blink">
                     <button
                       onClick={() => handleBet()}
                       className="block mx-auto w-fit relative"
@@ -216,7 +216,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                         alt={""}
                         className="mt-[-5px] h-[20%] mx-auto object-contain"
                       />
-                      <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[18px]">
+                      <p className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2  text-[16px]">
                         🔥 it's hot
                       </p>
                     </button>
