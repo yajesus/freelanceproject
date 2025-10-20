@@ -30,8 +30,8 @@ const HistoryOngoing: React.FC<HistoryOngoingProps> = ({ currentView, setCurrent
     return <div className="bg-black flex justify-center min-h-screen">
         <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
             <div className="flex-grow mt-4 pt-[3px] h-screen bg-gradient-to-r from-[#44F756] via-[#D3EB2F] to-[#D684F5] rounded-t-[48px] relative top-glow z-0">
-                <div className="bg-black rounded-t-[46px] pt-10 bg-center h-full w-full overflow-y-auto no-scrollbar p-[20px]">
-                    <div className="flex flex-col gap-8 relative">
+                <div className="bg-black rounded-t-[46px] pt-10 bg-center h-full w-full overflow-y-auto overflow-hidden no-scrollbar p-[20px]">
+                    <div className="flex flex-col gap-9 relative">
                         <Image
                             priority={false}
                             src={ellipse}
