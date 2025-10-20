@@ -21,35 +21,6 @@ export interface LaunchBetProps {
   onlinePlayers: number
 }
 
-const CustomSlider = styled(Slider)({
-  height: 31,
-  "& .MuiSlider-thumb": {
-    background: `url(${star2.src}) center center no-repeat`,
-    backgroundSize: "24px 24px",
-    width: 40,
-    height: 40,
-    border: "2px solid #3f3c40",
-    backgroundColor: "#262426",
-    marginLeft: -20,
-  },
-  "& .MuiSlider-track": {
-    borderRadius: 80,
-    background: "linear-gradient(to right, #C27CBC, #D3FF00, #3BE32D)",
-  },
-  "& .MuiSlider-rail": {
-    borderRadius: 80,
-    border: "2px solid #3f3c40",
-    backgroundColor: "#262426", // inactive part
-  },
-  "& .MuiSlider-valueLabel": {
-    background: "#262426",
-    color: "#fff",
-    fontSize: "16px",
-    fontFamily: "Poppins, sans-serif",
-    padding: "4px 8px",
-  },
-});
-
 const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlayers }) => {
   const [value, setValue] = useState(30);
   const { totalStars } = useGameStore()
@@ -155,18 +126,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                     </div>
                   </div>
                   <div className="absolute top-[165px] left-1/2 -translate-x-1/2 w-full px-3.5">
-                    {/* <GradientSlider /> */}
-                    <CustomSlider
-                      min={1}
-                      max={100}
-                      defaultValue={30}
-                      step={1}
-                      value={value}
-                      onChange={(e: Event, newValue: number | number[]) =>
-                        setValue(newValue as number)
-                      }
-                      valueLabelDisplay="on"
-                    />
+                    <GradientSlider value={value} onchange={(val: any) => setValue(val[0])} />
                   </div>
                   <div className="absolute top-[240px] left-1/2 -translate-x-1/2 w-full px-3.5 flex justify-between">
                     {addAmounts.map((amount) => (
