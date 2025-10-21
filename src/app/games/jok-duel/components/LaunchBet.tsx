@@ -111,7 +111,7 @@ const LaunchBet: FC<LaunchBetProps> = ({ currentView, setCurrentView, onlinePlay
                           className="no-arrows font-normal bg-transparent rounded-[10px] border border-white/0 placeholder-neutral-700 text-center text-base py-3 px-2 w-[88px] focus:outline-none focus:ring-0"
                           type="number"
                           placeholder="Your bet"
-                          onChange={(e) => setValue(parseInt(e.target.value))}
+                          onChange={(e) => setValue(parseInt(e.target.value) || 0)}
                         />
                         <div
                           className="absolute inset-0 rounded-[10px] border-[1.8px] border-neutral-400 pointer-events-none"

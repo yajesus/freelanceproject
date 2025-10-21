@@ -36,7 +36,7 @@ const MatchHeader: React.FC<MatchHeaderProps> = ({ currentView, setCurrentView, 
     <div className="flex flex-col gap-8 z-999 relative" ref={menuRef}>
       <div className="flex justify-between w-full">
         <div className="flex justify-center items-center gap-9">
-          <div
+          <div onClick={() => setCurrentView('game-profile')}
             className={`overflow-hidden w-14 h-14 relative rounded-full flex justify-center p-[1px] items-center bg-gradient-to-tr from-[#C27CBC] via-[#D3FF00] to-[#3BE32D] shadow-lg`}
           >
             <Image
