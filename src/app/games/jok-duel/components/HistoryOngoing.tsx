@@ -64,7 +64,7 @@ const HistoryOngoing: React.FC<HistoryOngoingProps> = ({ currentView, setCurrent
                         {/* Games */}
                         <div className="flex flex-col gap-6 z-0">
                             {playingGames && playingGames.length > 0 ? playingGames.map((game) => (
-                                <HistoryMatchCard isPremium={false} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} round={game.round} />
+                                <HistoryMatchCard isPremium={game.amount > 500 ? true : false} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} round={game.round} />
                             )) : <p className="text-center">No game ongoing</p>}
                         </div>
                     </div>

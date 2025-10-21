@@ -1,4 +1,4 @@
-import { clashIcon, diamond, Live, naruto, starGlow } from "@/src/app/games/jok-duel/images";
+import { clashIcon, diamond, Live, naruto, starGlow, starIcon2, glowingSparkle } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
 
 interface HistoryMatchCardProps {
@@ -33,7 +33,7 @@ const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount, 
                 </p>
             </div>
         </div>
-        <div className="w-full flex flex-col items-center justify-center">
+        <div className="relative w-full flex flex-col items-center justify-center">
             <div
                 className={`flex-wrap flex gap-1 py-2 px-2 outline outline-1 outline-offset-[-1px] rounded-[20px] ${isPremium ? "outline-fuchsia-500" : "outline-green-400"
                     } `}
@@ -48,15 +48,39 @@ const HistoryMatchCard: React.FC<HistoryMatchCardProps> = ({ isPremium, amount, 
                     {isPremium ? "Premium" : "Standard"}
                 </p>
             </div>
-            <div className="flex flex-col items-center justify-center -mt-2">
+            <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-full">
                 <Image
+                    priority={false}
+                    src={glowingSparkle}
+                    alt="Glowing sparkle"
+                    className="h-[109px] w-[109px]"
+                />
+            </div>
+            <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-full">
+                <Image
+                    priority={false}
+                    src={starGlow}
+                    alt="Star glow"
+                    className="h-[109px] w-[109px] animate-blink"
+                />
+            </div>
+            <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-full">
+                <Image
+                    priority={false}
+                    src={starIcon2}
+                    alt="star"
+                    className="h-[109px] w-[109px]"
+                />
+            </div>
+            <div className="relative flex flex-col items-center justify-center -mt-2">
+                {/* <Image
                     priority={false}
                     src={starGlow}
                     alt="star"
                     className=""
-                />
+                /> */}
                 <p
-                    className="text-[32px] z-10 font-normal -mt-5"
+                    className="absolute top-[85px] text-[32px] z-10 font-normal -mt-5"
                     style={{
                         color: "white",
                         WebkitTextStroke: "3px transparent",

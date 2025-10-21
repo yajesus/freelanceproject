@@ -144,10 +144,10 @@ const config: Config = {
         },
         "gradient-glow-blink": {
           "0%, 100%": {
-            boxShadow: "3px 3px 8px rgba(62, 238, 0, 0.8)",
+            boxShadow: "none",
           },
           "50%": {
-            boxShadow: "3px 3px 8px rgba(62, 238, 0, 0.1)",
+            boxShadow: "0 0 4px #44F756, 0 0 5px #D4CF65, 0 0 8px #D691DD",
           },
         },
       },
@@ -165,7 +165,7 @@ const config: Config = {
         riseSmokeBottomRight: "riseSmokeBottomRight 3s ease-in-out 1",
         "blink-shadow-green": "blink-shadow-green 1s infinite",
         "blink-shadow-purple": "blink-shadow-purple 1s infinite",
-        "gradient-glow-blink": "gradient-glow-blink 1s infinite",
+        "gradient-glow-blink": "gradient-glow-blink 1s ease-in-out infinite",
         "horizontal-shake": "horizontal-shake 3s ease-in-out infinite",
       },
       borderRadius: {

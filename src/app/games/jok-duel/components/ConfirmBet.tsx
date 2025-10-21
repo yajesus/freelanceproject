@@ -7,7 +7,8 @@ import {
   jokDuelOnboardingBtnBg,
   defeatTextBg,
   starGlow,
-  AmountBg
+  AmountBg,
+  starIcon2
 } from "@/src/app/games/jok-duel/images";
 import Image from "next/image";
 import { showBackButton, triggerHapticFeedback } from "@/utils/ui";
@@ -110,16 +111,37 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegram
                       <p className="text-[14px] font-normal">🎭 "Your bet is ready! Will an opponent dare to take up the challenge?</p>
                     </div>
 
-                    <div className="bg-[#1D1D1D] max-h-[172px] flex flex-col justify-center items-center rounded-xl w-full pb-1">
-                      <p className="text-[16px] font-normal mt-[15px]">Potential Winnings</p>
+                    <div className="bg-[#1D1D1D] h-[172px] relative rounded-xl w-full pb-1">
+                      <p className="absolute left-1/2 -translate-x-1/2 text-[16px] font-normal mt-[15px] w-full text-center">Potential Winnings</p>
                       <Image
                         priority={false}
                         src={starGlow}
                         alt="Star Glow Icon"
-                        className="-mt-[30px] h-[143px]"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[143px] animate-fadeOut"
+                      />
+                      <Image
+                        priority={false}
+                        src={starIcon2}
+                        alt="Star Glow Icon"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[143px]"
                       />
 
-                      <div className="relative -mt-[35px]">
+                      {/* <div className="relative  -mt-[30px] ">
+                        <Image
+                          priority={false}
+                          src={starGlow}
+                          alt="Star Glow Icon"
+                          className="absolute h-[143px]"
+                        />
+                      </div> */}
+                      {/* <Image
+                        priority={false}
+                        src={starIcon2}
+                        alt="star"
+                        className="h-[109px] w-[109px]"
+                      /> */}
+
+                      <div className="absolute left-1/2 -translate-x-1/2 bottom-[5px]">
                         <Image
                           priority={false}
                           src={AmountBg}
@@ -147,7 +169,7 @@ const ConfirmBet: FC<ConfirmBetProps> = ({ currentView, setCurrentView, telegram
                       </button>
                       <button
                         onClick={() => placeBet()}
-                        className="block mx-auto relative"
+                        className="block mx-auto relative rounded-full animate-gradient-glow-blink"
                       >
                         <Image
                           priority={false}
