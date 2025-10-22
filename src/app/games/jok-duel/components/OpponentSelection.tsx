@@ -14,11 +14,17 @@ import MatchCard from "@/components/games/MatchCard";
 import MatchHeader from "@/components/games/MatchHeader";
 import { timeAgo } from "@/utils/timeAgo";
 
+interface User {
+  name: string
+}
+
 export interface lobbyProps {
   id: string,
   userId1: string,
   amount: string,
   createdAt: string,
+
+  user1: User
 }
 
 export interface OpponentSelectionProps {
@@ -93,7 +99,7 @@ const OpponentSelection: FC<OpponentSelectionProps> = ({
               {/* Games */}
               <div className="flex flex-col gap-6 z-0">
                 {lobbies ? lobbies.map((lobby) => (
-                  <MatchCard user={lobby.userId1} isPremium={parseInt(lobby.amount) >= 500 ? true : false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} startGame={() => startGame(lobby.id)} />
+                  <MatchCard user={lobby.user1.name || "Unknown"} isPremium={parseInt(lobby.amount) >= 500 ? true : false} amount={parseInt(lobby.amount)} minLeft={timeAgo(lobby.createdAt)} startGame={() => startGame(lobby.id)} />
                 )) : <p className="text-center">No active user</p>}
               </div>
             </div>

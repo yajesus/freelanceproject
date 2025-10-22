@@ -2,7 +2,21 @@ import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
 
 export async function GET(req: Request) {
-  const lobbies = await prisma.lobby.findMany({ where: { status: "pending" } });
+  const lobbies = await prisma.lobby.findMany({
+    where: { status: "pending" },
+    include: {
+      user1: {
+        select: {
+          name: true,
+        },
+      },
+      user2: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 
   return NextResponse.json({ success: true, data: lobbies });
 }

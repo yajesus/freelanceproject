@@ -80,6 +80,9 @@ model User {
   isSheildActive              Boolean              @default(false)
   withdrawalRequests          WithdrawalRequest[]
   lastSeenAt                  DateTime?
+
+  lobbies1 Lobby[]            @relation("User1Lobbies")
+  lobbies2 Lobby[]            @relation("User2Lobbies")
 }
 
 model ComboOfTheDay {
@@ -128,7 +131,9 @@ model DuelGame {
 model Lobby {
   id        String   @id @default(uuid()) @map("_id")
   userId1   String
+  user1     User    @relation("User1Lobbies", fields: [userId1], references: [telegramId])
   userId2   String?
+  user2     User?   @relation("User2Lobbies", fields: [userId2], references: [telegramId])
   amount    Int       
   status    String
   winner    String?
