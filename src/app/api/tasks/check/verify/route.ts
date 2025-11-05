@@ -22,7 +22,10 @@ export async function POST(req: Request) {
   const { validatedData, user } = validateTelegramWebAppData(telegramInitData);
 
   if (!validatedData) {
-    return NextResponse.json({ error: 'Invalid Telegram data' }, { status: 403 });
+    return NextResponse.json(
+      { error: 'Invalid Telegram data' },
+      { status: 403 }
+    );
   }
 
   const telegramId = user.id?.toString();
@@ -36,7 +39,7 @@ export async function POST(req: Request) {
       async (prisma) => {
         // Step 1: Fetch user
         const dbUser = await prisma.user.findUnique({
-          where: { telegramId }
+          where: { telegramId },
         });
 
         if (!dbUser) {
@@ -46,7 +49,7 @@ export async function POST(req: Request) {
         // Step 2: Fetch task
         const task = await prisma.task.findUnique({
           where: { id: taskId },
-          include: { taskAction: true }
+          include: { taskAction: true },
         });
 
         if (!task) {
@@ -73,7 +76,9 @@ export async function POST(req: Request) {
           resetTime.setDate(resetTime.getDate() - 1);
         }
 
-        const nextResetTime = new Date(resetTime.getTime() + 24 * 60 * 60 * 1000);
+        const nextResetTime = new Date(
+          resetTime.getTime() + 24 * 60 * 60 * 1000
+        );
 
         // Step 3: Find or create userTask
         let userTask = await prisma.userTask.findFirst({
@@ -82,10 +87,10 @@ export async function POST(req: Request) {
             taskId: task.id,
             ...(task.type === 'DAILY' && {
               taskStartTimestamp: {
-                gte: resetTime
-              }
-            })
-          }
+                gte: resetTime,
+              },
+            }),
+          },
         });
 
         // Create userTask if it doesn't exist
@@ -95,8 +100,8 @@ export async function POST(req: Request) {
               userId: dbUser.id,
               taskId: task.id,
               taskStartTimestamp: new Date(),
-              isCompleted: false
-            }
+              isCompleted: false,
+            },
           });
         }
 
@@ -108,49 +113,52 @@ export async function POST(req: Request) {
         if (task.title === 'Play one round of JOK Duel') {
           const todayDuelGame = await prisma.duelGame.findFirst({
             where: {
-              userId: dbUser.telegramId,
+              userId1: dbUser.telegramId,
               createdAt: {
                 gte: resetTime,
-                lt: nextResetTime
-              }
+                lt: nextResetTime,
+              },
             },
             orderBy: {
-              createdAt: 'desc'
-            }
+              createdAt: 'desc',
+            },
           });
 
           if (!todayDuelGame) {
             return {
               success: false,
-              message: 'No today activity found for this user.'
+              message: 'No today activity found for this user.',
             };
           }
         } else {
           // Step 5: Fetch UserComboProgress for combo-related tasks
           const combo = await prisma.comboOfTheDay.findFirst({
             orderBy: {
-              createdAt: 'desc'
-            }
+              createdAt: 'desc',
+            },
           });
 
           const comboProgress = await prisma.userComboProgress.findFirst({
             where: {
               userId: dbUser.id,
-              comboDate: combo?.comboDate
-            }
+              comboDate: combo?.comboDate,
+            },
           });
 
           if (!comboProgress) {
             return {
               success: false,
-              message: 'No combo record found for this user.'
+              message: 'No combo record found for this user.',
             };
           }
 
-          if (!comboProgress.discoveredIds || comboProgress.discoveredIds.length < 1) {
+          if (
+            !comboProgress.discoveredIds ||
+            comboProgress.discoveredIds.length < 1
+          ) {
             return {
               success: false,
-              message: 'Please upgrade combo first.'
+              message: 'Please upgrade combo first.',
             };
           }
 
@@ -163,7 +171,7 @@ export async function POST(req: Request) {
           ) {
             return {
               success: false,
-              message: 'Please add more discoveries to your combo first.'
+              message: 'Please add more discoveries to your combo first.',
             };
           }
         }
@@ -177,15 +185,15 @@ export async function POST(req: Request) {
               taskId: task.id,
               completedAt: {
                 gte: resetTime,
-                lt: nextResetTime
-              }
-            }
+                lt: nextResetTime,
+              },
+            },
           });
 
           if (userTaskToday) {
             return {
               success: false,
-              message: 'Daily task already completed.'
+              message: 'Daily task already completed.',
             };
           }
 
@@ -194,8 +202,8 @@ export async function POST(req: Request) {
             where: { id: userTask.id },
             data: {
               isCompleted: true,
-              completedAt: new Date()
-            }
+              completedAt: new Date(),
+            },
           });
 
           // Calculate points with multiplier for daily tasks
@@ -203,7 +211,9 @@ export async function POST(req: Request) {
           const pointsMultiplier = task.multiplier || 2; // Daily tasks get 2x multiplier
           const userYieldPerHour = dbUser.yieldPerHour || 0;
           const userBonusYield = dbUser.bonusYieldPerHour || 0;
-          const totalMultiplier = calculateYieldPerHour(userBonusYield, userYieldPerHour) * pointsMultiplier;
+          const totalMultiplier =
+            calculateYieldPerHour(userBonusYield, userYieldPerHour) *
+            pointsMultiplier;
           const points = Math.round(pointsToIncrement + totalMultiplier);
 
           // Update user's points and stars
@@ -213,8 +223,8 @@ export async function POST(req: Request) {
               points: { increment: points },
               pointsBalance: { increment: points },
               totalStars: { increment: task.rewardStars || 0 },
-              earnedStars: { increment: task.rewardStars || 0 }
-            }
+              earnedStars: { increment: task.rewardStars || 0 },
+            },
           });
 
           // Create transaction record
@@ -225,8 +235,8 @@ export async function POST(req: Request) {
               amount: task.rewardStars || 0,
               type: TransactionType.EARNED,
               status: TransactionStatus.COMPLETED,
-              description: `Daily task reward: ${task.title}`
-            }
+              description: `Daily task reward: ${task.title}`,
+            },
           });
 
           return {
@@ -236,7 +246,7 @@ export async function POST(req: Request) {
             completedAt: updatedUserTask.completedAt,
             points,
             totalStars: updatedUser.totalStars,
-            earnedStars: updatedUser.earnedStars
+            earnedStars: updatedUser.earnedStars,
           };
         } else {
           // For non-daily tasks, update existing task
@@ -244,8 +254,8 @@ export async function POST(req: Request) {
             where: { id: userTask.id },
             data: {
               isCompleted: true,
-              completedAt: new Date()
-            }
+              completedAt: new Date(),
+            },
           });
 
           // Calculate points with multiplier
@@ -253,7 +263,9 @@ export async function POST(req: Request) {
           const pointsMultiplier = task.multiplier || 1.5; // Regular tasks get 1.5x multiplier
           const userYieldPerHour = dbUser.yieldPerHour || 0;
           const userBonusYield = dbUser.bonusYieldPerHour || 0;
-          const totalMultiplier = calculateYieldPerHour(userBonusYield, userYieldPerHour) * pointsMultiplier;
+          const totalMultiplier =
+            calculateYieldPerHour(userBonusYield, userYieldPerHour) *
+            pointsMultiplier;
           const points = Math.round(pointsToIncrement + totalMultiplier);
 
           // Update user's points and stars
@@ -263,8 +275,8 @@ export async function POST(req: Request) {
               points: { increment: points },
               pointsBalance: { increment: points },
               totalStars: { increment: task.rewardStars || 0 },
-              earnedStars: { increment: task.rewardStars || 0 }
-            }
+              earnedStars: { increment: task.rewardStars || 0 },
+            },
           });
 
           // Create transaction record
@@ -275,8 +287,8 @@ export async function POST(req: Request) {
               amount: task.rewardStars || 0,
               type: TransactionType.EARNED,
               status: TransactionStatus.COMPLETED,
-              description: `Task reward: ${task.title}`
-            }
+              description: `Task reward: ${task.title}`,
+            },
           });
 
           return {
@@ -286,7 +298,7 @@ export async function POST(req: Request) {
             completedAt: updatedUserTask.completedAt,
             points,
             totalStars: updatedUser.totalStars,
-            earnedStars: updatedUser.earnedStars
+            earnedStars: updatedUser.earnedStars,
           };
         }
       },
@@ -299,7 +311,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to verify task'
+        error: error instanceof Error ? error.message : 'Failed to verify task',
       },
       { status: 500 }
     );

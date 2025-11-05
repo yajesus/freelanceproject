@@ -118,20 +118,20 @@ model DuelGameUser {
 }
 
 model DuelGame {
-  id        String   @id @default(uuid()) @map("_id")
-  userId    String
-  round1    Json
-  round2    Json
-  round3    Json
-  status    String
-  prizeId   String
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid()) @map("_id")
+  userId1      String
+  userId2      String
+  rounds       Json     @default("{}")   
+  currentTurn  String   @default("")    
+  status       String   @default("pending") 
+  winner       String?                 
+  createdAt    DateTime @default(now())
 }
 
 model Lobby {
   id        String   @id @default(uuid()) @map("_id")
   userId1   String
-  user1     User    @relation("User1Lobbies", fields: [userId1], references: [telegramId])
+  user1     User?    @relation("User1Lobbies", fields: [userId1], references: [telegramId])
   userId2   String?
   user2     User?   @relation("User2Lobbies", fields: [userId2], references: [telegramId])
   amount    Int       

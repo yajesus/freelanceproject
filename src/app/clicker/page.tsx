@@ -1,15 +1,15 @@
 // src/app/clicker/page.tsx
 
-"use client";
+'use client';
 
-import { CheckTokenHoldings } from "@/components/CheckTokenHoldings";
-import ComebackReward from "@/components/ComebackReward";
-import LoadingScreen from "@/components/Loading";
-import Navigation from "@/components/Navigation";
-import AutoIncrementYieldPerHour from "@/components/UpgradeYieldPerHour";
-import { useGameStore } from "@/utils/game-mechanics";
-import dynamic from "next/dynamic";
-import { Luckiest_Guy } from "next/font/google";
+import { CheckTokenHoldings } from '@/components/CheckTokenHoldings';
+import ComebackReward from '@/components/ComebackReward';
+import LoadingScreen from '@/components/Loading';
+import Navigation from '@/components/Navigation';
+import AutoIncrementYieldPerHour from '@/components/UpgradeYieldPerHour';
+import { useGameStore } from '@/utils/game-mechanics';
+import dynamic from 'next/dynamic';
+import { Luckiest_Guy } from 'next/font/google';
 import React, {
   ReactNode,
   useCallback,
@@ -17,120 +17,129 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import AppLeaderboard from "@/components/AppLeaderboard";
-import StarSelectionPopup from "@/components/popups/StarSelectionPopup";
-import WithdrawalPopup from "@/components/popups/WithdrawalPopup";
-import { AnimatePresence, motion } from "framer-motion";
-import { GameHistoryProps } from "../games/jok-duel/components/HistoryOngoing";
-import { lobbyProps } from "../games/jok-duel/components/OpponentSelection";
+import AppLeaderboard from '@/components/AppLeaderboard';
+import StarSelectionPopup from '@/components/popups/StarSelectionPopup';
+import WithdrawalPopup from '@/components/popups/WithdrawalPopup';
+import { AnimatePresence, motion } from 'framer-motion';
+import { GameHistoryProps } from '../games/jok-duel/components/HistoryOngoing';
+import { lobbyProps } from '../games/jok-duel/components/OpponentSelection';
 
-const Mine = dynamic(() => import("@/components/Mine"), { ssr: true });
-const Friends = dynamic(() => import("@/components/Friends"), { ssr: true });
-const Quests = dynamic(() => import("@/components/Quests"), { ssr: true });
-const Upgrades = dynamic(() => import("@/components/Upgrades"), { ssr: true });
-const Settings = dynamic(() => import("@/components/Settings"), { ssr: true });
-const MyJOK = dynamic(() => import("@/components/MyJOK"), { ssr: true });
-const Shop = dynamic(() => import("@/components/Shop"), { ssr: true });
-const Boost = dynamic(() => import("@/components/Boost"), { ssr: true });
-const DailyRewards = dynamic(() => import("@/components/DailyRewards"), {
+const Mine = dynamic(() => import('@/components/Mine'), { ssr: true });
+const Friends = dynamic(() => import('@/components/Friends'), { ssr: true });
+const Quests = dynamic(() => import('@/components/Quests'), { ssr: true });
+const Upgrades = dynamic(() => import('@/components/Upgrades'), { ssr: true });
+const Settings = dynamic(() => import('@/components/Settings'), { ssr: true });
+const MyJOK = dynamic(() => import('@/components/MyJOK'), { ssr: true });
+const Shop = dynamic(() => import('@/components/Shop'), { ssr: true });
+const Boost = dynamic(() => import('@/components/Boost'), { ssr: true });
+const DailyRewards = dynamic(() => import('@/components/DailyRewards'), {
   ssr: false,
 });
-const Profile = dynamic(() => import("@/components/Profile"), { ssr: true });
-const AirdropPage = dynamic(() => import("@/components/AirdropPage"), {
+const Profile = dynamic(() => import('@/components/Profile'), { ssr: true });
+const AirdropPage = dynamic(() => import('@/components/AirdropPage'), {
   ssr: false,
 });
 // const Giveaway = dynamic(() => import('@/components/Giveaway'), { ssr: true });
-const Raffles = dynamic(() => import("@/components/Raffles"), { ssr: true });
-const DailyChest = dynamic(() => import("@/components/DailyChest"), {
+const Raffles = dynamic(() => import('@/components/Raffles'), { ssr: true });
+const DailyChest = dynamic(() => import('@/components/DailyChest'), {
   ssr: false,
 });
-const Intro1 = dynamic(() => import("@/components/Intro1"), { ssr: true });
+const Intro1 = dynamic(() => import('@/components/Intro1'), { ssr: true });
 
 // Game components grouped for better code splitting
 const GameComponents = {
   JokDuelOnboarding: dynamic(
-    () => import("../games/jok-duel/components/JokDuelOnboarding"),
+    () => import('../games/jok-duel/components/JokDuelOnboarding'),
     { ssr: true }
   ),
   OpponentSelection: dynamic(
-    () => import("../games/jok-duel/components/OpponentSelection"),
+    () => import('../games/jok-duel/components/OpponentSelection'),
     { ssr: true }
   ),
-  LaunchBet: dynamic(() => import("../games/jok-duel/components/LaunchBet"), {
+  LaunchBet: dynamic(() => import('../games/jok-duel/components/LaunchBet'), {
     ssr: true,
   }),
-  ConfirmBet: dynamic(() => import("../games/jok-duel/components/ConfirmBet"), {
+  ConfirmBet: dynamic(() => import('../games/jok-duel/components/ConfirmBet'), {
     ssr: true,
   }),
-  MatchVersus: dynamic(() => import("../games/jok-duel/components/MatchVersus"), {
-    ssr: true,
-  }),
-  HistoryAllMatches: dynamic(() => import("../games/jok-duel/components/HistoryAllMatches"), {
-    ssr: true,
-  }),
-  HistoryMyMatches: dynamic(() => import("../games/jok-duel/components/HistoryMyMatches"), {
-    ssr: true,
-  }),
-  HistoryOngoing: dynamic(() => import("../games/jok-duel/components/HistoryOngoing"), {
-    ssr: true,
-  }),
+  // MatchVersus: dynamic(() => import("../games/jok-duel/components/MatchVersus"), {
+  //   ssr: true,
+  // }),
+  HistoryAllMatches: dynamic(
+    () => import('../games/jok-duel/components/HistoryAllMatches'),
+    {
+      ssr: true,
+    }
+  ),
+  HistoryMyMatches: dynamic(
+    () => import('../games/jok-duel/components/HistoryMyMatches'),
+    {
+      ssr: true,
+    }
+  ),
+  HistoryOngoing: dynamic(
+    () => import('../games/jok-duel/components/HistoryOngoing'),
+    {
+      ssr: true,
+    }
+  ),
   SelectedOpponent: dynamic(
-    () => import("../games/jok-duel/components/SelectedOpponent"),
+    () => import('../games/jok-duel/components/SelectedOpponent'),
     { ssr: true }
   ),
-  Game: dynamic(() => import("../games/jok-duel/components/Game"), {
+  Game: dynamic(() => import('../games/jok-duel/components/Game'), {
     ssr: false,
   }),
-  Finish: dynamic(() => import("../games/jok-duel/components/Finish"), {
+  Finish: dynamic(() => import('../games/jok-duel/components/Finish'), {
     ssr: false,
   }),
-  Win: dynamic(() => import("../games/jok-duel/components/Win"), {
+  Win: dynamic(() => import('../games/jok-duel/components/Win'), {
     ssr: false,
   }),
-  Intro: dynamic(() => import("../games/jok-duel/components/Intro"), {
+  Intro: dynamic(() => import('../games/jok-duel/components/Intro'), {
     ssr: false,
   }),
   GameProfile: dynamic(
-    () => import("../games/jok-duel/components/GameProfile"),
+    () => import('../games/jok-duel/components/GameProfile'),
     { ssr: true }
   ),
   GameEndLoading: dynamic(
-    () => import("../games/jok-duel/components/GameEndLoading"),
+    () => import('../games/jok-duel/components/GameEndLoading'),
     { ssr: true }
   ),
   JokDuelLoading: dynamic(
-    () => import("../games/jok-duel/components/JokDuelLoading"),
+    () => import('../games/jok-duel/components/JokDuelLoading'),
     { ssr: true }
   ),
   LeaderBoard: dynamic(
-    () => import("../games/jok-duel/components/LeaderBoard"),
+    () => import('../games/jok-duel/components/LeaderBoard'),
     { ssr: true }
   ),
   ChestLoading: dynamic(
-    () => import("../games/jok-duel/components/ChestLoading"),
+    () => import('../games/jok-duel/components/ChestLoading'),
     { ssr: true }
   ),
 };
 
-const luckiestGuyFont = Luckiest_Guy({ subsets: ["latin"], weight: ["400"] });
+const luckiestGuyFont = Luckiest_Guy({ subsets: ['latin'], weight: ['400'] });
 
 // Utility functions
 const base64urlDecode = (str: string): string => {
-  str = str.replace(/-/g, "+").replace(/_/g, "/");
-  while (str.length % 4) str += "=";
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
   try {
     return atob(str);
   } catch {
-    return "";
+    return '';
   }
 };
 
 const generateRandomUsername = (): string => {
-  const vowels = "aeiou";
-  const consonants = "bcdfghjklmnpqrstvwxyz";
-  let username = "";
+  const vowels = 'aeiou';
+  const consonants = 'bcdfghjklmnpqrstvwxyz';
+  let username = '';
   for (let i = 0; i < 4; i++) {
     const c = consonants[Math.floor(Math.random() * consonants.length)];
     const v = vowels[Math.floor(Math.random() * vowels.length)];
@@ -142,7 +151,7 @@ const generateRandomUsername = (): string => {
 const extractTelegramId = (queryString: string) => {
   try {
     const params = new URLSearchParams(queryString);
-    const userJson = params.get("user");
+    const userJson = params.get('user');
     if (!userJson) return null;
     const user = JSON.parse(decodeURIComponent(userJson));
     return user.id;
@@ -159,11 +168,11 @@ function ClickerPage() {
   const userInfo = useGameStore();
 
   const [appState, setAppState] = useState({
-    currentView: "myjok",
+    currentView: 'myjok',
     isInitialized: false,
     isLoading: true,
     updated: false,
-    chestOpeningView: "dailyChest",
+    chestOpeningView: 'dailyChest',
   });
 
   const [gameState, setGameState] = useState({
@@ -172,14 +181,14 @@ function ClickerPage() {
       gamesPlayed: 0,
       watchedAds: 0,
     },
-    opponentUsername: "",
+    opponentUsername: '',
     leaderBoardInfo: [],
   });
 
-  const [onlinePlayers, setOnlinePlayers] = useState(0)
-  const [gameHistory, setGameHIstory] = useState<GameHistoryProps[]>([])
-  const [allGameHistory, setAllGameHIstory] = useState<GameHistoryProps[]>([])
-  const [lobbies, setLobbies] = useState<lobbyProps[]>([])
+  const [onlinePlayers, setOnlinePlayers] = useState(0);
+  const [gameHistory, setGameHIstory] = useState<GameHistoryProps[]>([]);
+  const [allGameHistory, setAllGameHIstory] = useState<GameHistoryProps[]>([]);
+  const [lobbies, setLobbies] = useState<lobbyProps[]>([]);
 
   // Popup state
   const [popupState, setPopupState] = useState({
@@ -192,18 +201,21 @@ function ClickerPage() {
     },
   });
 
-  const gameId = useRef<string>("");
+  const gameId = useRef<string>('');
   const timeoutRefs = useRef<NodeJS.Timeout[]>([]);
   const userPollingInterval = useRef<NodeJS.Timeout | null>(null);
+  const wsRef = useRef<WebSocket | null>(null);
+  const heartbeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const telegramId = useMemo(() => {
-    return extractTelegramId(userInfo.userTelegramInitData) || "undefined";
+    return extractTelegramId(userInfo.userTelegramInitData) || 'undefined';
   }, [userInfo.userTelegramInitData]);
 
   // Polling interval constants
   const WITHDRAWAL_POLLING_INTERVAL = 15 * 60 * 1000; // 15 minutes
   const USER_POLLING_INTERVAL = 5000; // 5 seconds for user data
-  const CACHE_KEY = useMemo(() => "withdrawal_data_cache", []);
+  const CACHE_KEY = useMemo(() => 'withdrawal_data_cache', []);
 
   const shouldShowLoading = useMemo(() => {
     return !appState.isInitialized || gameState.gameUser.id == null;
@@ -226,7 +238,7 @@ function ClickerPage() {
       }
 
       const decoded = base64urlDecode(startParamEncoded);
-      const parts = decoded.split("_");
+      const parts = decoded.split('_');
 
       const [_, accessToken, accessSecret, userId, screenName] = parts;
 
@@ -236,12 +248,12 @@ function ClickerPage() {
       while (retryCount < maxRetries) {
         try {
           const telegramID =
-            window.Telegram?.WebApp.initDataUnsafe?.user?.id ?? "undefined";
+            window.Telegram?.WebApp.initDataUnsafe?.user?.id ?? 'undefined';
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
           const response = await fetch(`${baseUrl}/api/twitter/twitter-auth`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               telegramId: telegramID,
               userId,
@@ -259,7 +271,7 @@ function ClickerPage() {
           }
 
           if (data.success) {
-            setAppState((prev) => ({ ...prev, currentView: "upgrades" }));
+            setAppState((prev) => ({ ...prev, currentView: 'upgrades' }));
             break;
           }
 
@@ -275,17 +287,18 @@ function ClickerPage() {
     handleAuthData();
   }, []);
 
+  const fetchLobbies = async () => {
+    const res = await fetch('/api/lobby');
+    const data = await res.json();
+
+    if (data.success) {
+      setLobbies(data.data);
+    }
+  };
+
   // lastSeenAt
   useEffect(() => {
-    const fetchLobbies = async () => {
-      const res = await fetch('/api/lobby');
-      const data = await res.json()
-
-      if (data.success) {
-        setLobbies(data.data)
-      }
-    }
-    fetchLobbies()
+    fetchLobbies();
   }, []);
 
   const fetchOrCreateUser = useCallback(async () => {
@@ -306,9 +319,9 @@ function ClickerPage() {
           gameUser: data.data,
         }));
       } else {
-        const createRes = await fetch("/api/duelGameUser", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const createRes = await fetch('/api/duelGameUser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ telegramId: telegramId.toString() }),
         });
 
@@ -319,44 +332,162 @@ function ClickerPage() {
             gameUser: createdUser.data,
           }));
         } else {
-          console.error("Failed to create duelGameUser", createdUser);
+          console.error('Failed to create duelGameUser', createdUser);
         }
       }
-
-      // count online players
-      const result = await fetch("/api/online");
-      const countData = await result.json()
-      if (countData.success) {
-        setOnlinePlayers(countData.data);
-      }
     } catch (err) {
-      console.error("Error loading duelGameUser", err);
+      console.error('Error loading duelGameUser', err);
     }
   }, [gameState.gameUser.id, telegramId]);
 
-  // update lastSeenAt
+  // useEffect(() => {
+  //   // Start the WS server
+  //   fetch('/api/ws')
+  //     .then((res) => res.json())
+  //     .then((data) => console.log('WS API response:', data))
+  //     .catch(console.error);
+
+  //   // Connect a WebSocket client to test
+  //   const ws = new WebSocket('ws://localhost:8080');
+
+  //   ws.onopen = () => console.log('✅ Connected to WS server!');
+  //   ws.onmessage = (msg) => console.log('Message from server:', msg.data);
+  //   ws.onerror = (err) => console.error('WS error:', err);
+
+  //   return () => ws.close();
+  // }, []);
+
+  // WebSocket connection for online players
   useEffect(() => {
-    const saveSignTime = async () => {
-      const res = await fetch("/api/online", {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: telegramId
-        })
-      })
+    // For local development, use a fallback telegramId if none exists
+    const effectiveTelegramId =
+      telegramId && telegramId !== 'undefined'
+        ? telegramId
+        : `local-dev-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-      const data = await res.json()
-      if (!data.success) {
-        console.error("Have issue of save last seen datetime")
+    const connectWebSocket = () => {
+      // Ensure WebSocket server is started
+      fetch('/api/ws').catch((err) => {
+        console.error('Failed to start WS server:', err);
+      });
+
+      // Determine WebSocket URL based on environment
+      let wsUrl: string;
+
+      if (process.env.NEXT_PUBLIC_WS_URL) {
+        const wsUrlEnv = process.env.NEXT_PUBLIC_WS_URL;
+
+        // If it already includes a protocol, use it directly (or convert http/https to ws/wss)
+        if (wsUrlEnv.startsWith('http://')) {
+          wsUrl = wsUrlEnv.replace('http://', 'ws://');
+        } else if (wsUrlEnv.startsWith('https://')) {
+          wsUrl = wsUrlEnv.replace('https://', 'wss://');
+        } else if (
+          wsUrlEnv.startsWith('ws://') ||
+          wsUrlEnv.startsWith('wss://')
+        ) {
+          wsUrl = wsUrlEnv;
+        } else {
+          // No protocol, add ws:// or wss:// based on current protocol
+          const wsProtocol =
+            window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          wsUrl = `${wsProtocol}//${wsUrlEnv}`;
+        }
+      } else if (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
+      ) {
+        wsUrl = 'ws://localhost:8080';
+      } else {
+        // In production, use the same host but port 8080
+        const wsProtocol =
+          window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        wsUrl = `${wsProtocol}//${window.location.hostname}:8080`;
       }
-    }
 
-    const interval = setInterval(() => {
-      saveSignTime()
-    }, 30 * 1000);
+      const sendHeartbeat = () => {
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(
+            JSON.stringify({
+              type: 'heartbeat',
+              telegramId: effectiveTelegramId.toString(),
+            })
+          );
+        }
+      };
 
-    return () => clearInterval(interval)
-  }, [])
+      try {
+        const ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+          wsRef.current = ws;
+
+          // Send initial heartbeat
+          sendHeartbeat();
+
+          // Set up heartbeat interval (every 30 seconds)
+          heartbeatIntervalRef.current = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+              sendHeartbeat();
+            }
+          }, 30000);
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'onlineCount') {
+              setOnlinePlayers(data.count);
+            }
+          } catch (err) {
+            console.error('Error parsing WebSocket message:', err);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+          wsRef.current = null;
+
+          // Clear heartbeat interval
+          if (heartbeatIntervalRef.current) {
+            clearInterval(heartbeatIntervalRef.current);
+            heartbeatIntervalRef.current = null;
+          }
+
+          // Reconnect after 3 seconds
+          reconnectTimeoutRef.current = setTimeout(() => {
+            connectWebSocket();
+          }, 3000);
+        };
+      } catch (error) {
+        console.error('Failed to create WebSocket:', error);
+        // Retry connection after 5 seconds
+        reconnectTimeoutRef.current = setTimeout(() => {
+          connectWebSocket();
+        }, 5000);
+      }
+    };
+
+    connectWebSocket();
+
+    return () => {
+      // Cleanup on unmount
+      if (heartbeatIntervalRef.current) {
+        clearInterval(heartbeatIntervalRef.current);
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+    };
+  }, [telegramId]);
 
   // User polling
   useEffect(() => {
@@ -393,7 +524,7 @@ function ClickerPage() {
           leaderBoardInfo: leaderboardData,
         }));
       } catch (err) {
-        console.error("Error loading leaderboard", err);
+        console.error('Error loading leaderboard', err);
       }
     };
 
@@ -404,13 +535,13 @@ function ClickerPage() {
     async (fields: Record<string, any>) => {
       try {
         if (!gameState.gameUser?.id || !telegramId) {
-          console.warn("gameUser or telegramId not ready");
+          console.warn('gameUser or telegramId not ready');
           return;
         }
 
         const response = await fetch(`/api/duelGameUser`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegramId: telegramId.toString(),
             ...fields,
@@ -419,7 +550,7 @@ function ClickerPage() {
 
         const data = await response.json();
         if (!response.ok) {
-          console.error("Failed to update user:", data.error || data);
+          console.error('Failed to update user:', data.error || data);
           return null;
         }
 
@@ -431,7 +562,7 @@ function ClickerPage() {
         setAppState((prev) => ({ ...prev, updated: !prev.updated }));
         return data;
       } catch (err) {
-        console.error("Error in updateDuelGameUser:", err);
+        console.error('Error in updateDuelGameUser:', err);
         return null;
       }
     },
@@ -439,109 +570,111 @@ function ClickerPage() {
   );
 
   // start match
-  const startMatch = useCallback(async (lobbyId: string) => {
-    setGameState((prev) => ({
-      ...prev,
-      opponentUsername: generateRandomUsername(),
-    }));
+  const startMatch = useCallback(
+    async (lobbyId: string) => {
+      setGameState((prev) => ({
+        ...prev,
+        opponentUsername: generateRandomUsername(),
+      }));
 
-    try {
-      const prizeRes = await fetch("/api/prize", { method: "POST" });
-      const prizeData = await prizeRes.json();
-      if (!prizeRes.ok || !prizeData?.data?.id) {
-        console.error("❌ Failed to create prize", prizeData);
-        return;
+      try {
+        const prizeRes = await fetch('/api/prize', { method: 'POST' });
+        const prizeData = await prizeRes.json();
+        if (!prizeRes.ok || !prizeData?.data?.id) {
+          console.error('❌ Failed to create prize', prizeData);
+          return;
+        }
+        const gameRes = await fetch('/api/duelGame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: telegramId.toString(),
+            round1: { me: 0, pc: 0 },
+            round2: { me: 0, pc: 0 },
+            round3: { me: 0, pc: 0 },
+            status: 'pending',
+            prizeId: prizeData.data.id,
+          }),
+        });
+
+        const gameData = await gameRes.json();
+        if (!gameRes.ok || !gameData?.data?.id) {
+          console.error('❌ Failed to create duel game', gameData);
+          return;
+        }
+
+        const lobbyRes = await fetch('/api/lobby', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lobbyId: lobbyId,
+            userId: telegramId.toString(),
+            gameId: gameData?.data?.id,
+          }),
+        });
+        const lobbyData = await lobbyRes.json();
+
+        if (!lobbyData.success) {
+          console.error('❌ Failed to create lobby', lobbyData);
+          return;
+        }
+
+        gameId.current = gameData.data.id;
+        await updateDuelGameUser({
+          gamesPlayed: gameState.gameUser.gamesPlayed + 1,
+        });
+
+        setCurrentView('game');
+      } catch (error) {
+        console.error('⚠️ Error in startMatch:', error);
       }
-      const gameRes = await fetch("/api/duelGame", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: telegramId.toString(),
-          round1: { me: 0, pc: 0 },
-          round2: { me: 0, pc: 0 },
-          round3: { me: 0, pc: 0 },
-          status: "pending",
-          prizeId: prizeData.data.id,
-        }),
-      });
-
-
-      const gameData = await gameRes.json();
-      if (!gameRes.ok || !gameData?.data?.id) {
-        console.error("❌ Failed to create duel game", gameData);
-        return;
-      }
-
-      const lobbyRes = await fetch("/api/lobby", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          lobbyId: lobbyId,
-          userId: telegramId.toString(),
-          gameId: gameData?.data?.id
-        }),
-      });
-      const lobbyData = await lobbyRes.json();
-
-      if (!lobbyData.success) {
-        console.error("❌ Failed to create lobby", lobbyData);
-        return;
-      }
-
-      gameId.current = gameData.data.id;
-      await updateDuelGameUser({
-        gamesPlayed: gameState.gameUser.gamesPlayed + 1,
-      });
-
-      setCurrentView("game")
-    } catch (error) {
-      console.error("⚠️ Error in startMatch:", error);
-    }
-  }, [telegramId, gameState.gameUser.gamesPlayed, updateDuelGameUser]);
+    },
+    [telegramId, gameState.gameUser.gamesPlayed, updateDuelGameUser]
+  );
 
   // game history
-  useEffect(() => {
-    const fetchGameHistory = async (telegramId: string) => {
-      try {
-        const res = await fetch('/api/history', {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: telegramId
-          }),
-        })
-        const data = await res.json();
+  // useEffect(() => {
+  //   const fetchGameHistory = async (telegramId: string) => {
+  //     try {
+  //       const res = await fetch('/api/history', {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           userId: telegramId
+  //         }),
+  //       })
+  //       const data = await res.json();
 
-        if (data.success) {
-          setGameHIstory(data.data)
-        } else {
-          throw Error(data.data)
-        }
+  //       if (data.success) {
+  //         setGameHIstory(data.data)
+  //       } else {
+  //         throw Error(data.data)
+  //       }
 
-      } catch (error) {
-        console.error("⚠️ Error in startMatch:", error);
-      }
-    }
+  //     } catch (error) {
+  //       console.error("⚠️ Error in startMatch:", error);
+  //     }
+  //   }
 
-    const fetchAllGameHistory = async () => {
-      try {
-        const res = await fetch('/api/history')
-        const data = await res.json();
+  //   const fetchAllGameHistory = async () => {
+  //     try {
+  //       const res = await fetch('/api/history')
+  //       const data = await res.json();
 
-        if (data.success) {
-          setAllGameHIstory(data.data)
-        } else {
-          throw Error(data.data)
-        }
+  //       if (data.success) {
+  //         setAllGameHIstory(data.data)
+  //       } else {
+  //         throw Error(data.data)
+  //       }
 
-      } catch (error) {
-        console.error("⚠️ Error in startMatch:", error);
-      }
-    }
+  //     } catch (error) {
+  //       console.error("⚠️ Error in startMatch:", error);
+  //     }
+  //   }
 
-    fetchGameHistory(telegramId.toString())
-    fetchAllGameHistory()
-  }, [gameHistory])
+  //   fetchGameHistory(telegramId.toString())
+  //   fetchAllGameHistory()
+  // }, [gameHistory])
 
   // Game start function
   const startGame = useCallback(async () => {
@@ -551,28 +684,28 @@ function ClickerPage() {
     }));
 
     try {
-      const prizeRes = await fetch("/api/prize", { method: "POST" });
+      const prizeRes = await fetch('/api/prize', { method: 'POST' });
       const prizeData = await prizeRes.json();
       if (!prizeRes.ok || !prizeData?.data?.id) {
-        console.error("❌ Failed to create prize", prizeData);
+        console.error('❌ Failed to create prize', prizeData);
         return;
       }
-      const gameRes = await fetch("/api/duelGame", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const gameRes = await fetch('/api/duelGame', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: telegramId.toString(),
           round1: { me: 0, pc: 0 },
           round2: { me: 0, pc: 0 },
           round3: { me: 0, pc: 0 },
-          status: "pending",
+          status: 'pending',
           prizeId: prizeData.data.id,
         }),
       });
 
       const gameData = await gameRes.json();
       if (!gameRes.ok || !gameData?.data?.id) {
-        console.error("❌ Failed to create duel game", gameData);
+        console.error('❌ Failed to create duel game', gameData);
         return;
       }
 
@@ -581,7 +714,7 @@ function ClickerPage() {
         gamesPlayed: gameState.gameUser.gamesPlayed + 1,
       });
     } catch (error) {
-      console.error("⚠️ Error in startGame:", error);
+      console.error('⚠️ Error in startGame:', error);
     }
   }, [telegramId, gameState.gameUser.gamesPlayed, updateDuelGameUser]);
 
@@ -590,7 +723,7 @@ function ClickerPage() {
     if (
       gameState.gameUser.id &&
       appState.isInitialized &&
-      appState.currentView === "game"
+      appState.currentView === 'game'
     ) {
       startGame();
     }
@@ -604,35 +737,35 @@ function ClickerPage() {
     }));
 
     try {
-      const prizeRes = await fetch("/api/prize", { method: "POST" });
+      const prizeRes = await fetch('/api/prize', { method: 'POST' });
       const prizeData = await prizeRes.json();
       if (!prizeRes.ok || !prizeData?.data?.id) {
-        console.error("❌ Failed to create prize", prizeData);
+        console.error('❌ Failed to create prize', prizeData);
         return;
       }
 
-      const gameRes = await fetch("/api/duelGame", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const gameRes = await fetch('/api/duelGame', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: telegramId.toString(),
           round1: { me: 0, pc: 0 },
           round2: { me: 0, pc: 0 },
           round3: { me: 0, pc: 0 },
-          status: "pending",
+          status: 'pending',
           prizeId: prizeData.data.id,
         }),
       });
 
       const gameData = await gameRes.json();
       if (!gameRes.ok || !gameData?.data?.id) {
-        console.error("❌ Failed to create duel game", gameData);
+        console.error('❌ Failed to create duel game', gameData);
         return;
       }
 
       gameId.current = gameData.data.id;
       await updateDuelGame({
-        status: "pending",
+        status: 'pending',
         round1: { me: 0, pc: 0 },
         round2: { me: 0, pc: 0 },
         round3: { me: 0, pc: 0 },
@@ -641,15 +774,15 @@ function ClickerPage() {
       await updateDuelGameUser({
         gamesPlayed: gameState.gameUser.gamesPlayed + 1,
       });
-      setAppState((prev) => ({ ...prev, currentView: "game" }));
+      setAppState((prev) => ({ ...prev, currentView: 'game' }));
     } catch (err) {
-      console.error("⚠️ Error during rematchGame:", err);
+      console.error('⚠️ Error during rematchGame:', err);
     }
   }, [telegramId, gameState.gameUser.gamesPlayed]);
 
   // Game profile view effect
   useEffect(() => {
-    if (appState.currentView === "game-profile") {
+    if (appState.currentView === 'game-profile') {
       setAppState((prev) => ({ ...prev, updated: !prev.updated }));
     }
   }, [appState.currentView]);
@@ -658,8 +791,8 @@ function ClickerPage() {
   const updateDuelGame = useCallback(async (fields: Record<string, any>) => {
     try {
       const response = await fetch(`/api/duelGame`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           gameId: gameId.current,
           ...fields,
@@ -668,30 +801,30 @@ function ClickerPage() {
 
       const data = await response.json();
       if (!response.ok) {
-        console.error("❌ Failed to update duel game:", data.error || data);
+        console.error('❌ Failed to update duel game:', data.error || data);
         return null;
       }
       return data.data;
     } catch (error) {
-      console.error("⚠️ Error updating duel game:", error);
+      console.error('⚠️ Error updating duel game:', error);
       return null;
     }
   }, []);
 
   useEffect(() => {
     const initWebApp = async () => {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         try {
-          const WebApp = (await import("@twa-dev/sdk")).default;
+          const WebApp = (await import('@twa-dev/sdk')).default;
           WebApp.ready();
-          WebApp.setBottomBarColor("#1d2025");
-          WebApp.setHeaderColor("#000000");
+          WebApp.setBottomBarColor('#1d2025');
+          WebApp.setHeaderColor('#000000');
           WebApp.disableVerticalSwipes();
           WebApp.requestFullscreen();
           WebApp.expand();
           WebApp.enableClosingConfirmation();
         } catch (error) {
-          console.error("Error initializing TG Webapp:", error);
+          console.error('Error initializing TG Webapp:', error);
         }
       }
     };
@@ -721,9 +854,9 @@ function ClickerPage() {
   const handleTopUpProcess = useCallback(
     async (topupAmount: number) => {
       try {
-        const response = await fetch("/api/user/star-topup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/user/star-topup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             initData: userInfo.userTelegramInitData,
             topupAmount,
@@ -731,17 +864,17 @@ function ClickerPage() {
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.message || "Top up error");
+        if (!response.ok) throw new Error(data.message || 'Top up error');
 
-        const WebApp = (await import("@twa-dev/sdk")).default;
+        const WebApp = (await import('@twa-dev/sdk')).default;
         WebApp.ready();
         WebApp.openInvoice(data.invoiceLink, (status: string) => {
-          if (status === "paid") {
+          if (status === 'paid') {
             userInfo.setTotalStars(userInfo.totalStars + topupAmount);
           }
         });
       } catch (error) {
-        console.error("Top up error:", error);
+        console.error('Top up error:', error);
       }
     },
     [userInfo.userTelegramInitData, userInfo.totalStars, userInfo.setTotalStars]
@@ -752,12 +885,12 @@ function ClickerPage() {
       try {
         const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
         if (!telegramUser || !telegramUser.id) {
-          throw new Error("Telegram user ID not found.");
+          throw new Error('Telegram user ID not found.');
         }
 
-        await fetch("/api/user/set-stars", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        await fetch('/api/user/set-stars', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegramId: telegramUser.id.toString(),
             stars: topupAmount,
@@ -765,7 +898,7 @@ function ClickerPage() {
         });
         userInfo.setTotalStars(userInfo.totalStars + topupAmount);
       } catch (error) {
-        console.error("Top up error:", error);
+        console.error('Top up error:', error);
       }
     },
     [userInfo.totalStars, userInfo.setTotalStars]
@@ -830,7 +963,7 @@ function ClickerPage() {
         setPopupState((prev) => ({ ...prev, lastWithdrawalCheck: Date.now() }));
       }
     } catch (error) {
-      console.error("Failed to fetch withdrawal data:", error);
+      console.error('Failed to fetch withdrawal data:', error);
     }
   }, [
     userInfo.userTelegramInitData,
@@ -867,7 +1000,7 @@ function ClickerPage() {
           fetchWithdrawalData();
         }
       } catch (error) {
-        console.error("Failed to load cached withdrawal data:", error);
+        console.error('Failed to load cached withdrawal data:', error);
         fetchWithdrawalData();
       }
     };
@@ -910,6 +1043,15 @@ function ClickerPage() {
       if (userPollingInterval.current) {
         clearInterval(userPollingInterval.current);
       }
+      if (heartbeatIntervalRef.current) {
+        clearInterval(heartbeatIntervalRef.current);
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
     };
   }, [clearAllTimeouts]);
 
@@ -933,72 +1075,73 @@ function ClickerPage() {
       onlinePlayers,
       gameHistory,
       allGameHistory,
-      lobbies
+      lobbies,
+      fetchLobbies,
     };
 
     switch (appState.currentView) {
-      case "intro1":
+      case 'intro1':
         return <Intro1 {...viewProps} />;
-      case "myjok":
+      case 'myjok':
         return <MyJOK {...viewProps} />;
-      case "upgrades":
+      case 'upgrades':
         return <Upgrades {...viewProps} />;
-      case "boost":
+      case 'boost':
         return <Boost {...viewProps} />;
-      case "settings":
+      case 'settings':
         return <Settings setCurrentView={setCurrentView} />;
-      case "friends":
+      case 'friends':
         return <Friends setCurrentView={setCurrentView} />;
-      case "quests":
+      case 'quests':
         return <Quests {...viewProps} />;
-      case "shop":
+      case 'shop':
         return <Shop {...viewProps} />;
-      case "raffles":
+      case 'raffles':
         return <Raffles {...viewProps} />;
-      case "reward":
+      case 'reward':
         return <DailyRewards {...viewProps} />;
-      case "profile":
+      case 'profile':
         return <Profile {...viewProps} />;
       // case 'giveaway':
       //   return <Giveaway {...viewProps} />;
-      case "airdrop":
+      case 'airdrop':
         return <AirdropPage {...viewProps} />;
-      case "dailyChest":
+      case 'dailyChest':
         return <DailyChest {...viewProps} />;
-      case "leaderboardApp":
+      case 'leaderboardApp':
         return <AppLeaderboard {...viewProps} />;
-      case "onboarding":
+      case 'onboarding':
         return <GameComponents.JokDuelOnboarding {...viewProps} />;
-      case "opponent-selection":
+      case 'opponent-selection':
         return <GameComponents.OpponentSelection {...viewProps} />;
-      case "launch-bet":
+      case 'launch-bet':
         return <GameComponents.LaunchBet {...viewProps} />;
-      case "confirm-bet":
+      case 'confirm-bet':
         return <GameComponents.ConfirmBet {...viewProps} />;
-      case "match-versus":
-        return <GameComponents.MatchVersus {...viewProps} />;
-      case "history-ongoing":
+      // case "match-versus":
+      //   return <GameComponents.MatchVersus {...viewProps} />;
+      case 'history-ongoing':
         return <GameComponents.HistoryOngoing {...viewProps} />;
-      case "history-all-matches":
+      case 'history-all-matches':
         return <GameComponents.HistoryAllMatches {...viewProps} />;
-      case "history-my-matches":
+      case 'history-my-matches':
         return <GameComponents.HistoryMyMatches {...viewProps} />;
-      case "selectedOpponent":
+      case 'selectedOpponent':
         return <GameComponents.SelectedOpponent {...viewProps} />;
-      case "game":
+      case 'game':
         return <GameComponents.Game {...viewProps} />;
-      case "finish":
+      case 'finish':
         return <GameComponents.Finish {...viewProps} />;
-      case "win":
+      case 'win':
         return <GameComponents.Win {...viewProps} />;
-      case "gameIntro":
+      case 'gameIntro':
         return <GameComponents.Intro {...viewProps} />;
-      case "game-profile":
+      case 'game-profile':
         return <GameComponents.GameProfile {...viewProps} />;
       // case 'recover':
-      case "gameEndLoading":
+      case 'gameEndLoading':
         return <GameComponents.GameEndLoading {...viewProps} />;
-      case "onboardingLoading":
+      case 'onboardingLoading':
         return (
           <GameComponents.JokDuelLoading
             setIsLoading={(loading) =>
@@ -1007,9 +1150,9 @@ function ClickerPage() {
             setCurrentView={setCurrentView}
           />
         );
-      case "leaderBoard":
+      case 'leaderBoard':
         return <GameComponents.LeaderBoard {...viewProps} />;
-      case "chest-opening":
+      case 'chest-opening':
         return (
           <GameComponents.ChestLoading
             setCurrentView={setCurrentView}
@@ -1035,26 +1178,26 @@ function ClickerPage() {
   // Game views check
   const isGameView = useMemo(() => {
     const gameViews = [
-      "dailyChest",
-      "onboardingLoading",
-      "opponent-selection",
-      "launch-bet",
-      "confirm-bet",
-      "match-versus",
-      "history-ongoing",
-      "history-all-matches",
-      "history-my-matches",
-      "onboarding",
-      "selectedOpponent",
-      "finish",
-      "win",
-      "gameIntro",
+      'dailyChest',
+      'onboardingLoading',
+      'opponent-selection',
+      'launch-bet',
+      'confirm-bet',
+      'match-versus',
+      'history-ongoing',
+      'history-all-matches',
+      'history-my-matches',
+      'onboarding',
+      'selectedOpponent',
+      'finish',
+      'win',
+      'gameIntro',
       // 'recover',
-      "gameEndLoading",
-      "game",
-      "game-profile",
-      "leaderBoard",
-      "chest-opening",
+      'gameEndLoading',
+      'game',
+      'game-profile',
+      'leaderBoard',
+      'chest-opening',
     ];
     return gameViews.includes(appState.currentView);
   }, [appState.currentView]);
@@ -1065,7 +1208,7 @@ function ClickerPage() {
 
   if (shouldShowLoading) {
     return (
-      <div className="bg-black flex flex-col h-screen text-white safe-area-top safe-area-bottom overflow-hidden">
+      <div className='bg-black flex flex-col h-screen text-white safe-area-top safe-area-bottom overflow-hidden'>
         <LoadingScreen
           setIsInitialized={(init) =>
             setAppState((prev) => ({ ...prev, isInitialized: init }))
@@ -1077,7 +1220,7 @@ function ClickerPage() {
   }
 
   return (
-    <div className="bg-black flex flex-col h-screen text-white safe-area-top safe-area-bottom overflow-hidden">
+    <div className='bg-black flex flex-col h-screen text-white safe-area-top safe-area-bottom overflow-hidden'>
       <AutoIncrementYieldPerHour
         currentView={appState.currentView}
         setCurrentView={setCurrentView}
@@ -1089,7 +1232,7 @@ function ClickerPage() {
       />
 
       {isGameView ? (
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode='wait'>
           <motion.div
             key={appState.currentView}
             className={`${luckiestGuyFont.className}`}
@@ -1102,14 +1245,14 @@ function ClickerPage() {
           </motion.div>
         </AnimatePresence>
       ) : (
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode='wait'>
           <motion.div
             key={appState.currentView}
             initial={{ opacity: 0.7 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0.7 }}
             transition={{ duration: 0.1 }}
-            className="flex flex-col h-full w-full"
+            className='flex flex-col h-full w-full'
           >
             {renderCurrentView}
           </motion.div>
@@ -1142,7 +1285,7 @@ function ClickerPage() {
         <StarSelectionPopup
           onClose={handleCloseStarPopup}
           onConfirm={handleStarConfirm}
-          mode="topup"
+          mode='topup'
           onBack={handleCloseStarPopup}
         />
       )}
@@ -1173,10 +1316,10 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo);
 
     // report this
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       // reportErrorToService(error, errorInfo);
     }
   }
@@ -1184,12 +1327,12 @@ class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex items-center justify-center h-screen bg-black text-white">
-          <div className="text-center p-4">
-            <h1 className="text-xl mb-4">Something went wrong.</h1>
+        <div className='flex items-center justify-center h-screen bg-black text-white'>
+          <div className='text-center p-4'>
+            <h1 className='text-xl mb-4'>Something went wrong.</h1>
             <button
               onClick={() => window.location.reload()}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
             >
               Reload App
             </button>

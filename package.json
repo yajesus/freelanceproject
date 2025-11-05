@@ -30,6 +30,7 @@
 		"@tonconnect/ui-react": "^2.0.8",
 		"@twa-dev/sdk": "^8.0.2",
 		"@types/ua-parser-js": "^0.7.39",
+		"@types/ws": "^8.18.1",
 		"bcryptjs": "^2.4.3",
 		"canvas": "^3.1.0",
 		"cloudinary": "^2.5.1",
@@ -59,6 +60,7 @@
 		"tsconfig-paths": "^4.2.0",
 		"twitter-api-v2": "^1.23.0",
 		"ua-parser-js": "^1.0.38",
+		"ws": "^8.18.3",
 		"zod": "^3.23.8",
 		"zustand": "^4.5.4"
 	},
