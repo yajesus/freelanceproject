@@ -514,6 +514,7 @@ function ClickerPage() {
     if (!gameState.gameUser?.id) return;
 
     const fetchLeaderboard = async () => {
+      if (telegramId === 'undefined') return;
       try {
         const leaderboardRes = await fetch(
           `/api/leaderboard?telegramId=${telegramId}`
@@ -572,6 +573,10 @@ function ClickerPage() {
   // start match
   const startMatch = useCallback(
     async (lobbyId: string) => {
+      if (telegramId === 'undefined') {
+        console.warn('Cannot start match without a valid telegramId');
+        return;
+      }
       setGameState((prev) => ({
         ...prev,
         opponentUsername: generateRandomUsername(),
@@ -678,6 +683,10 @@ function ClickerPage() {
 
   // Game start function
   const startGame = useCallback(async () => {
+    if (telegramId === 'undefined') {
+      console.warn('Cannot start game without a valid telegramId');
+      return;
+    }
     setGameState((prev) => ({
       ...prev,
       opponentUsername: generateRandomUsername(),
@@ -731,6 +740,10 @@ function ClickerPage() {
 
   // Rematch function
   const rematchGame = useCallback(async () => {
+    if (telegramId === 'undefined') {
+      console.warn('Cannot rematch without a valid telegramId');
+      return;
+    }
     setGameState((prev) => ({
       ...prev,
       opponentUsername: generateRandomUsername(),
@@ -764,12 +777,6 @@ function ClickerPage() {
       }
 
       gameId.current = gameData.data.id;
-      await updateDuelGame({
-        status: 'pending',
-        round1: { me: 0, pc: 0 },
-        round2: { me: 0, pc: 0 },
-        round3: { me: 0, pc: 0 },
-      });
 
       await updateDuelGameUser({
         gamesPlayed: gameState.gameUser.gamesPlayed + 1,
@@ -790,6 +797,10 @@ function ClickerPage() {
   // Duel game update
   const updateDuelGame = useCallback(async (fields: Record<string, any>) => {
     try {
+      if (!gameId.current) {
+        console.warn('updateDuelGame skipped: missing gameId');
+        return null;
+      }
       const response = await fetch(`/api/duelGame`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -1072,6 +1083,7 @@ function ClickerPage() {
       gameId,
       startGame: rematchGame,
       startMatch: startMatch,
+      acceptBet: async () => {},
       onlinePlayers,
       gameHistory,
       allGameHistory,
