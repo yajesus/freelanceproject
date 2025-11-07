@@ -126,6 +126,7 @@ model DuelGame {
   status       String   @default("pending") 
   winner       String?                 
   createdAt    DateTime @default(now())
+  prizeId      String?
 }
 
 model Lobby {

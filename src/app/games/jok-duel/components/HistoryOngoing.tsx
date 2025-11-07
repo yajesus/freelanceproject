@@ -1,3 +1,5 @@
+"use client";
+
 import MatchHeader from "@/components/games/MatchHeader"
 import Image from "next/image";
 import {
@@ -5,6 +7,7 @@ import {
     Trophy,
 } from "@/src/app/games/jok-duel/images";
 import HistoryMatchCard from "@/components/games/HistoryMatchCard";
+import { useEffect, useState, useRef } from "react";
 
 export interface GameHistoryProps {
     id: string;
@@ -15,6 +18,9 @@ export interface GameHistoryProps {
     score2: number;
     round: number;
     status: string;
+    player1Name?: string;
+    player2Name?: string;
+    isBotGame?: boolean;
 }
 
 interface HistoryOngoingProps {
@@ -25,7 +31,130 @@ interface HistoryOngoingProps {
 }
 
 const HistoryOngoing: React.FC<HistoryOngoingProps> = ({ currentView, setCurrentView, onlinePlayers, gameHistory }) => {
-    const playingGames = gameHistory?.filter(game => game.status === "playing")
+    const [playingGames, setPlayingGames] = useState<GameHistoryProps[]>([]);
+    const wsRef = useRef<WebSocket | null>(null);
+    const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Fetch initial ongoing games
+    useEffect(() => {
+        const fetchOngoingGames = async () => {
+            try {
+                const res = await fetch('/api/games?type=ongoing');
+                const data = await res.json();
+                if (data.success) {
+                    setPlayingGames(data.data || []);
+                }
+            } catch (error) {
+                console.error('Error fetching ongoing games:', error);
+                // Fallback to gameHistory prop if API fails
+                const filtered = gameHistory?.filter(game => game.status === "playing") || [];
+                setPlayingGames(filtered);
+            }
+        };
+
+        fetchOngoingGames();
+    }, []);
+
+    // WebSocket connection for live updates
+    useEffect(() => {
+        const connectWebSocket = () => {
+            // Ensure WebSocket server is started
+            fetch('/api/ws').catch((err) => {
+                console.error('Failed to start WS server:', err);
+            });
+
+            // Determine WebSocket URL
+            let wsUrl: string;
+            if (process.env.NEXT_PUBLIC_WS_URL) {
+                const wsUrlEnv = process.env.NEXT_PUBLIC_WS_URL;
+                if (wsUrlEnv.startsWith('http://')) {
+                    wsUrl = wsUrlEnv.replace('http://', 'ws://');
+                } else if (wsUrlEnv.startsWith('https://')) {
+                    wsUrl = wsUrlEnv.replace('https://', 'wss://');
+                } else if (wsUrlEnv.startsWith('ws://') || wsUrlEnv.startsWith('wss://')) {
+                    wsUrl = wsUrlEnv;
+                } else {
+                    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                    wsUrl = `${wsProtocol}//${wsUrlEnv}`;
+                }
+            } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                wsUrl = 'ws://localhost:8080';
+            } else {
+                const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                wsUrl = `${wsProtocol}//${window.location.hostname}:8080`;
+            }
+
+            try {
+                const ws = new WebSocket(wsUrl);
+
+                ws.onopen = () => {
+                    wsRef.current = ws;
+                    console.log('✅ Connected to WebSocket for ongoing games');
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+
+                        if (data.type === 'ongoingGameUpdate') {
+                            const { action, game } = data;
+
+                            setPlayingGames((prevGames) => {
+                                if (action === 'created' || action === 'update') {
+                                    // Add or update game
+                                    const existingIndex = prevGames.findIndex(g => g.id === game.id);
+                                    if (existingIndex >= 0) {
+                                        // Update existing game
+                                        const updated = [...prevGames];
+                                        updated[existingIndex] = game;
+                                        return updated;
+                                    } else {
+                                        // Add new game
+                                        return [game, ...prevGames];
+                                    }
+                                } else if (action === 'finished') {
+                                    // Remove finished game
+                                    return prevGames.filter(g => g.id !== game.id);
+                                }
+                                return prevGames;
+                            });
+                        }
+                    } catch (err) {
+                        console.error('Error parsing WebSocket message:', err);
+                    }
+                };
+
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+
+                ws.onclose = () => {
+                    wsRef.current = null;
+                    // Reconnect after 3 seconds
+                    reconnectTimeoutRef.current = setTimeout(() => {
+                        connectWebSocket();
+                    }, 3000);
+                };
+            } catch (error) {
+                console.error('Failed to create WebSocket:', error);
+                reconnectTimeoutRef.current = setTimeout(() => {
+                    connectWebSocket();
+                }, 5000);
+            }
+        };
+
+        connectWebSocket();
+
+        return () => {
+            if (reconnectTimeoutRef.current) {
+                clearTimeout(reconnectTimeoutRef.current);
+            }
+            if (wsRef.current) {
+                wsRef.current.close();
+                wsRef.current = null;
+            }
+        };
+    }, []);
 
     return <div className="bg-black flex justify-center min-h-screen">
         <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
@@ -64,7 +193,14 @@ const HistoryOngoing: React.FC<HistoryOngoingProps> = ({ currentView, setCurrent
                         {/* Games */}
                         <div className="flex flex-col gap-6 z-0">
                             {playingGames && playingGames.length > 0 ? playingGames.map((game) => (
-                                <HistoryMatchCard isPremium={game.amount > 500 ? true : false} amount={game.amount} player1={game.player1} player2={game.player2 || "Unknown"} round={game.round} />
+                                <HistoryMatchCard 
+                                    key={game.id}
+                                    isPremium={game.amount >= 500} 
+                                    amount={game.amount} 
+                                    player1={game.player1Name || game.player1} 
+                                    player2={game.player2Name || game.player2 || "Unknown"} 
+                                    round={game.round} 
+                                />
                             )) : <p className="text-center">No game ongoing</p>}
                         </div>
                     </div>

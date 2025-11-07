@@ -242,12 +242,37 @@ export async function PATCH(req: Request) {
           },
         });
 
+        // Update game status to playing
+        await prisma.duelGame.update({
+          where: { id: gameData.id },
+          data: { status: 'playing' },
+        });
+
         // Broadcast lobby update
         broadcast({
           type: 'lobbyUpdate',
           action: 'accepted',
           lobby: updatedLobby,
           gameId: gameData.id,
+        });
+
+        // Broadcast ongoing game creation
+        broadcast({
+          type: 'ongoingGameUpdate',
+          action: 'created',
+          game: {
+            id: gameData.id,
+            amount: updatedLobby.amount,
+            player1: updatedLobby.userId1,
+            player2: updatedLobby.userId2 || "Unknown",
+            player1Name: updatedLobby.user1?.name || "Unknown",
+            player2Name: updatedLobby.user2?.name || "Unknown",
+            score1: 0,
+            score2: 0,
+            round: 1,
+            status: 'playing',
+            isBotGame: false,
+          },
         });
 
         return NextResponse.json({
@@ -300,6 +325,61 @@ export async function PATCH(req: Request) {
           },
         },
       });
+
+      // Update game status to finished
+      if (lobby.gameId) {
+        await prisma.duelGame.update({
+          where: { id: lobby.gameId },
+          data: { status: 'finished', winner: winnerId },
+        });
+
+        // Get game data for broadcast
+        const game = await prisma.duelGame.findUnique({
+          where: { id: lobby.gameId },
+        });
+
+        if (game) {
+          const rounds = game.rounds as any;
+          let score1 = 0;
+          let score2 = 0;
+          let currentRound = 3;
+
+          const roundData = rounds && typeof rounds === "object"
+            ? (rounds["1"] && rounds["2"] && rounds["3"]
+                ? { round1: rounds["1"], round2: rounds["2"], round3: rounds["3"] }
+                : { round1: null, round2: null, round3: null })
+            : { round1: null, round2: null, round3: null };
+
+          const roundArray = [roundData.round1, roundData.round2, roundData.round3];
+
+          for (let i = 0; i < roundArray.length; i++) {
+            const r = roundArray[i];
+            if (r && r.me !== undefined && r.pc !== undefined) {
+              score1 += r.me || 0;
+              score2 += r.pc || 0;
+            }
+          }
+
+          // Broadcast ongoing game finished
+          broadcast({
+            type: 'ongoingGameUpdate',
+            action: 'finished',
+            game: {
+              id: game.id,
+              amount: updatedLobby.amount,
+              player1: game.userId1,
+              player2: game.userId2 === "pc" ? "Bot" : game.userId2 || "Unknown",
+              player1Name: updatedLobby.user1?.name || "Unknown",
+              player2Name: game.userId2 === "pc" ? "Bot" : updatedLobby.user2?.name || "Unknown",
+              score1,
+              score2,
+              round: currentRound,
+              status: 'finished',
+              isBotGame: game.userId2 === "pc",
+            },
+          });
+        }
+      }
 
       // Broadcast lobby finished
       broadcast({

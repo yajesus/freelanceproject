@@ -3,16 +3,22 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   const result = [];
-  const games = await prisma.duelGame.findMany();
+  const games = await prisma.duelGame.findMany({
+    orderBy: { createdAt: "desc" },
+  });
   for (const game of games) {
     const lobby = await prisma.lobby.findFirst({ where: { gameId: game.id } });
     if (game.status == "pending") continue;
 
-    const rounds = [
-      typeof game.round1 === "string" ? JSON.parse(game.round1) : game.round1,
-      typeof game.round2 === "string" ? JSON.parse(game.round2) : game.round2,
-      typeof game.round3 === "string" ? JSON.parse(game.round3) : game.round3,
-    ];
+    // Parse rounds from JSON field
+    const roundsData = game.rounds as any;
+    const roundData = roundsData && typeof roundsData === "object" 
+      ? (roundsData["1"] && roundsData["2"] && roundsData["3"] 
+          ? { round1: roundsData["1"], round2: roundsData["2"], round3: roundsData["3"] }
+          : { round1: null, round2: null, round3: null })
+      : { round1: null, round2: null, round3: null };
+
+    const rounds = [roundData.round1, roundData.round2, roundData.round3];
 
     let me = 0;
     let pc = 0;
@@ -21,8 +27,8 @@ export async function GET(req: Request) {
       const r = rounds[i];
       if (!r) continue;
 
-      me += r.me;
-      pc += r.pc;
+      me += (r.me || 0);
+      pc += (r.pc || 0);
     }
 
     const data = {
@@ -36,6 +42,9 @@ export async function GET(req: Request) {
     };
 
     result.push({ ...data });
+    
+    // Limit to 3 matches for testing purposes only then change it to 30
+    if (result.length >= 3) break;
   }
 
   return NextResponse.json({ success: true, data: result });
@@ -49,15 +58,24 @@ export async function POST(req: Request) {
   }
 
   const result = [];
-  const games = await prisma.duelGame.findMany({ where: { userId } });
+  const games = await prisma.duelGame.findMany({ 
+    where: {
+      OR: [{ userId1: userId }, { userId2: userId }],
+    },
+    orderBy: { createdAt: "desc" },
+  });
   for (const game of games) {
     const lobby = await prisma.lobby.findFirst({ where: { gameId: game.id } });
 
-    const rounds = [
-      typeof game.round1 === "string" ? JSON.parse(game.round1) : game.round1,
-      typeof game.round2 === "string" ? JSON.parse(game.round2) : game.round2,
-      typeof game.round3 === "string" ? JSON.parse(game.round3) : game.round3,
-    ];
+    // Parse rounds from JSON field
+    const roundsData = game.rounds as any;
+    const roundData = roundsData && typeof roundsData === "object" 
+      ? (roundsData["1"] && roundsData["2"] && roundsData["3"] 
+          ? { round1: roundsData["1"], round2: roundsData["2"], round3: roundsData["3"] }
+          : { round1: null, round2: null, round3: null })
+      : { round1: null, round2: null, round3: null };
+
+    const rounds = [roundData.round1, roundData.round2, roundData.round3];
 
     let round = 1;
     let me = 0;
@@ -67,8 +85,8 @@ export async function POST(req: Request) {
       const r = rounds[i];
       if (!r) continue;
 
-      me += r.me;
-      pc += r.pc;
+      me += (r.me || 0);
+      pc += (r.pc || 0);
 
       if (r.me === 0 && r.pc === 0) {
         round = i + 1;
@@ -92,6 +110,9 @@ export async function POST(req: Request) {
     };
 
     result.push({ ...data });
+    
+    // Limit to 3 matches for testing purposes only then change it to 30
+    if (result.length >= 3) break;
   }
 
   return NextResponse.json({ success: true, data: result });

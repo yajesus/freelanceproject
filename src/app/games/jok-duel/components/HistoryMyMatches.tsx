@@ -15,7 +15,7 @@ interface HistoryMyMatchesProps {
 }
 
 const HistoryMyMatches: React.FC<HistoryMyMatchesProps> = ({ currentView, setCurrentView, onlinePlayers, gameHistory }) => {
-    const myGames = gameHistory?.filter(game => game.status != "pending")
+    const myGames = gameHistory?.filter(game => game.status != "pending").slice(0, 30)
     function winner(score1: number, score2: number, player1: string, player2: string) {
         let winner;
         if (score1 > score2) {

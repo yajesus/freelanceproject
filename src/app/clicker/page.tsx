@@ -638,48 +638,48 @@ function ClickerPage() {
   );
 
   // game history
-  // useEffect(() => {
-  //   const fetchGameHistory = async (telegramId: string) => {
-  //     try {
-  //       const res = await fetch('/api/history', {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({
-  //           userId: telegramId
-  //         }),
-  //       })
-  //       const data = await res.json();
+  useEffect(() => {
+    const fetchGameHistory = async (telegramId: string) => {
+      try {
+        const res = await fetch('/api/history', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: telegramId
+          }),
+        })
+        const data = await res.json();
 
-  //       if (data.success) {
-  //         setGameHIstory(data.data)
-  //       } else {
-  //         throw Error(data.data)
-  //       }
+        if (data.success) {
+          setGameHIstory(data.data)
+        } else {
+          throw Error(data.data)
+        }
 
-  //     } catch (error) {
-  //       console.error("⚠️ Error in startMatch:", error);
-  //     }
-  //   }
+      } catch (error) {
+        console.error("⚠️ Error in startMatch:", error);
+      }
+    }
 
-  //   const fetchAllGameHistory = async () => {
-  //     try {
-  //       const res = await fetch('/api/history')
-  //       const data = await res.json();
+    const fetchAllGameHistory = async () => {
+      try {
+        const res = await fetch('/api/history')
+        const data = await res.json();
 
-  //       if (data.success) {
-  //         setAllGameHIstory(data.data)
-  //       } else {
-  //         throw Error(data.data)
-  //       }
+        if (data.success) {
+          setAllGameHIstory(data.data)
+        } else {
+          throw Error(data.data)
+        }
 
-  //     } catch (error) {
-  //       console.error("⚠️ Error in startMatch:", error);
-  //     }
-  //   }
+      } catch (error) {
+        console.error("⚠️ Error in startMatch:", error);
+      }
+    }
 
-  //   fetchGameHistory(telegramId.toString())
-  //   fetchAllGameHistory()
-  // }, [gameHistory])
+    fetchGameHistory(telegramId.toString())
+    fetchAllGameHistory()
+  }, [gameHistory])
 
   // Game start function
   const startGame = useCallback(async () => {
