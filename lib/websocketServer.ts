@@ -1,4 +1,4 @@
-import { WebSocketServer, WebSocket } from 'ws';
+import { WebSocketServer, WebSocket } from "ws";
 
 let wss: WebSocketServer | null = null;
 
@@ -17,24 +17,24 @@ export interface MessageHandler {
   ) => Promise<void> | void;
 }
 
-const messageHandlers = new Map<string, MessageHandler['handler']>();
+const messageHandlers = new Map<string, MessageHandler["handler"]>();
 const connectedClients = new Map<WebSocket, ClientInfo>();
 
 export function getWebSocketServer(): WebSocketServer {
   if (!wss) {
-    wss = new WebSocketServer({ port: 8080 });
-    console.log('✅ WebSocket Server running on ws://localhost:8080');
+    wss = new WebSocketServer({ noServer: true });
+    console.log("✅ WebSocket Server running on ws://localhost:3000");
 
-    wss.on('connection', (ws: WebSocket) => {
+    wss.on("connection", (ws: WebSocket) => {
       connectedClients.set(ws, {});
 
       const welcomeMsg = JSON.stringify({
-        type: 'connected',
-        message: 'Welcome!',
+        type: "connected",
+        message: "Welcome!",
       });
       ws.send(welcomeMsg);
 
-      ws.on('message', async (data: WebSocket.RawData) => {
+      ws.on("message", async (data: WebSocket.RawData) => {
         try {
           const parsed = JSON.parse(data.toString());
           const handler = messageHandlers.get(parsed.type);
@@ -44,16 +44,16 @@ export function getWebSocketServer(): WebSocketServer {
             await handler(ws, parsed, clientInfo);
           }
         } catch (err) {
-          console.error('WebSocket error parsing message:', err);
+          console.error("WebSocket error parsing message:", err);
         }
       });
 
-      ws.on('close', () => {
+      ws.on("close", () => {
         connectedClients.delete(ws);
       });
 
-      ws.on('error', (error) => {
-        console.error('WebSocket error:', error);
+      ws.on("error", (error) => {
+        console.error("WebSocket error:", error);
         connectedClients.delete(ws);
       });
     });
@@ -69,7 +69,7 @@ export function getWebSocketServer(): WebSocketServer {
  */
 export function registerMessageHandler(
   type: string,
-  handler: MessageHandler['handler']
+  handler: MessageHandler["handler"]
 ): void {
   messageHandlers.set(type, handler);
 }
