@@ -223,65 +223,43 @@ function ClickerPage() {
 
   useEffect(() => {
     const handleAuthData = async () => {
-      if (!window.Telegram?.WebApp.initDataUnsafe) {
-        window.Telegram?.WebApp.expand();
-        window.Telegram?.WebApp.ready();
-      }
+      window.Telegram?.WebApp.expand();
+      window.Telegram?.WebApp.ready();
 
-      const startParamEncoded =
-        window.Telegram?.WebApp.initDataUnsafe?.start_param;
+      const initDataUnsafe = window.Telegram?.WebApp.initDataUnsafe;
+      const startParamEncoded = initDataUnsafe?.start_param;
 
       if (!startParamEncoded) {
-        const timeoutId = setTimeout(handleAuthData, 1000);
-        timeoutRefs.current.push(timeoutId);
+        console.warn("⚠️ No start_param found, running fallback logic");
+        const telegramID = initDataUnsafe?.user?.id ?? "undefined";
+
+        // Proceed without start_param
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+        const response = await fetch(`${baseUrl}/api/twitter/twitter-auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            telegramId: telegramID,
+            userId: "fallback",
+            screenName: "guest",
+            accessToken: "none",
+            accessSecret: "none",
+          }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setAppState((prev) => ({ ...prev, currentView: "upgrades" }));
+        }
         return;
       }
 
+      // normal flow (with start_param)
       const decoded = base64urlDecode(startParamEncoded);
       const parts = decoded.split("_");
-
       const [_, accessToken, accessSecret, userId, screenName] = parts;
 
-      let retryCount = 0;
-      const maxRetries = 10;
-
-      while (retryCount < maxRetries) {
-        try {
-          const telegramID =
-            window.Telegram?.WebApp.initDataUnsafe?.user?.id ?? "undefined";
-          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-          const response = await fetch(`${baseUrl}/api/twitter/twitter-auth`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              telegramId: telegramID,
-              userId,
-              screenName,
-              accessToken,
-              accessSecret,
-            }),
-          });
-
-          const data = await response.json();
-          if (!response.ok) {
-            retryCount++;
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            continue;
-          }
-
-          if (data.success) {
-            setAppState((prev) => ({ ...prev, currentView: "upgrades" }));
-            break;
-          }
-
-          retryCount++;
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-        } catch (error) {
-          retryCount++;
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-        }
-      }
+      // rest of your logic...
     };
 
     handleAuthData();
