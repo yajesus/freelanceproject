@@ -223,46 +223,81 @@ function ClickerPage() {
 
   useEffect(() => {
     const handleAuthData = async () => {
-      window.Telegram?.WebApp.expand();
-      window.Telegram?.WebApp.ready();
-
-      const initDataUnsafe = window.Telegram?.WebApp.initDataUnsafe;
-      const startParamEncoded = initDataUnsafe?.start_param;
-
-      if (!startParamEncoded) {
-        console.warn("⚠️ No start_param found, running fallback logic");
-        const telegramID = initDataUnsafe?.user?.id ?? "undefined";
-
-        // Proceed without start_param
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-        const response = await fetch(`${baseUrl}/api/twitter/twitter-auth`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            telegramId: telegramID,
-            userId: "fallback",
-            screenName: "guest",
-            accessToken: "none",
-            accessSecret: "none",
-          }),
-        });
-
-        const data = await response.json();
-        if (data.success) {
-          setAppState((prev) => ({ ...prev, currentView: "upgrades" }));
-        }
-        return;
+      // Ensure Telegram WebApp is initialized
+      if (!window.Telegram?.WebApp.initDataUnsafe) {
+        window.Telegram?.WebApp.expand();
+        window.Telegram?.WebApp.ready();
       }
 
-      // normal flow (with start_param)
-      const decoded = base64urlDecode(startParamEncoded);
-      const parts = decoded.split("_");
-      const [_, accessToken, accessSecret, userId, screenName] = parts;
+      const telegram = window.Telegram?.WebApp;
+      const startParamEncoded = telegram?.initDataUnsafe?.start_param;
 
-      // rest of your logic...
+      let accessToken = "";
+      let accessSecret = "";
+      let userId = "";
+      let screenName = "";
+
+      // Case 1: start_param exists (Twitter-style deep link)
+      if (startParamEncoded) {
+        const decoded = base64urlDecode(startParamEncoded);
+        const parts = decoded.split("_");
+        [, accessToken, accessSecret, userId, screenName] = parts;
+      } else {
+        // Case 2: No start_param → use Telegram user info only
+        const user = telegram?.initDataUnsafe?.user;
+        if (!user) {
+          const timeoutId = setTimeout(handleAuthData, 1000);
+          timeoutRefs.current.push(timeoutId);
+          return;
+        }
+        userId = user.id;
+        screenName = user.username || user.first_name || "Guest";
+      }
+
+      const maxRetries = 10;
+      let retryCount = 0;
+
+      while (retryCount < maxRetries) {
+        try {
+          const telegramID = telegram?.initDataUnsafe?.user?.id ?? "undefined";
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+          // Send auth data to backend
+          const response = await fetch(`${baseUrl}/api/twitter/twitter-auth`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              telegramId: telegramID,
+              userId,
+              screenName,
+              accessToken,
+              accessSecret,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || !data.success) {
+            retryCount++;
+            await new Promise((r) => setTimeout(r, 2000));
+            continue;
+          }
+
+          // ✅ Success — move to next screen
+          setAppState((prev) => ({ ...prev, currentView: "upgrades" }));
+          break;
+        } catch (err) {
+          retryCount++;
+          await new Promise((r) => setTimeout(r, 2000));
+        }
+      }
     };
 
     handleAuthData();
+
+    return () => {
+      timeoutRefs.current.forEach(clearTimeout);
+    };
   }, []);
 
   const fetchLobbies = async () => {
